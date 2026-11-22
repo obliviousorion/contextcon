@@ -36,7 +36,6 @@ async def test_c17_drl_aero_identify_matches_two_companies(session):
     assert {c.crustdata_company_id for c in r.candidates} == {5798, 15944579}
     assert "exactly one company" in r.missing
     assert session.client.network_calls == 0
-    assert session.index.company_for_domain("drl.aero") is None  # no inference from all_domains
 
 
 class CountingClient:

@@ -79,8 +79,7 @@ async def _by_domain(s: Session, d: str) -> ResolveResult:
     items = res.data if isinstance(res.data, list) else []
     cands = _candidates(items)
     if not cands:
-        why = " in the recorded fixtures (replay mode)" if res.extra.get("replay_index") else ""
-        return _cannot(f"a domain Crustdata recognises: {d} was not found{why}; "
+        return _cannot(f"a domain Crustdata recognises: {d} was not found; "
                        "registration documents (GSTIN/CIN) would settle it")
     ids = {c.crustdata_company_id for c in cands}
     if len(ids) > 1:

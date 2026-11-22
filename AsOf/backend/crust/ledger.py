@@ -24,9 +24,7 @@ DEFAULT_CREDIT_CAP = 400.0
 PRICES = {
     "/company/enrich": 2.0,   # per record
     "/company/identify": 0.2,  # per match (unmatched is free)
-    "/person/enrich": 1.0,    # per profile
     "/company/search": 0.03,  # per result
-    "/person/search": 0.03,   # per result
     "/web/search/live": 1.0,  # per call
     "/web/enrich/live": 1.0,  # per page (measured 2026-11-22: one url, balance -1.0)
 }
