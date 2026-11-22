@@ -4,6 +4,18 @@ import { ShieldCheck, Clock, CheckCircle2 } from "lucide-react";
 interface ApproveButtonProps {
   initialStatus?: "draft" | "approved" | "issued_sandbox";
   onApproved?: () => void;
+  caseId?: string;
+}
+
+const API_BASE_URL = import.meta.env.VITE_API_URL as string | undefined;
+
+async function post(path: string, body: unknown, token?: string) {
+  const headers: Record<string, string> = { "content-type": "application/json" };
+  if (token) headers["x-asof-approval-token"] = token;
+  const res = await fetch(`${API_BASE_URL}${path}`, { method: "POST", headers, body: JSON.stringify(body) });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || res.statusText);
+  return data;
 }
 
 type ApprovalState = "draft" | "held_for_approval" | "issued_sandbox";
@@ -11,27 +23,56 @@ type ApprovalState = "draft" | "held_for_approval" | "issued_sandbox";
 export const ApproveButton: React.FC<ApproveButtonProps> = ({
   initialStatus = "draft",
   onApproved,
+  caseId,
 }) => {
   const [approvalState, setApprovalState] = useState<ApprovalState>(
     initialStatus === "issued_sandbox" ? "issued_sandbox" : "draft"
   );
   const [isDisabled, setIsDisabled] = useState<boolean>(initialStatus === "issued_sandbox");
 
-  const handleApprove = () => {
-    if (isDisabled) return;
+  const [error, setError] = useState<string | null>(null);
 
-    // Disables after one click
+  const handleApprove = async () => {
+    if (isDisabled) return;
     setIsDisabled(true);
-    // Transitions to "held for approval"
+    setError(null);
     setApprovalState("held_for_approval");
 
-    // Transitions to "issued (sandbox)"
-    setTimeout(() => {
-      setApprovalState("issued_sandbox");
-      if (onApproved) {
-        onApproved();
+    if (!API_BASE_URL || !caseId) {
+      // Fixture mode: no backend, so this only shows the state change.
+      setTimeout(() => {
+        setApprovalState("issued_sandbox");
+        onApproved?.();
+      }, 900);
+      return;
+    }
+
+    try {
+      // 1. Ask to issue: the backend holds it until a person approves.
+      const first = await post("/api/issue", { id: caseId });
+      if (first.status !== "done") {
+        // 2. A person approves with the token printed in the API server's terminal.
+        const token = window.prompt(
+          `Held for approval: ${caseId}\nPaste the approval token from the AsOf API server's terminal to approve and issue.`
+        );
+        if (!token) {
+          setApprovalState("held_for_approval");
+          setError("Held for approval: nothing was sent.");
+          setIsDisabled(false);
+          return;
+        }
+        await post("/api/approve", { id: caseId }, token);
+        // 3. Issue again: now it is sent exactly once to the sandbox.
+        const sent = await post("/api/issue", { id: caseId });
+        if (sent.status !== "done") throw new Error(`issue returned ${sent.status}`);
       }
-    }, 900);
+      setApprovalState("issued_sandbox");
+      onApproved?.();
+    } catch (e) {
+      setApprovalState("held_for_approval");
+      setError((e as Error).message);
+      setIsDisabled(false);
+    }
   };
 
   return (
@@ -70,9 +111,10 @@ export const ApproveButton: React.FC<ApproveButtonProps> = ({
       >
         <ShieldCheck className="w-4 h-4" />
         {approvalState === "draft" && "Approve & issue"}
-        {approvalState === "held_for_approval" && "Processing approval..."}
+        {approvalState === "held_for_approval" && (error ? "Approve & issue" : "Waiting for approval...")}
         {approvalState === "issued_sandbox" && "Issued to sandbox"}
       </button>
+      {error && <span className="text-xs text-rose-300 max-w-xs">{error}</span>}
     </div>
   );
 };

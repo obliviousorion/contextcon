@@ -50,8 +50,10 @@ export const App: React.FC = () => {
   };
 
   // Run query / fetch handler
+  const [queryError, setQueryError] = useState<string | null>(null);
   const handleQuery = async () => {
     setIsLoading(true);
+    setQueryError(null);
     try {
       const result = await fetchCaseFileData(tool, domain, asOf);
       if (result.caseFile) {
@@ -63,6 +65,7 @@ export const App: React.FC = () => {
       }
     } catch (err) {
       console.error("Failed to query case file:", err);
+      setQueryError((err as Error).message);
     } finally {
       setIsLoading(false);
     }
@@ -129,6 +132,15 @@ export const App: React.FC = () => {
           isLoading={isLoading}
         />
 
+        {import.meta.env.VITE_API_URL ? (
+          <div className="text-xs text-emerald-300/80">Live backend: {import.meta.env.VITE_API_URL} (replay mode, 0 credits)</div>
+        ) : (
+          <div className="text-xs text-slate-500">Fixture mode: recorded outcomes only. Set VITE_API_URL to call the real backend.</div>
+        )}
+        {queryError && (
+          <div className="rounded-lg border border-rose-800/80 bg-rose-950/60 px-4 py-2 text-sm text-rose-200">{queryError}</div>
+        )}
+
         {/* Resolve Refusal View (when tool is resolve or resolve failed) */}
         {(tool === "resolve" || (!activeCaseFile && activeResolve)) && activeResolve && (
           <div className="space-y-6">
@@ -184,6 +196,8 @@ export const App: React.FC = () => {
                 {/* Approve & Issue Action */}
                 <div className="flex items-center gap-2 self-start md:self-auto">
                   <ApproveButton
+                    key={activeCaseFile.id}
+                    caseId={activeCaseFile.id}
                     initialStatus={activeCaseFile.status}
                     onApproved={() => console.log("Case file approved & issued to sandbox")}
                   />

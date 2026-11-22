@@ -85,7 +85,8 @@ export async function fetchCaseFileData(
   if (API_BASE_URL) {
     const res = await fetch(`${API_BASE_URL}/api/casefile?tool=${tool}&domain=${encodeURIComponent(domain)}&as_of=${asOf}`);
     if (!res.ok) {
-      throw new Error(`API error: ${res.statusText}`);
+      const body = await res.json().catch(() => ({}));
+      throw new Error(body.error || `API error: ${res.statusText}`);
     }
     return await res.json();
   }
