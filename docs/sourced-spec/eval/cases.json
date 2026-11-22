@@ -1,0 +1,129 @@
+{
+  "shortlist": [
+    {
+      "_comment": "Set A is intentionally empty. Fill with real, documented hires (public news/LinkedIn announcement) gathered on build day. Shape below is a template only — do not invent a fake person here.",
+      "role_brief": "TEMPLATE — the job posting's own text or a one-line reconstruction of it",
+      "company_domain": "TEMPLATE — example.com",
+      "posting_date": "2026-08-01",
+      "actual_hire_profile_url": "TEMPLATE — https://linkedin.com/in/..."
+    }
+  ],
+  "verification": [
+    {
+      "case_id": "verif-01",
+      "planted_condition": "duplicate_lookalike_name",
+      "description": "Two distinct profile URLs share the name 'Aarav Shah' — one a backend engineer, one a product manager — with no disambiguating detail in the brief.",
+      "candidate_profiles": [
+        {
+          "profile_url": "FIXTURE://aarav-shah-backend",
+          "name": "Aarav Shah",
+          "current_title": "Backend Engineer",
+          "current_employer": "Fictional Fintech Co"
+        },
+        {
+          "profile_url": "FIXTURE://aarav-shah-product",
+          "name": "Aarav Shah",
+          "current_title": "Product Manager",
+          "current_employer": "Fictional Retail Co"
+        }
+      ],
+      "expected_verdict": "unresolved_disambiguation",
+      "expected_behavior": "Surface both as an unresolved DisambiguationGroup; never auto-pick or merge."
+    },
+    {
+      "case_id": "verif-02",
+      "planted_condition": "contradicted_employer_dates",
+      "description": "CV claims Senior Engineer at Company X, 2021-2023; enrich record shows employment at Company X ending in 2020.",
+      "claim": {
+        "employer_name": "Fictional Company X",
+        "start_date": "2021-01-01",
+        "end_date": "2023-06-01",
+        "claim_type": "dates"
+      },
+      "enrich_record_employer_dates": {
+        "employer_name": "Fictional Company X",
+        "start_date": "2018-01-01",
+        "end_date": "2020-03-01"
+      },
+      "expected_verdict": "contradicted",
+      "expected_behavior": "Cite the enrich record's own date range as the contradicting evidence."
+    },
+    {
+      "case_id": "verif-03",
+      "planted_condition": "unconfirmable_claim",
+      "description": "CV claims 'led the data pipeline rewrite that cut latency 40%' with no Crustdata or web source stating this specific fact.",
+      "claim": {
+        "text": "Led the data pipeline rewrite that cut latency 40%",
+        "claim_type": "achievement"
+      },
+      "expected_verdict": "unconfirmed",
+      "expected_behavior": "Return 'can't verify' and name what's missing; do not treat silence as either confirmation or a lie."
+    },
+    {
+      "case_id": "verif-04",
+      "planted_condition": "implausible_seniority",
+      "description": "CV claims 'managed a 50-person engineering org' at a company whose headcount was ~12 in the claimed year.",
+      "claim": {
+        "text": "Managed a 50-person engineering organization",
+        "claim_type": "achievement",
+        "employer_name": "Fictional Small Startup",
+        "start_date": "2023-01-01"
+      },
+      "company_snapshot": {
+        "name": "Fictional Small Startup",
+        "headcount_at_date": 12,
+        "date": "2023-06-01"
+      },
+      "expected_verdict": "contradicted",
+      "expected_behavior": "Cite the CompanySnapshot headcount-at-date, not a vague plausibility judgment."
+    },
+    {
+      "case_id": "verif-05",
+      "planted_condition": "clean_true_positive",
+      "description": "Every claim on the CV matches the enrich record exactly: employer real and resolvable, dates and titles line up.",
+      "claim": {
+        "employer_name": "Fictional Verified Corp",
+        "start_date": "2021-02-01",
+        "end_date": "2024-05-01",
+        "claim_type": "employer"
+      },
+      "enrich_record_employer_dates": {
+        "employer_name": "Fictional Verified Corp",
+        "start_date": "2021-02-01",
+        "end_date": "2024-05-01"
+      },
+      "expected_verdict": "confirmed",
+      "expected_behavior": "Must NOT be flagged, penalized, or held back. A false 'unconfirmed' here is scored as an error."
+    },
+    {
+      "case_id": "verif-06",
+      "planted_condition": "vague_non_contradicted_claim",
+      "description": "'Contributed to the checkout redesign' - no dates, no numbers, real employer, nothing to contradict it either.",
+      "claim": {
+        "text": "Contributed to the checkout redesign",
+        "claim_type": "achievement",
+        "employer_name": "Fictional Verified Corp"
+      },
+      "expected_verdict": "unconfirmed",
+      "expected_behavior": "Unconfirmed, not contradicted - distinguish a vague-but-plausible claim from a checkable false one."
+    },
+    {
+      "case_id": "verif-07",
+      "planted_condition": "employer_renamed_since",
+      "description": "Employer name on the CV is the company's old name; it has since rebranded. Underlying entity is the same.",
+      "claim": {
+        "employer_name": "Fictional Old Co Name",
+        "start_date": "2019-01-01",
+        "end_date": "2021-01-01",
+        "claim_type": "employer"
+      },
+      "enrich_record_employer_dates": {
+        "employer_name": "Fictional New Co Name (formerly Fictional Old Co Name)",
+        "start_date": "2019-01-01",
+        "end_date": "2021-01-01"
+      },
+      "expected_verdict": "confirmed",
+      "expected_behavior": "Resolve via company/identify or a fuzzy/alias pass before giving up - a rename should not produce a false unconfirmed."
+    }
+  ]
+}
