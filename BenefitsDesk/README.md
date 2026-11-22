@@ -39,7 +39,9 @@ uv run python -m bd approve <key printed under Actions> --by person
 uv run python -m bd sandbox &                                  # our own receiver; never a real insurer
 uv run python -m bd act <run_id>                               # sends approved actions exactly once
 uv run pytest -q                                               # 30 tests incl. the 20-trial kill test
-# UI: cd web && npm install && npm run build && cd .. && uv run python -m bd serve   -> http://127.0.0.1:8787
+# UI: cd web && npm install && npm run build && cd .. && uv run python -m bd serve
+#   http://127.0.0.1:8787/          guided flow: chat -> profile -> 3D neighbourhood -> gaps -> approve
+#   http://127.0.0.1:8787/console   operator console: run stream, ledger, kill and resume (also 'Behind the scenes')
 ```
 Modes: `--mode replay` (default, `config.yaml`), `record` (calls Crustdata, caches every response), `live`. `--chaos` kills the process at random step boundaries.
 
