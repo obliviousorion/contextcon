@@ -8,7 +8,7 @@ TASK=${1:?task file}; shift; ALLOWED=("$@"); [ ${#ALLOWED[@]} -gt 0 ] || { echo 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"; cd "$ROOT"
 export PATH="$HOME/.local/bin:$PATH"
 AGY=${AGY_BIN:-agy}; command -v "$AGY" >/dev/null || { echo "agy not installed: fall back to the Claude subagent for this task" >&2; exit 2; }
-NAME=$(basename "$TASK" .md); TS=$(date +%H%M%S); LOG="agy/logs/$TS-$NAME.log"
+mkdir -p agy/logs; NAME=$(basename "$TASK" .md); TS=$(date +%H%M%S); LOG="agy/logs/$TS-$NAME.log"
 BEFORE=$(git status --porcelain --untracked-files=all . | sort)
 PROMPT="$(cat agy/RULES_FOR_AGY.md)
 
