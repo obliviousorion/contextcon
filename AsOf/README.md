@@ -23,7 +23,7 @@ AsOf is a service (an MCP server plus a CLI) that returns a **case file** about 
 Every statement uses one template: "Data point dated P states X; stored copy retrieved T." It never says "was true on D". Estimates, "profile-derived count" and "true at retrieval only" are always labelled.
 
 ## Pass mark
-- `uv run pytest -q`: **183 passed, 0 xfail** (2026-11-22).
+- `uv run pytest -q`: **195 passed, 0 xfail** (2026-11-22).
 - `tests/cases/hidden_test_cases.json`: 17 cases with answers computed from the recorded fixtures. All pass in replay, including C17.
 - Engine: pass and fail fixtures per rule; staleness tested at exactly 14 and 15 days; a test fails if any output says "was true on".
 - Chaos: `council/chaos_kill.py` kills the process 5 times at random moments; each action must happen once (see `docs/demo.md`).
@@ -71,7 +71,7 @@ Needs Python 3.12 and [uv](https://docs.astral.sh/uv/). Replay never touches the
 ```bash
 cd AsOf
 uv sync
-uv run pytest -q                      # 183 passed
+uv run pytest -q                      # 195 passed
 export MODE=replay ASOF_TODAY=2026-11-22 ASOF_STATE_DIR="$(mktemp -d)"
 uv run python -m backend.cli clear delhivery.com
 ```

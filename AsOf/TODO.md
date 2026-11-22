@@ -31,11 +31,17 @@ Ordered by what unblocks "done". See `STATUS.md` for where each item stands.
 - [x] rehearse the 2-minute demo in replay, including the kill mid-send
 
 ## Non-blocking cleanups (from the council)
-- [ ] the webhook has no host allow-list (https only today); add a sandbox hosts config key (lead) or document the env var as trusted
+- [x] the webhook has no host allow-list (https only today); add a sandbox hosts config key (lead) or document the env var as trusted
 - [x] remove the dead person-endpoint prices in backend/crust/ledger.py
-- [ ] a torn last ledger line loses that one charge (the cap undercounts by at most one call)
-- [ ] index config keys without fallback defaults (platform config.py, watchers.py, engine rules.py, pipeline session.py)
-- [ ] read the recorded unit costs from the ledger fixture instead of hard-coding them
+- [x] a torn last ledger line loses that one charge (the cap undercounts by at most one call)
+- [x] index config keys without fallback defaults (platform config.py, watchers.py, engine rules.py, pipeline session.py)
+- [x] read the recorded unit costs from the ledger fixture instead of hard-coding them
 - [x] delete the ReplayIndex after the Phase 4 per-company recordings
-- [ ] person-endpoint branches still exist in backend/crust/client.py `_estimate`/`_credits` (endpoints are hard-disabled; cleanup only)
-- [ ] the agy runner uses `--output-format stream-json` so its progress is visible
+- [x] person-endpoint branches still exist in backend/crust/client.py `_estimate`/`_credits` (endpoints are hard-disabled; cleanup only)
+- [x] the agy runner uses `--output-format stream-json` so its progress is visible
+
+## Optional polish (council 1742 notes, non-blocking)
+- [ ] the sandbox webhook uses a no-redirect opener (urllib follows redirects today)
+- [ ] `DEFAULT_CREDIT_CAP = 400` in backend/crust/ledger.py is a fallback for a client built without config; make the config cap mandatory
+- [ ] a failed live call releases its ledger intent, which assumes failed calls aren't billed; confirm with Crustdata
+- [ ] demo Beat 5: print the watch handle so it doesn't have to be copied by hand

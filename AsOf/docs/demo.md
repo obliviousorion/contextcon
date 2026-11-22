@@ -121,7 +121,7 @@ Real output of the first test: `alert ['CF-38e15ccbbde1#headcount']`, and the se
 `asof cost` (in a state dir where `clear` already ran, e.g. Beat 2's) shows the ledger: 0 spent this run, 2.2 credits (Rs 62.12) measured per clearance file. The Rs 600 price is an estimate.
 
 ## Backup path (no live commands, no kill)
-1. Run the suite: `uv run pytest -q` (183 passed, 0 xfail, about 6 seconds).
+1. Run the suite: `uv run pytest -q` (195 passed, 0 xfail, about 6 seconds).
 2. Show the recorded ledger: `cat fixtures/live_check/ledger/phase4-record-2026-11-22.jsonl` (7.8 credits across the live record run).
 3. Show the stored answers: `tests/cases/hidden_test_cases.json` (C08 25 candidates, C17 two candidates).
 4. Show the council gate: `council/reports/1535-GATE.md` (all 5 PASS).
