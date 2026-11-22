@@ -1,8 +1,8 @@
 """Local, dependency-free HTTP adapter for the FreightClose demo."""
 import argparse
-import webbrowser
 import json
 import re
+import webbrowser
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlsplit
@@ -59,6 +59,8 @@ class Handler(BaseHTTPRequestHandler):
                 return self.send_json(200, service.get_sample(missing in ("true", "1")))
             if url.path == "/api/cases":
                 return self.send_json(200, service.history())
+            if url.path == "/api/status":
+                return self.send_json(200, service.status())
             if case and case[2] == "receipt":
                 return self.send_json(200, service.receipt_data(case[1]), f"freight-{case[1]}.json")
         if self.command == "POST":
@@ -86,14 +88,31 @@ class Handler(BaseHTTPRequestHandler):
     do_POST = do_GET
 
 
+def clear_sandbox():
+    """Delete the sandbox database so a rehearsal starts from zero cases and postings."""
+    path = Path(service.db_path())
+    if path.suffix != ".sqlite3":
+        raise SystemExit(f"--fresh only deletes *.sqlite3 sandbox files, not {path}")
+    removed = [p for p in (path, *(Path(f"{path}{s}") for s in ("-journal", "-wal", "-shm")))
+               if p.exists()]
+    for p in removed:
+        p.unlink()
+    print(f"Fresh sandbox: {path.name} {'cleared' if removed else 'was already empty'}", flush=True)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--port", type=int, default=8000)
     parser.add_argument("--open-browser", action="store_true")
+    parser.add_argument("--fresh", action="store_true",
+                        help="delete this mode's sandbox database before serving")
     args = parser.parse_args()
+    if args.fresh:
+        clear_sandbox()
     with ThreadingHTTPServer(("127.0.0.1", args.port), Handler) as server:
         url = f"http://127.0.0.1:{server.server_port}/"
-        print(f"FreightClose running at {url}", flush=True)
+        sources = f"invoice reader: {service.MODE}, FX: {service.FX_MODE}"
+        print(f"FreightClose running at {url} ({sources})", flush=True)
         if args.open_browser:
             webbrowser.open(url)
         try:

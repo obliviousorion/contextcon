@@ -3,31 +3,39 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#132f29"><title>FreightClose | Settlement desk</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%23132f29'/%3E%3Cpath d='M4 4h3v3H4zM9 4h3v3H9zM4 9h3v3H4z' fill='%23dbf285'/%3E%3C/svg%3E">
   <style>
-    :root{--ink:#172a25;--green:#144b3e;--lime:#dbf285;--paper:#f4f5ef;--line:#d8dfd4;--muted:#53645b;--white:#fff;--mono:"IBM Plex Mono",Consolas,monospace}
-    *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.5 "Inter","Segoe UI",Arial,sans-serif}
-    header{background:#132f29;color:white}nav,.shell{max-width:1260px;margin:auto;padding:0 clamp(18px,4vw,56px)}nav{height:70px;display:flex;align-items:center;justify-content:space-between}
+    :root{--ink:#172a25;--green:#144b3e;--lime:#dbf285;--paper:#f4f5ef;--line:#d8dfd4;--muted:#53645b;--white:#fff;--amber:#814300;--amber-bg:#fff5df;--mono:"IBM Plex Mono",Consolas,Menlo,monospace}
+    *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.5 "Inter","Segoe UI",-apple-system,Arial,sans-serif}
+    header{background:#132f29;color:white}nav,.shell{max-width:1260px;margin:auto;padding:0 clamp(16px,4vw,56px)}nav{min-height:70px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-top:10px;padding-bottom:10px}
     .brand{display:inline-flex;align-items:center;gap:10px;font-size:22px;font-weight:750;letter-spacing:-1px}.mark{display:inline-grid;grid-template-columns:repeat(2,8px);gap:2px;transform:skew(-12deg);padding:4px}.mark i{height:8px;background:var(--lime)}.mark i:nth-child(2){opacity:.55}
-    .env{font:12px var(--mono);color:#e4ebdc}.env::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--lime);margin-right:9px}
+    .env{font:12px var(--mono);color:#e4ebdc;text-align:right}.env::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--lime);margin-right:9px}
     h1,h2,h3,p{margin:0}h1{font-size:clamp(36px,5vw,62px);line-height:1.02;letter-spacing:-.065em}h2{font-size:22px;letter-spacing:-.045em}h3{font-size:16px;letter-spacing:-.02em}
-    .pagehead{padding:40px 0 26px;display:flex;align-items:end;justify-content:space-between;gap:16px}.pagehead p,.sub{color:var(--muted);font-size:14px;margin-top:7px}
-    .columns{display:grid;grid-template-columns:minmax(280px,.87fr) minmax(320px,1.13fr);gap:20px;align-items:start}.panel{background:var(--white);border:1px solid var(--line);border-radius:15px;padding:clamp(16px,2vw,28px)}
+    .pagehead{padding:40px 0 26px}.pagehead p,.sub{color:var(--muted);font-size:14px;margin-top:7px}
+    .columns{display:grid;grid-template-columns:minmax(0,.87fr) minmax(0,1.13fr);gap:20px;align-items:start}.panel{background:var(--white);border:1px solid var(--line);border-radius:15px;padding:clamp(16px,2vw,28px);min-width:0}
     .label,label{display:block;font-size:13px;font-weight:650;color:#395348}.margin{margin-top:20px}select,input,textarea,button{font:inherit}select,input,textarea{border:1px solid #bdcbbf;border-radius:7px;width:100%;padding:10px 12px;background:#fff;color:var(--ink)}select{margin-top:6px}textarea{font:13px/1.65 var(--mono);resize:vertical;min-height:174px;margin-top:6px;background:#fbfcf9}
     :focus-visible{outline:3px solid #539d82;outline-offset:3px}button,.button{border:1px solid transparent;display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:650;font-size:14px;cursor:pointer;text-decoration:none;padding:10px 17px;border-radius:7px}button:disabled{opacity:.5;cursor:progress}
     .primary{background:var(--green);color:white}.primary:hover{background:#0f392e}.wide{width:100%;margin-top:18px}.outline{background:#fff;border-color:var(--line);color:var(--ink)}.outline:hover{background:#f1f5ee}
-    .facts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}.fact{background:#f3f6f0;padding:9px 12px;border-radius:6px}.fact span,.metric span{display:block;font-size:12px;color:var(--muted)}.fact strong{font:600 14px/1.6 var(--mono);overflow-wrap:anywhere}
-    .result-head{display:flex;justify-content:space-between;align-items:center;gap:12px}.pill{font:600 11px/1.2 var(--mono);text-transform:uppercase;border-radius:20px;padding:7px 11px;background:#eaf1e7;color:var(--green);letter-spacing:.02em}.pill.review{background:#fff0d1;color:#814300}
+    .facts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}.fact{background:#f3f6f0;padding:9px 12px;border-radius:6px}.fact span,.metric span{display:block;font-size:12px;color:var(--muted)}.fact strong{font:600 14px/1.6 var(--mono);overflow-wrap:anywhere}.fact.missing{background:var(--amber-bg)}.fact.missing strong{color:var(--amber)}
+    .result-head{display:flex;justify-content:space-between;align-items:center;gap:12px}.pill{font:600 11px/1.2 var(--mono);text-transform:uppercase;border-radius:20px;padding:7px 11px;background:#eaf1e7;color:var(--green);letter-spacing:.02em;white-space:nowrap}.pill.review{background:#fff0d1;color:var(--amber)}
     .placeholder{border:1px dashed #c6d3c6;border-radius:9px;margin-top:22px;padding:35px 20px;text-align:center;color:var(--muted)}.placeholder strong{display:block;color:var(--ink);margin-bottom:5px}
-    .metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:20px 0}.metric{padding:15px;border-radius:8px;background:#eef3ed}.metric:nth-child(2){background:#edf6c9}.metric strong{display:block;font-size:clamp(22px,3vw,34px);letter-spacing:-.055em;font-variant-numeric:tabular-nums}
-    .trace{margin-top:10px}details{border-top:1px solid var(--line);padding:10px 0}summary{cursor:pointer;font-weight:650;font-size:14px}details p{font-size:14px;margin:7px 0 6px}.tag{display:inline-block;background:#eff3ee;color:#3b5547;border:1px solid var(--line);padding:2px 6px;margin:3px 5px 0 0;font:12px/1.5 var(--mono);border-radius:4px;overflow-wrap:anywhere;max-width:100%}
-    .actions{margin:8px 0 0;padding-left:19px}.actions li{margin:6px 0;font-size:14px;overflow-wrap:anywhere}.reviewbox{padding:14px;background:#fff5df;border:1px solid #e6d3a5;border-radius:8px;margin:16px 0}.reviewbox input{margin:4px 0 9px}.errors{color:#8b3528;margin-top:10px;font-size:14px}.history{margin:20px 0 40px}.histrow{padding:10px 0;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px}.histrow button{font-family:var(--mono);overflow-wrap:anywhere;text-align:left}.histrow:last-child{border:0}[hidden]{display:none!important}
-    @media(max-width:840px){.columns{grid-template-columns:1fr}.pagehead{padding-top:25px}.panel{border-radius:10px}}@media(max-width:420px){.facts{grid-template-columns:1fr}.metric{padding:9px}.pagehead{display:block}.env{font-size:10px}}
+    .banner{margin-top:16px;padding:11px 14px;border-radius:8px;font-size:14px;background:#e8f0fb;border:1px solid #c4d5ee;color:#1f3d63}.banner strong{display:block}
+    .metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:18px 0}.metric{padding:14px;border-radius:8px;background:#eef3ed;min-width:0}.metric.pay{background:#edf6c9}.metric.cut{background:var(--amber-bg)}.metric strong{display:block;font-size:clamp(19px,2.4vw,30px);letter-spacing:-.05em;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+    .tablewrap{overflow-x:auto;margin:8px 0 4px}table{width:100%;border-collapse:collapse;font-size:14px;min-width:420px}th{font-size:12px;color:var(--muted);font-weight:600;text-align:right;padding:6px 8px;border-bottom:1px solid var(--line)}th:first-child,td:first-child{text-align:left;padding-left:0}td{padding:8px;text-align:right;font:13px/1.4 var(--mono);border-bottom:1px solid #edf0ea;vertical-align:top}td small{display:block;font:12px/1.4 "Inter","Segoe UI",Arial,sans-serif;color:var(--muted);margin-top:2px}td.cut{color:var(--amber);font-weight:700}tr.total td{font-weight:700;border-bottom:0;border-top:2px solid var(--line)}
+    .authority{margin:16px 0 4px;padding:14px;border:1px solid var(--line);border-radius:8px}.authority .row{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:14px}.meter{height:10px;background:#eef1ea;border-radius:6px;margin:10px 0 8px;overflow:hidden}.meter i{display:block;height:100%;background:var(--green);border-radius:6px}.authority.over .meter i{background:#c46a00}.authority.over{border-color:#e6d3a5;background:var(--amber-bg)}
+    .trace{margin-top:10px}details{border-top:1px solid var(--line);padding:10px 0}summary{cursor:pointer;font-weight:650;font-size:14px}details p{font-size:14px;margin:7px 0 6px}.tag{display:inline-block;background:#eff3ee;color:#3b5547;border:1px solid var(--line);padding:2px 6px;margin:3px 5px 0 0;font:12px/1.5 var(--mono);border-radius:4px;overflow-wrap:anywhere;max-width:100%}details.hold summary{color:var(--amber)}
+    .actions{margin:8px 0 0;padding-left:19px}.actions li{margin:8px 0;font-size:14px;overflow-wrap:anywhere}pre.notice{font:12px/1.55 var(--mono);white-space:pre-wrap;overflow-wrap:anywhere;background:#fbfcf9;border:1px solid var(--line);border-radius:6px;padding:10px 12px;margin:6px 0;color:var(--ink)}
+    .reviewbox{padding:14px;background:var(--amber-bg);border:1px solid #e6d3a5;border-radius:8px;margin:16px 0}.reviewbox input{margin:4px 0 9px}.errors{color:#8b3528;margin-top:10px;font-size:14px}
+    .history{margin:20px 0 40px}.histrow{width:100%;padding:11px 4px;border:0;border-bottom:1px solid var(--line);border-radius:0;background:none;color:var(--ink);display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr) minmax(0,1fr) auto;align-items:center;gap:12px;text-align:left;font-weight:400}.histrow:hover{background:#f6f8f3}.histrow:last-child{border-bottom:0}.histrow b{font-family:var(--mono);font-size:14px;overflow-wrap:anywhere}.histrow span{font-size:13px;color:var(--muted);overflow-wrap:anywhere}.histrow .pill{justify-self:end}
+    [hidden]{display:none!important}
+    @media(max-width:840px){.columns{grid-template-columns:1fr}.pagehead{padding-top:25px}.panel{border-radius:10px}}
+    @media(max-width:520px){.facts{grid-template-columns:1fr}.metrics{grid-template-columns:1fr}.metric{padding:10px 12px}.env{font-size:10px;text-align:left}.histrow{grid-template-columns:minmax(0,1fr) auto}.histrow .hide-sm{display:none}table{min-width:0}th{padding:6px 3px}td{padding:7px 3px;font-size:11.5px}td small{font-size:11px}}
   </style>
 </head>
 <body>
-  <header><nav><div class="brand"><span class="mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>FreightClose</div><span class="env">Sandbox ledger</span></nav></header>
+  <header><nav><div class="brand"><span class="mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>FreightClose</div><span class="env" id="env">Sandbox ledger</span></nav></header>
   <main class="shell">
-    <section class="pagehead"><div><h1>Settlement desk</h1><p>Audit carrier charges, settle the supported amount, and document every deduction.</p></div></section>
+    <section class="pagehead"><h1>Settlement desk</h1><p>Audit carrier charges, settle the supported amount, and document every deduction.</p></section>
     <div class="columns">
       <section class="panel"><h2>Shipment packet</h2>
         <label class="margin" for="scenario">Demo shipment</label><select id="scenario"><option value="false">Detention overcharge</option><option value="true">Missing delivery record</option></select>
@@ -36,19 +44,23 @@
         <h3 class="margin">Contract &amp; delivery evidence</h3><div id="facts" class="facts"></div>
         <div class="facts margin">
           <label for="invoiceDate">Invoice date<input id="invoiceDate" type="date" required></label>
-          <label for="cap">Approval cap (INR paise)<input id="cap" type="number" min="0" step="1" required><output id="rupees" for="cap" class="sub"></output></label>
+          <label for="cap">Spending authority cap (₹)<input id="cap" type="number" min="0" step="0.01" required><output id="rupees" for="cap" class="sub"></output></label>
         </div>
         <button id="run" class="primary wide" disabled>Audit and settle →</button><p id="error" role="alert" class="errors"></p>
       </section>
       <section class="panel" id="result" aria-live="polite"><div class="result-head"><h2>Settlement receipt</h2><span id="status" class="pill">Ready</span></div>
         <div id="empty" class="placeholder"><strong>Awaiting shipment audit</strong>Run the packet to see the settlement and supporting evidence.</div>
         <div id="output" hidden>
+          <div id="replay" class="banner" hidden></div>
           <p id="meta" class="sub"></p><div id="metrics" class="metrics"></div>
-          <h3>Decision trail</h3><div id="trace" class="trace"></div>
+          <div id="linebox"><h3>Line-item audit</h3><p id="linenote" class="sub" hidden></p><div class="tablewrap"><table><thead><tr><th scope="col">Charge</th><th scope="col">Billed</th><th scope="col">Supported</th><th scope="col">Withheld</th></tr></thead><tbody id="lines"></tbody></table></div></div>
+          <div id="authority" class="authority" hidden></div>
+          <h3 class="margin">Decision trail</h3><div id="trace" class="trace"></div>
           <details><summary>Case evidence</summary><pre id="evidence" style="font:12px/1.6 var(--mono);white-space:pre-wrap;overflow-wrap:anywhere"></pre></details>
           <button type="button" id="retry" class="outline margin" hidden>Retry held case</button>
           <form id="resolve" class="reviewbox" hidden><h3>Add verified delivery evidence</h3>
-            <label class="margin" for="minutes">Verified dwell time (minutes)</label><input type="number" id="minutes" min="0" step="1" required placeholder="120">
+            <p class="sub">Nothing is booked until the reviewer supplies the signed dwell time.</p>
+            <label class="margin" for="minutes">Verified dwell time (minutes)</label><input type="number" id="minutes" min="0" max="10080" step="1" required placeholder="120">
             <label for="ref">Delivery record reference</label><input id="ref" maxlength="160" required placeholder="Signed gate log GL-018">
             <button class="primary" type="submit">Attach evidence and re-audit</button></form>
           <div id="actionbox"><h3 class="margin">Sandbox postings</h3><ul id="actions" class="actions"></ul></div>
@@ -56,48 +68,101 @@
         </div>
       </section>
     </div>
-    <section class="panel history"><h2>Case history</h2><div id="history"></div></section>
+    <section class="panel history"><h2>Case history</h2><p id="ledger" class="sub"></p><div id="history"></div></section>
   </main>
 <script>
   const byId = id => document.getElementById(id);
-  const money = value => value == null ? '—' : new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(value/100);
+  const usd = new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'});
+  const inr = new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR'});
+  const money = value => value == null ? '—' : usd.format(value/100);
+  const rupees = paise => paise == null ? '—' : inr.format(paise/100);
+  const when = iso => {try{return new Date(iso).toLocaleString([], {dateStyle:'medium',timeStyle:'short'})}catch{return iso||''}};
   const element = (tag,text,className) => {const el=document.createElement(tag);if(text!=null)el.textContent=String(text);if(className)el.className=className;return el};
   const title = value => String(value).replace(/_/g,' ').replace(/^./,c=>c.toUpperCase());
+  const SOURCE = {live:{reader:'OpenAI invoice reader',fx:'Live ECB rate'},mock:{reader:'Fixture invoice reader',fx:'Fixture FX 85.00'}};
   let packet,active,busy=false;
   async function api(url,payload){
     const response=await fetch(url,payload===undefined?{}:{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
     if(!response.ok){let msg='Request failed ('+response.status+')';try{const body=await response.json();if(typeof body.detail==='string')msg=body.detail}catch{}throw Error(msg)}
     return response.json();
   }
-  function pair(parent,label,value,style){const cell=element('div',null,style);cell.append(element('span',label),element('strong',value));parent.append(cell)}
+  function pair(parent,label,value,style){const cell=element('div',null,style);cell.append(element('span',label),element('strong',value));parent.append(cell);return cell}
+  function sources(mode,fxMode){return SOURCE[mode].reader+' · '+SOURCE[fxMode||mode].fx}
+  async function refreshStatus(){
+    const s=await api('/api/status');
+    byId('env').textContent='Sandbox ledger · '+sources(s.mode,s.fx_mode);
+    byId('ledger').textContent=s.cases+' case'+(s.cases===1?'':'s')+' · '+s.postings+' sandbox payable'+(s.postings===1?'':'s')+' posted';
+  }
   function showPacket(p){
-    packet=p;byId('caseKey').value=p.case_id;byId('invoice').value=p.invoice_text;byId('invoiceDate').value=p.invoice_date||'';byId('cap').value=p.cap_paise??'';showRupees();byId('scenario').value=String(p.pod_minutes==null);const facts=byId('facts');facts.replaceChildren();
-    for(const [name,value] of [['Purchase order',p.po_id],['Contract base',money(p.contracted_base_cents)],['Detention rate',money(p.detention_cents_per_hour)+'/hr'],['Free time',p.free_minutes+' min'],['Delivery dwell',p.pod_minutes==null?'Evidence missing':p.pod_minutes+' min']])pair(facts,name,value,'fact');
+    packet=p;byId('caseKey').value=p.case_id;byId('invoice').value=p.invoice_text;byId('invoiceDate').value=p.invoice_date||'';
+    byId('cap').value=p.cap_paise==null?'':String(p.cap_paise/100);showRupees();
+    byId('scenario').value=String(p.pod_minutes==null||'evidence_ref' in p);
+    const facts=byId('facts');facts.replaceChildren();
+    const dwell=p.pod_minutes==null?'Evidence missing':p.pod_minutes+' min'+(p.evidence_ref?' · '+p.evidence_ref:'');
+    for(const [name,value] of [['Purchase order',p.po_id],['Contract base',money(p.contracted_base_cents)],['Detention rate',money(p.detention_cents_per_hour)+'/hr'],['Free time',p.free_minutes+' min'],['Delivery dwell',dwell]])
+      pair(facts,name,value,'fact'+(p.pod_minutes==null&&name==='Delivery dwell'?' missing':''));
   }
   function resetResult(){active=null;byId('output').hidden=true;byId('empty').hidden=false;byId('status').textContent='Ready';byId('status').className='pill'}
-  function showRupees(){const amount=byId('cap').valueAsNumber;byId('rupees').textContent=Number.isFinite(amount)?new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR'}).format(amount/100):''}
+  function capPaise(){const v=byId('cap').valueAsNumber;return Number.isFinite(v)?Math.round(v*100):NaN}
+  function showRupees(){const p=capPaise();byId('rupees').textContent=Number.isFinite(p)?rupees(p)+' · '+p.toLocaleString('en-IN')+' paise':''}
   function sourceTag(source){const value=String(source);try{const url=new URL(value);if(url.protocol==='https:'&&!url.username&&!url.password){const link=element('a',value,'tag');link.href=url.href;link.target='_blank';link.rel='noopener noreferrer';return link}}catch{}return element('span',value,'tag')}
+  function cell(row,text,note,className){const td=element('td',text,className);if(note)td.append(element('small',note));row.append(td)}
+  function showLines(r,held){
+    const body=byId('lines');body.replaceChildren();const lines=r.lines||[];byId('linebox').hidden=!lines.length;if(!lines.length)return;
+    let billed=0,supported=0,complete=true;
+    for(const line of lines){
+      const row=element('tr');cell(row,line.charge,line.basis);cell(row,money(line.billed_cents));
+      cell(row,line.supported_cents==null?'Held':money(line.supported_cents));
+      cell(row,line.withheld_cents==null?'—':money(line.withheld_cents),null,line.withheld_cents?'cut':'');
+      body.append(row);billed+=line.billed_cents;if(line.supported_cents==null)complete=false;else supported+=line.supported_cents;
+    }
+    const total=element('tr','', 'total');cell(total,'Total');cell(total,money(billed));cell(total,complete?money(supported):'—');cell(total,complete?money(billed-supported):'—',null,complete&&billed-supported?'cut':'');body.append(total);
+    const note=byId('linenote');note.hidden=!held;note.textContent=complete?'Proposed amounts. Nothing was posted because the case is on hold.':'The detention line cannot be priced without verified dwell time.';
+  }
+  function showAuthority(r){
+    const box=byId('authority'),fx=r.fx;box.hidden=!fx;box.replaceChildren();if(!fx)return;
+    const cap=r.packet.cap_paise,over=!fx.approved;box.className='authority'+(over?' over':'');
+    const head=element('div',null,'row');head.append(element('strong','Spending authority · '+(over?'above cap, held':'within cap')),element('span',rupees(fx.payable_paise)+' of '+rupees(cap)));
+    const meter=element('div',null,'meter');const bar=element('i');bar.style.width=Math.min(100,cap?fx.payable_paise/cap*100:100).toFixed(1)+'%';meter.append(bar);
+    meter.setAttribute('role','img');meter.setAttribute('aria-label',Math.round(cap?fx.payable_paise/cap*100:100)+'% of the INR cap');
+    const foot=element('div',null,'row sub');foot.append(element('span',money(r.payable_cents)+' × '+fx.rate+' INR/USD'),element('span','Rate dated '+fx.rate_date+' · '+(fx.url?'ECB via Frankfurter':'Test fixture')));
+    box.append(head,meter,foot);
+  }
   function showRecord(r){
     active=r;showPacket(r.packet);byId('output').hidden=false;byId('empty').hidden=true;const held=r.status==='REVIEW';
-    byId('status').textContent=r.status;byId('status').className='pill'+(held?' review':'');byId('meta').textContent=(r.mode==='live'?'Live sources':'Offline fixtures')+' · Case '+r.packet.case_id;
-    const metrics=byId('metrics');metrics.replaceChildren();pair(metrics,'Payable',held?'On hold':money(r.payable_cents),'metric');pair(metrics,'Deduction',held?'Pending':money(r.recovered_cents),'metric');
-    const trail=byId('trace');trail.replaceChildren();(r.trace||[]).forEach((item,i,list)=>{const detail=element('details');detail.open=i===list.length-1||i===0;detail.append(element('summary',title(item.step)),element('p',item.reason));(item.sources||[]).forEach(source=>detail.append(sourceTag(source)));trail.append(detail)});
-    byId('evidence').textContent=JSON.stringify({mode:r.mode,elapsed_ms:r.elapsed_ms,calls:r.calls,packet:r.packet,extraction:r.extraction,fx:r.fx},null,2);byId('retry').hidden=!held;
-    byId('resolve').hidden=!(held&&r.packet.pod_minutes==null);byId('resolve').reset();
+    byId('status').textContent=held?'On hold':'Settled';byId('status').className='pill'+(held?' review':'');
+    const replay=byId('replay');replay.hidden=!r.replayed;replay.replaceChildren();
+    if(r.replayed){replay.append(element('strong',held?'Already on file: this case is still on hold.':'Duplicate blocked: this invoice was already settled.'),element('span',(held?'Showing the held case from ':'Returned the existing receipt from ')+when(r.created_at)+'. Nothing new was posted.'))}
+    byId('meta').textContent=sources(r.mode,r.fx_mode)+' · Case '+r.packet.case_id+(r.extraction&&r.extraction.invoice_id?' · Invoice '+r.extraction.invoice_id:'')+' · '+when(r.created_at);
+    const metrics=byId('metrics');metrics.replaceChildren();
+    pair(metrics,'Billed',money(r.extraction&&r.extraction.total_cents),'metric');
+    pair(metrics,held?'Payable':'Payable posted',held?'On hold':money(r.payable_cents),'metric'+(held?'':' pay'));
+    pair(metrics,held?'Deduction':'Short-paid',held?'Pending':money(r.recovered_cents),'metric'+(!held&&r.recovered_cents?' cut':''));
+    showLines(r,held);showAuthority(r);
+    const trail=byId('trace');trail.replaceChildren();(r.trace||[]).forEach((item,i,list)=>{const detail=element('details',null,/hold|duplicate|time budget/i.test(item.step)||(held&&i===list.length-1)?'hold':'');detail.open=i===list.length-1||i===0||item.step==='Price detention';detail.append(element('summary',title(item.step)),element('p',item.reason));(item.sources||[]).forEach(source=>detail.append(sourceTag(source)));trail.append(detail)});
+    byId('evidence').textContent=JSON.stringify({mode:r.mode,fx_mode:r.fx_mode,elapsed_ms:r.elapsed_ms,calls:r.calls,packet:r.packet,extraction:r.extraction,fx:r.fx},null,2);
+    const needsEvidence=held&&r.packet.pod_minutes==null&&(r.lines||[]).some(l=>l.supported_cents==null);
+    byId('resolve').hidden=!needsEvidence;byId('resolve').reset();byId('retry').hidden=!held||needsEvidence;
     const actions=byId('actions');actions.replaceChildren();for(const action of r.actions||[]){
-      const labels={LEDGER_POST:'Ledger posting',SHORT_PAY_NOTICE:'Deduction notice',REMITTANCE_NOTICE:'Remittance notice'};
+      const labels={LEDGER_POST:'Ledger posting',SHORT_PAY_NOTICE:'Short-pay notice to carrier',REMITTANCE_NOTICE:'Remittance notice'};
       const item=element('li');item.append(element('strong',(labels[action.type]||title(action.type))+' · '+money(action.amount_cents)));
-      item.append(element('p',action.notice_text||action.reason,'sub'));
+      item.append(action.notice_text?element('pre',action.notice_text,'notice'):element('p',action.reason,'sub'));
       if(action.entry_ref)item.append(element('span',action.entry_ref,'tag'));
       actions.append(item);
     }
-    byId('actionbox').hidden=!actions.children.length;byId('explain').textContent=r.error||(!actions.children.length&&held?'Settlement is on hold until the exception is resolved.':'');
+    byId('actionbox').hidden=!actions.children.length;byId('explain').textContent=r.error||(!actions.children.length&&held?'Settlement is on hold until the exception is resolved. Zero postings.':'');
     byId('receipt').href='/api/cases/'+encodeURIComponent(r.id)+'/receipt';
   }
   async function historyList(){
     const records=await api('/api/cases');const history=byId('history');history.replaceChildren();
     if(!records.length)history.append(element('p','Settled and held cases will appear here.','sub'));
-    for(const record of records){const row=element('div',null,'histrow'),btn=element('button',record.packet.case_id+' · '+record.id,'outline');btn.addEventListener('click',()=>{if(!busy){byId('error').textContent='';showRecord(record);byId('result').scrollIntoView({block:'nearest'})}});row.append(btn,element('span',record.status,'pill'+(record.status==='REVIEW'?' review':'')));history.append(row)}
+    for(const record of records){
+      const held=record.status==='REVIEW',row=element('button',null,'histrow');row.type='button';
+      row.append(element('b',record.packet.case_id),element('span',(record.extraction&&record.extraction.invoice_id||'Unread invoice')+' · '+when(record.created_at),'hide-sm'),element('span',held?'Nothing posted':money(record.payable_cents)+' paid · '+money(record.recovered_cents)+' withheld','hide-sm'),element('span',held?'On hold':'Settled','pill'+(held?' review':'')));
+      row.addEventListener('click',()=>{if(!busy){byId('error').textContent='';showRecord(record);byId('result').scrollIntoView({block:'nearest'})}});
+      history.append(row);
+    }
+    await refreshStatus();
   }
   async function withLock(fn){
     if(busy)return;busy=true;byId('error').textContent='';const submit=byId('resolve').querySelector('button');byId('run').disabled=byId('scenario').disabled=submit.disabled=byId('invoice').disabled=true;byId('run').textContent='Working…';
@@ -109,8 +174,8 @@
   byId('run').addEventListener('click',()=>withLock(async()=>{
     const dateInput=byId('invoiceDate'),capInput=byId('cap');
     if(!byId('caseKey').reportValidity()||!dateInput.reportValidity()||!capInput.reportValidity())return;
-    if(!Number.isSafeInteger(capInput.valueAsNumber))throw Error('Enter a whole-number INR cap in paise.');
-    const submission={...packet,case_id:byId('caseKey').value,invoice_text:byId('invoice').value,invoice_date:dateInput.value,cap_paise:capInput.valueAsNumber};
+    const cap=capPaise();if(!Number.isSafeInteger(cap)||cap<0)throw Error('Enter the INR spending cap in rupees.');
+    const submission={...packet,case_id:byId('caseKey').value,invoice_text:byId('invoice').value,invoice_date:dateInput.value,cap_paise:cap};
     showRecord(await api('/api/run',{packet:submission}));await historyList()
   }));
   byId('retry').addEventListener('click',()=>withLock(async()=>{showRecord(await api('/api/cases/'+encodeURIComponent(active.id)+'/retry',{}));await historyList()}));

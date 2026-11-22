@@ -36,6 +36,24 @@ class FreightCloseTests(unittest.TestCase):
             self.assertTrue(all(entry["sources"]))
             self.assertGreater(len(entry["sources"]), 0)
 
+    def test_line_items_reconcile_to_payable_and_deduction(self):
+        decision = self.decide()
+        lines = {line["charge"]: line for line in decision["lines"]}
+        self.assertEqual(lines["Line haul"]["withheld_cents"], 0)
+        self.assertEqual(lines["Detention"]["supported_cents"], 15_000)
+        self.assertEqual(lines["Detention"]["withheld_cents"], 30_000)
+        self.assertIn("1 billable hour", lines["Detention"]["basis"])
+        self.assertEqual(sum(l["supported_cents"] for l in lines.values()), decision["payable_cents"])
+        self.assertEqual(sum(l["withheld_cents"] for l in lines.values()), decision["recovered_cents"])
+
+    def test_missing_pod_leaves_detention_line_unpriced(self):
+        self.packet = sample(missing=True)
+        self.invoice = extract(self.packet["invoice_text"], "mock")
+        detention = self.decide()["lines"][-1]
+        self.assertEqual(detention["charge"], "Detention")
+        self.assertIsNone(detention["supported_cents"])
+        self.assertIsNone(detention["withheld_cents"])
+
     def test_missing_pod_holds_then_evidence_releases(self):
         self.packet = sample(missing=True)
         self.invoice = extract(self.packet["invoice_text"], "mock")

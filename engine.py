@@ -22,6 +22,7 @@ def run_case(packet: dict, extraction: dict, resolution: str | None = None) -> d
     check. Callers persist these intents atomically and enforce invoice uniqueness.
     """
     trace = []
+    lines = []  # Line-item audit: billed, supported and withheld amounts per charge.
 
     def record(step, reason, *sources):
         trace.append({"step": step, "reason": reason, "sources": list(sources)})
@@ -29,7 +30,7 @@ def run_case(packet: dict, extraction: dict, resolution: str | None = None) -> d
     def hold(reason, *sources):
         record("Hold for review", reason, *sources)
         return {"status": "REVIEW", "payable_cents": 0, "recovered_cents": 0,
-                "trace": trace, "actions": []}
+                "trace": trace, "actions": [], "lines": lines}
 
     if not isinstance(packet, dict) or not isinstance(extraction, dict):
         return hold("Supply the packet and its extracted invoice fields.", "Intake")
@@ -78,11 +79,16 @@ def run_case(packet: dict, extraction: dict, resolution: str | None = None) -> d
     approved_base = min(base, base_cap)
     record("Price line haul", f"Billed {_money(base)}. Contract cap {_money(base_cap)}. "
            f"Allow {_money(approved_base)}, the lower amount.", invoice, contract)
+    lines.append({"charge": "Line haul", "billed_cents": base, "supported_cents": approved_base,
+                  "withheld_cents": base - approved_base,
+                  "basis": f"Lower of billed and contract rate {_money(base_cap)}"})
 
     minutes = packet.get("pod_minutes")
     if minutes is not None and not _integer(minutes):
         return hold("The proof of delivery needs a valid nonnegative dwell time in minutes.", proof)
     if minutes is None and detention:
+        lines.append({"charge": "Detention", "billed_cents": detention, "supported_cents": None,
+                      "withheld_cents": None, "basis": "Awaiting verified dwell minutes"})
         return hold(f"The carrier billed {_money(detention)} detention. Attach verified "
                     "dwell minutes to calculate the contractual allowance.", invoice, contract, proof)
     if detention:
@@ -92,12 +98,19 @@ def run_case(packet: dict, extraction: dict, resolution: str | None = None) -> d
         allowance = hours * rate
         approved_detention = min(detention, allowance)
         record("Price detention", f"{minutes} recorded minutes less {free} free minutes "
-               f"yields {hours} complete billable hours at {_money(rate)} per hour. "
+               f"yields {hours} complete billable {'hour' if hours == 1 else 'hours'} "
+               f"at {_money(rate)} per hour. "
                f"Cap {_money(allowance)}, billed {_money(detention)}, "
                f"allow {_money(approved_detention)}.", proof, contract, invoice)
+        basis = (f"{minutes} min dwell − {free} free = {hours} billable "
+                 f"{'hour' if hours == 1 else 'hours'} × {_money(rate)}")
     else:
         approved_detention = 0
         record("Price detention", "The invoice claims zero detention. Allow 0.00.", invoice)
+        basis = "No detention billed"
+    lines.append({"charge": "Detention", "billed_cents": detention,
+                  "supported_cents": approved_detention,
+                  "withheld_cents": detention - approved_detention, "basis": basis})
 
     payable = approved_base + approved_detention
     recovered = total - payable
@@ -113,4 +126,4 @@ def run_case(packet: dict, extraction: dict, resolution: str | None = None) -> d
          "amount_cents": recovered if recovered else payable},
     ]
     return {"status": "SETTLED", "payable_cents": payable, "recovered_cents": recovered,
-            "trace": trace, "actions": actions}
+            "trace": trace, "actions": actions, "lines": lines}

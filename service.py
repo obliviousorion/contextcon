@@ -25,6 +25,14 @@ if (ROOT / ".env").is_file():
 MODE = os.getenv("FREIGHT_MODE", "mock").lower()
 if MODE not in {"mock", "live"}:
     raise RuntimeError("FREIGHT_MODE must be mock or live")
+# The FX check can run live on its own: a real dated ECB rate needs no model key.
+FX_MODE = os.getenv("FREIGHT_FX", "").lower() or MODE
+if FX_MODE not in {"mock", "live"}:
+    raise RuntimeError("FREIGHT_FX must be mock or live")
+# Evidence fields a reviewer adds to a held packet. A resubmitted original is a replay.
+EVIDENCE_FIELDS = ("pod_minutes", "evidence_ref")
+
+
 class ServiceError(Exception):
     def __init__(self, status_code, detail):
         super().__init__(detail)
@@ -32,11 +40,14 @@ class ServiceError(Exception):
         self.detail = detail
 
 
+def db_path():
+    # Separate simulation runs from runs with live sources.
+    return os.getenv("FREIGHT_DB", str(ROOT / f"freight-{MODE}.sqlite3"))
+
+
 @contextmanager
 def database(write=False):
-    # Separate simulation runs from runs with live sources.
-    path = os.getenv("FREIGHT_DB", str(ROOT / f"freight-{MODE}.sqlite3"))
-    db = sqlite3.connect(path, timeout=30)
+    db = sqlite3.connect(db_path(), timeout=30)
     try:
         db.execute("CREATE TABLE IF NOT EXISTS cases (id TEXT PRIMARY KEY, case_key TEXT UNIQUE, body TEXT NOT NULL)")
         db.execute("CREATE TABLE IF NOT EXISTS postings (invoice_key TEXT PRIMARY KEY, case_id TEXT NOT NULL, body TEXT NOT NULL)")
@@ -65,12 +76,23 @@ def hold(record, step, reason, sources):
     record["trace"].append(dict(step=step, reason=reason, sources=sources))
 
 
-def prepare_notice(actions, data, rid, trace):
+def _usd(cents):
+    return f"{cents/100:,.2f}"
+
+
+def prepare_notice(actions, data, rid, trace, items=()):
     """Give the billing desk an actual notice to file with the settlement."""
     invoice = data["invoice_id"]
-    lines = [f"Re: {invoice} / {data['po_id']}", "",
-             f"The audit supports USD {actions[0]['amount_cents']/100:,.2f} "
-             f"of USD {data['total_cents']/100:,.2f} invoiced."]
+    payable = actions[0]["amount_cents"]
+    lines = [f"Re: Invoice {invoice} / {data['po_id']}", "",
+             f"The audit supports USD {_usd(payable)} of USD {_usd(data['total_cents'])} invoiced."]
+    if items:
+        lines += ["", f"{'Charge':<12}{'Billed':>12}{'Supported':>12}{'Withheld':>12}"]
+        for item in items:
+            lines.append(f"{item['charge']:<12}{_usd(item['billed_cents']):>12}"
+                         f"{_usd(item['supported_cents']):>12}{_usd(item['withheld_cents']):>12}")
+        lines += [f"{'Total':<12}{_usd(data['total_cents']):>12}{_usd(payable):>12}"
+                  f"{_usd(data['total_cents'] - payable):>12}", ""]
     for item in trace:
         if item["step"] in {"Price detention", "Price line haul"}:
             lines.append(item["reason"])
@@ -84,8 +106,9 @@ def prepare_notice(actions, data, rid, trace):
 def process(db, packet, rid):
     start = monotonic()
     now = datetime.now(timezone.utc).isoformat()
-    record = dict(id=rid, mode=MODE, packet=packet, extraction={}, trace=[], calls=[],
-                  created_at=now, status="REVIEW", actions=[], payable_cents=0, recovered_cents=0)
+    record = dict(id=rid, mode=MODE, fx_mode=FX_MODE, packet=packet, extraction={}, trace=[],
+                  calls=[], created_at=now, status="REVIEW", actions=[], lines=[],
+                  payable_cents=0, recovered_cents=0)
     stage, sources = "Read invoice", ["packet.invoice_text"]
     try:
         raw = packet.get("invoice_text")
@@ -102,7 +125,7 @@ def process(db, packet, rid):
             call.update(usage=usage, estimated_usd=round((usage["prompt_tokens"]*0.15 +
                         usage["completion_tokens"]*0.60)/1_000_000, 8))
         note = packet.get("evidence_ref")
-        result = run_case(packet, data, f"Reviewed delivery record {note}" if note else None)
+        result = run_case(packet, data, f"Reviewer attached delivery record: {note}" if note else None)
         record.update(result)
         source_fields = {
             "Match purchase order": ["packet.po_id", "extraction.sources.po_id"],
@@ -126,8 +149,9 @@ def process(db, packet, rid):
                 hold(record, "Duplicate invoice", "Invoice already posted under case " + prior[0],
                      ["extraction.invoice_id", "receipt:" + prior[0]])
             else:
-                record["calls"].append(dict(service="Frankfurter" if live else "Fixture FX", estimated_usd=0, max_usd=0))
-                fx = assess(record["payable_cents"], packet.get("invoice_date"), packet.get("cap_paise"), MODE)
+                record["calls"].append(dict(service="Frankfurter" if FX_MODE == "live" else "Fixture FX",
+                                            estimated_usd=0, max_usd=0))
+                fx = assess(record["payable_cents"], packet.get("invoice_date"), packet.get("cap_paise"), FX_MODE)
                 record["fx"] = fx
                 if not fx["approved"]:
                     hold(record, stage, fx["reason"], fx["sources"])
@@ -135,10 +159,10 @@ def process(db, packet, rid):
                     hold(record, "Time budget", "Run exceeded 25 seconds before posting", ["run.elapsed_ms"])
                 else:
                     record["trace"].append(dict(step=stage, reason=fx["reason"], sources=fx["sources"]))
-                    prepare_notice(proposed, data, rid, record["trace"])
+                    prepare_notice(proposed, data, rid, record["trace"], record["lines"])
                     db.execute("INSERT INTO postings VALUES (?,?,?)", (inv, rid, json.dumps(proposed)))
                     record["actions"] = proposed
-                    record["trace"].append(dict(step="Post settlement", reason="Wrote one internal ledger entry and its remittance record together.", sources=["postings:" + rid]))
+                    record["trace"].append(dict(step="Post settlement", reason="Wrote one internal ledger entry and its carrier notice in one transaction.", sources=["postings:" + rid]))
     except ValueError as exc:
         hold(record, stage, str(exc), sources)
     record["elapsed_ms"] = round((monotonic() - start) * 1000)
@@ -146,6 +170,23 @@ def process(db, packet, rid):
                (rid, packet["case_id"], json.dumps(record)))
     db.execute("INSERT INTO attempts VALUES (?,?)", (rid, json.dumps(record)))
     return record
+
+
+def status():
+    """Desk header: which sources are live and what the sandbox already holds."""
+    with database() as db:
+        cases = db.execute("SELECT count(*) FROM cases").fetchone()[0]
+        postings = db.execute("SELECT count(*) FROM postings").fetchone()[0]
+    return {"mode": MODE, "fx_mode": FX_MODE, "cases": cases, "postings": postings}
+
+
+def _replay(record):
+    # Returned, never stored: tells the operator nothing new was posted.
+    return {**record, "replayed": True}
+
+
+def _without_evidence(packet):
+    return {k: v for k, v in packet.items() if k not in EVIDENCE_FIELDS}
 
 
 def get_sample(missing: bool = False):
@@ -161,7 +202,12 @@ def run(payload: dict):
         if row:
             old = json.loads(row[0])
             if old["packet"] == packet:
-                return old
+                return _replay(old)
+            # The original evidence-less packet of a case a reviewer already resolved.
+            if ("evidence_ref" in old["packet"] and "evidence_ref" not in packet
+                    and packet.get("pod_minutes") is None
+                    and _without_evidence(old["packet"]) == _without_evidence(packet)):
+                return _replay(old)
             if old["status"] != "REVIEW":
                 raise ServiceError(409, "Case already posted. A changed invoice needs a new case ID.")
             return process(db, packet, old["id"])
@@ -188,7 +234,7 @@ def resolve(rid: str, payload: dict):
 def retry(rid: str):
     with database(True) as db:
         old = get_case(db, rid)
-        return old if old["status"] == "SETTLED" else process(db, old["packet"], rid)
+        return _replay(old) if old["status"] == "SETTLED" else process(db, old["packet"], rid)
 
 
 def receipt_data(rid: str):

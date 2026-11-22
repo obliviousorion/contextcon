@@ -31,6 +31,8 @@ The completed job ends at **audit and internal posting**. A deduction records a 
 python offline_server.py --port 8000
 ```
 
+Add `--fresh` to start from an empty sandbox (it deletes only this mode's `*.sqlite3` file), which is what a recording needs. On macOS, double-click `start-freightclose.command` (or run `./start-freightclose.command --fresh`); on Windows, double-click `Start-FreightClose.cmd`. Both pick a free port and open the browser.
+
 **FastAPI serving option** — On Windows PowerShell:
 
 ```powershell
@@ -55,6 +57,8 @@ Open [the settlement desk](http://127.0.0.1:8000). Select **Detention overcharge
 **Rehearsal** — Set `FREIGHT_MODE=mock` in `.env`. The invoice parser and the 85.00 INR/USD fixture run locally with no model key.
 
 **Live** — Set `FREIGHT_MODE=live` and `OPENAI_API_KEY` in `.env`, then restart the server. OpenAI extracts invoice fields and Frankfurter provides the dated rate used in the spending decision. Live mode needs working network access to both services. The OpenAI call sends the supplied invoice text to the provider. Use approved event data.
+
+**Live rate, no model key** — Keep `FREIGHT_MODE=mock` and set `FREIGHT_FX=live`. The fixture reader parses the invoice and the authority check uses the real dated ECB rate from Frankfurter (94.96 INR/USD on 16 October 2026, so the sample payable is ₹242,148). Only the date range and currency pair leave the machine. The header and every receipt name both sources, for example `Fixture invoice reader · Live ECB rate`.
 
 ## Architecture
 
@@ -86,15 +90,17 @@ The model interprets invoice language. Python owns contract arithmetic and autho
 | `service.py` | Workflow, run budget, duplicate protection, SQLite transaction, case version history |
 | `intake.py` / `samples.py` | Invoice evidence extraction and reproducible source fixtures |
 | `engine.py` / `fx.py` | Freight contract arithmetic and dated INR authorization |
-| `index.html` | Shipment intake, receipts, source inspection and exception handling |
-| `test_service.py` | Regression checks for supported charges and hold paths |
+| `index.html` | Shipment intake, line-item audit, INR authority meter, receipts, source inspection and exception handling |
+| `test_service.py` | Regression checks for supported charges, line items and hold paths |
+| `test_posting.py` | Posting, replay, retry, notice, adapter and sandbox-reset checks |
 
 ## What counts as a pass
 
 | Test | Expected result |
 |---|---|
 | $2,400 line haul plus $450 detention, 120 minutes recorded, first 60 free, $150 per completed hour | One $2,550 sandbox payable and one $300 short-pay notice if the INR cap permits it |
-| Same bill submitted again | Prior settlement remains the sole payable |
+| Same bill submitted again | Prior settlement remains the sole payable. The response carries `replayed: true` and the desk shows "Duplicate blocked" |
+| Original evidence-less packet resubmitted after a reviewer resolved it | The resolved receipt comes back as a replay, not a 409 |
 | Detention claimed, delivery record missing | Review, with an explanation and no postings |
 | Reviewer supplies 120 verified minutes and a gate-log reference | Re-audit settles the supported amount if the other checks pass |
 | Sum mismatch, PO mismatch, unsupported evidence or unavailable live rate | No settlement |
@@ -128,7 +134,7 @@ The service tests submit four concurrent copies, interrupt the receipt write, re
 
 ## Reproduce a changed policy
 
-The sample packet uses 16 October 2026 and a ₹300,000 authority cap. In mock mode, $2,550 × 85.00 = ₹216,750. To prove the rate affects the decision, use the [FastAPI interactive docs](http://127.0.0.1:8000/docs) when running the FastAPI adapter, or run the following PowerShell on a **fresh mock database before settling the original sample**. Lower the authority to ₹200,000 (20,000,000 paise). The same freight calculation now produces a held case and zero postings.
+The sample packet uses 16 October 2026 and a ₹300,000 authority cap. In mock mode, $2,550 × 85.00 = ₹216,750. To prove the rate affects the decision on a **fresh database before settling the original sample**, type `200000` into **Spending authority cap (₹)** and click **Audit and settle**: the authority meter turns amber, the case holds and nothing posts. The API takes the cap in paise (20,000,000). Use the [FastAPI interactive docs](http://127.0.0.1:8000/docs) when running the FastAPI adapter, or the PowerShell below.
 
 ```powershell
 $desk = 'http://127.0.0.1:8000'
@@ -139,6 +145,17 @@ $body = @{packet = $packet} | ConvertTo-Json -Depth 6
 $result = Invoke-RestMethod "$desk/api/run" -Method Post -ContentType 'application/json' -Body $body
 $result | Select-Object status, actions, fx
 ```
+
+The same check from macOS or Linux:
+
+```bash
+curl -s http://127.0.0.1:8000/api/sample \
+  | python3 -c "import sys,json;p=json.load(sys.stdin);p.update(case_id='CAP-200K',cap_paise=20000000);print(json.dumps({'packet':p}))" \
+  | curl -s -X POST -H 'Content-Type: application/json' --data @- http://127.0.0.1:8000/api/run \
+  | python3 -c "import sys,json;r=json.load(sys.stdin);print(r['status'],r['fx']['reason'])"
+```
+
+`GET /api/status` reports both source modes and how many cases and payables the sandbox holds.
 
 A fresh instance uses a local SQLite file per mode. Set `FREIGHT_DB` to a new file path for a clean rehearsal. Each downloadable receipt includes prior attempts, elapsed time, call estimates and the packet behind the decision. The service records the estimate available for each call. An unavailable provider can leave its actual charge unknown. FX retrieval allows at most five seconds of network inactivity, and the posting gate checks a 25-second processing budget. An operator can retry a held case with `POST /api/cases/{id}/retry`. This single-operator localhost prototype trusts input records and uses a single invoice-ID namespace.
 

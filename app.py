@@ -17,6 +17,7 @@ def home():
     return FileResponse(service.ROOT / "index.html")
 
 
+app.get("/api/status")(service.status)
 app.get("/api/sample")(service.get_sample)
 app.get("/api/cases")(service.history)
 app.post("/api/run")(service.run)
