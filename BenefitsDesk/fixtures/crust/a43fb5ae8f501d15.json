@@ -1,0 +1,217 @@
+{
+ "endpoint": "/job/search",
+ "status": 200,
+ "retrieved_at": "2026-11-22T10:48:28+00:00",
+ "credits": 0.06,
+ "data": {
+  "job_listings": [
+   {
+    "crustdata_job_id": 3423005849283373,
+    "job_details": {
+     "job_id": 3423005849283373,
+     "title": "Team Leader",
+     "category": null,
+     "workplace_type": "On-site",
+     "url": "https://in.indeed.com/viewjob?jk=a18456e17209f680",
+     "reposted_job": false,
+     "number_of_openings": null,
+     "source": "indeed",
+     "employment_type": "full_time"
+    },
+    "company": {
+     "basic_info": {
+      "crustdata_company_id": 2764184,
+      "name": "SHREE VASU LOGISTICS LTD",
+      "primary_domain": "shreevasulogistics.com",
+      "website": "https://www.linkedin.com/company-beta/13453041",
+      "professional_network_id": "13453041",
+      "industries": [
+       "Transportation, Logistics, Supply Chain and Storage"
+      ]
+     },
+     "locations": {
+      "country": "India",
+      "state": "Chhattisgarh",
+      "city": null,
+      "street_address": "Logistics Park, Opp. Jaika Automobiles, Ring Road No.1, Raipur - 492001, Chhattisgarh., Rajendra Nagar (Raipur), Byron Bazar, Vivekanand Ashram, Dayanand Nagar, Kalibadi, Chhotapara, Purani Basti (Raipur), Raipur H.O, Ravigram, Raipur Kutchery, Chhattisgarh"
+     },
+     "headcount": {
+      "total": 264,
+      "range": "201-500",
+      "largest_headcount_country": "IND"
+     },
+     "followers": {
+      "count": 2761
+     },
+     "revenue": {
+      "estimated": {
+       "lower_bound_usd": 20000000,
+       "upper_bound_usd": 50000000
+      },
+      "public_markets": {
+       "stock_symbols": [
+        "SVLL"
+       ],
+       "fiscal_year_end": ""
+      },
+      "acquisition_status": null
+     },
+     "funding": {
+      "total_investment_usd": null,
+      "valuation_usd": 0.0,
+      "last_fundraise_date": null,
+      "last_round_type": "",
+      "num_funding_rounds": null,
+      "investors": null
+     },
+     "competitors": {
+      "websites": []
+     }
+    },
+    "location": {
+     "raw": "Ahmedabad, Gujarat",
+     "city": "Ahmedabad",
+     "district": null,
+     "state": "Gujarat",
+     "country": "India",
+     "pincode": null
+    },
+    "content": {
+     "description": "We are hiring a *Team Leader* experienced in handling operations for e-commerce giants like *Flipkart, Amazon, Meesho, and Myntra*. The candidate should have a strong background in managing teams and ensuring smooth logistics operations. *Key Responsibilities:* * Lead a team of warehouse staff for efficient order processing and dispatch. * Oversee daily operations, including picking, packing, and inventory management. * Ensure timely shipment and coordinate with courier partners. * Monitor team performance and implement SOPs for quality and efficiency. * Prepare basic reports on order fulfillment and stock status. *Requirements:* * *Experience:* 3-5 years in e-commerce operations with Flipkart, Amazon, Meesho, or Myntra. * *Skills:* Team leadership, WMS knowledge, problem-solving, attention to detail. * *Education:* Bachelor\u2019s degree; supply chain/logistics background preferred. * *Location:* Ahmedabad, Gujarat. * *Language:* Proficient in Hindi and English. Job Type: Full-time Pay: \u20b925,000.00 - \u20b930,000.00 per month Benefits: * Health insurance * Provident Fund Experience: * total work: 1 year (Preferred) Work Location: In person"
+    },
+    "metadata": {
+     "date_added": "2026-11-21T05:17:07",
+     "date_updated": "2026-11-22T01:48:22"
+    }
+   },
+   {
+    "crustdata_job_id": 2925972452173646,
+    "job_details": {
+     "job_id": 2925972452173646,
+     "title": "AR (Foreign Accounting)-UK/US",
+     "category": null,
+     "workplace_type": "On-site",
+     "url": "https://in.indeed.com/viewjob?jk=c005146c6fdf5a71",
+     "reposted_job": false,
+     "number_of_openings": null,
+     "source": "indeed",
+     "employment_type": "full_time"
+    },
+    "company": {
+     "basic_info": {
+      "crustdata_company_id": 1001934,
+      "name": "BJS Home Delivery",
+      "primary_domain": "bjshomedelivery.com",
+      "website": "http://www.bjshomedelivery.com",
+      "professional_network_id": "9462032",
+      "industries": [
+       "Transportation, Logistics, Supply Chain and Storage"
+      ]
+     },
+     "locations": {
+      "country": "United Kingdom",
+      "state": "England",
+      "city": null,
+      "street_address": "BJS House Unit 2 Bull Lane, Darlaston, Moxley, King's Hill, Wednesbury, England"
+     },
+     "headcount": {
+      "total": 411,
+      "range": "501-1000",
+      "largest_headcount_country": "GBR"
+     },
+     "followers": {
+      "count": 17788
+     },
+     "revenue": {
+      "estimated": {
+       "lower_bound_usd": 500000000,
+       "upper_bound_usd": 1000000000
+      },
+      "public_markets": {
+       "stock_symbols": [],
+       "fiscal_year_end": ""
+      },
+      "acquisition_status": null
+     },
+     "funding": {
+      "total_investment_usd": null,
+      "valuation_usd": 0.0,
+      "last_fundraise_date": null,
+      "last_round_type": "",
+      "num_funding_rounds": null,
+      "investors": null
+     },
+     "competitors": {
+      "websites": [
+       "http://www.paperfly.com.bd",
+       "http://seasonboy.com/",
+       "http://www.blowhorn.com",
+       "http://www.fuelbuddy.in",
+       "http://themodernmilkman.co.uk",
+       "http://www.deliveryhero.com",
+       "http://www.eztruck.co",
+       "http://www.dispatchit.com",
+       "https://bsxvapor.com",
+       "http://www.boxed.com",
+       "http://www.mybuddy.in",
+       "https://www.bulkvan.com",
+       "http://www.timemytask.com",
+       "https://bungii.com",
+       "https://borzodelivery.com/in",
+       "https://www.bringg.com",
+       "https://www.jkbhousing.com/",
+       "https://www.autohornfleetservices.co.uk/",
+       "https://www.facebook.com/getbakedtlv/",
+       "https://www.taskrabbit.com/delivery",
+       "http://www.thecakecrew.co.uk",
+       "http://www.clustertruck.com",
+       "http://www.chill.com.au",
+       "http://www.jarviscorp.com",
+       "https://daakninja.com",
+       "http://www.jsmobileon.com",
+       "http://www.vlokal.com",
+       "https://boosterusa.com/",
+       "http://www.sendle.com",
+       "https://joboy.com",
+       "https://migrant-at-work.webnode.co.uk/",
+       "http://www.roadcast.in",
+       "http://www.freightbazaar.com",
+       "http://pikup.co.in",
+       "http://www.transporter.city",
+       "http://thekarrier.com/",
+       "https://www.buyk.com",
+       "https://trexity.com/",
+       "http://www.runnr.co.in",
+       "https://www.pandionpro.com/",
+       "http://eJOOV.com",
+       "http://www.beconfidentgroup.com",
+       "http://www.milkbasket.com",
+       "http://shipveho.com/",
+       "https://skipcart.com/partners/",
+       "https://www.dropoff.com",
+       "http://www.bymiles.co.uk",
+       "http://www.jbmgroup.com"
+      ]
+     }
+    },
+    "location": {
+     "raw": "Mohali, Punjab",
+     "city": "Sahibzada Ajit Singh Nagar",
+     "district": "Ropar Division",
+     "state": "Punjab",
+     "country": "India",
+     "pincode": null
+    },
+    "content": {
+     "description": "Accounts Receivable (AR) Executive | UK/US Accounting *Location:* Mohali *Experience:* 1.5+ Years *Working Days:* 5.5 Days *Shift:* UK Shifts *Joining:* Immediate Joiners Preferred Job Overview We are looking for an experienced Accounts Receivable (AR) Executive with knowledge of UK/US accounting processes and hands-on experience with accounting software such as Xero, QuickBooks, or Sage. Roles & Responsibilities * Manage accounts receivable operations for UK/US clients. * Handle invoicing, billing, payment allocation, and reconciliation. * Follow up on outstanding payments and manage collections. * Maintain accurate financial records and customer accounts. * Resolve payment discrepancies and billing queries. * Prepare AR reports and support month-end closing activities. Required Skills & Qualifications * Minimum 1.5+ years of experience in AR/Accounting. * Knowledge of UK/US accounting processes. * Hands-on experience with *Xero, QuickBooks, or Sage*. * Excellent communication and coordination skills. * Strong understanding of invoicing, reconciliation, and collections. * Excellent command of MS Excel. * Immediate joiners preferred. *Interested candidates can share their updated CVs at 8909399009.* Pay: \u20b925,000.00 - \u20b950,000.00 per month Benefits: * Commuter assistance * Flexible schedule * Food provided * Health insurance * Paid sick time * Paid time off * Provident Fund Work Location: In person"
+    },
+    "metadata": {
+     "date_added": "2026-11-20T08:03:55",
+     "date_updated": "2026-11-22T01:49:21"
+    }
+   }
+  ],
+  "next_cursor": "H4sIAAAAAAAA_xTLSwrCMBAA0KuEWXcxk2Y-6VVEyiRp6EIs9rMQ8e7iAd4HXteyv-fVjxWmAKiSy2IVFYlTbs2UWItEl56aVyrFxMU6W0_ClLtyQ62uNSqNBkOAY9tPmMKNNDMJ2ciIOISYI2eNiSPpKEnuQ4BzO_0x1-16_gVR-v4CAAD__xyBu6ORAAAA",
+  "total_count": 114
+ }
+}

@@ -10,7 +10,7 @@ from .store import Store
 
 def build_case(store: Store, case: dict, run_id: str, seconds: float) -> dict:
     cfg = load_config()
-    case["actions"] = actions.list_all(store, run_id)
+    case["actions"] = actions.list_all(store, run_id, (case.get("persona") or {}).get("persona_id"))
     case["cost"] = {**store.run_cost(run_id), "seconds": round(seconds, 2),
                     "cap": cfg["limits"]["credit_cap_per_run"], "inr_per_credit": cfg["cost"]["inr_per_credit"]}
     keep = ["run_id", "status", "as_of", "skipped_steps", "refusal"] + list(cfg["output"]["fields"])

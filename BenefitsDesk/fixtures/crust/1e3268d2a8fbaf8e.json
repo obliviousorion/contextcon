@@ -1,0 +1,99 @@
+{
+ "endpoint": "/person/enrich",
+ "status": 200,
+ "retrieved_at": "2026-11-22T10:46:18+00:00",
+ "credits": 1.0,
+ "data": [
+  {
+   "matched_on": "<redacted>",
+   "match_type": "professional_network_profile_url",
+   "match_status": "matched",
+   "matches": [
+    {
+     "confidence_score": 1.0,
+     "person_data": {
+      "crustdata_person_id": "<redacted>",
+      "experience": {
+       "employment_details": {
+        "current": [],
+        "past": [
+         {
+          "name": "Amazon",
+          "crustdata_company_id": 6034577,
+          "title": "SDE Intern",
+          "start_date": "2026-05-01T00:00:00+00:00",
+          "end_date": "2026-07-01T00:00:00+00:00",
+          "is_default": false,
+          "employment_type": "Internship",
+          "seniority_level": "In Training",
+          "location": {
+           "raw": ""
+          },
+          "function_category": ""
+         },
+         {
+          "name": "Student Alumni Relations Cell, BITS Pilani, Pilani Campus",
+          "crustdata_company_id": 2016948,
+          "title": "Coordinator",
+          "start_date": "2025-05-01T00:00:00+00:00",
+          "end_date": "2026-05-01T00:00:00+00:00",
+          "is_default": false,
+          "employment_type": "Full-time",
+          "seniority_level": "Entry Level",
+          "location": {
+           "raw": "Pilani, Rajasthan, India"
+          },
+          "function_category": ""
+         },
+         {
+          "name": "Ministry of Electronics and Information Technology",
+          "crustdata_company_id": 1090803,
+          "title": "Data Science Intern",
+          "start_date": "2025-05-01T00:00:00+00:00",
+          "end_date": "2025-07-01T00:00:00+00:00",
+          "is_default": false,
+          "employment_type": "Internship",
+          "seniority_level": "In Training",
+          "location": {
+           "raw": "Delhi, India"
+          },
+          "function_category": ""
+         },
+         {
+          "name": "Student Alumni Relations Cell, BITS Pilani, Pilani Campus",
+          "crustdata_company_id": 2016948,
+          "title": "Content Writer",
+          "start_date": "2023-10-01T00:00:00+00:00",
+          "end_date": "2025-05-01T00:00:00+00:00",
+          "is_default": false,
+          "employment_type": "",
+          "seniority_level": "Entry Level",
+          "location": {
+           "raw": ""
+          },
+          "function_category": ""
+         },
+         {
+          "name": "Jhabua Power Limited CSR (a joint venture company of NTPC Ltd)",
+          "crustdata_company_id": 6270722,
+          "title": "Summer Intern",
+          "start_date": "2024-05-01T00:00:00+00:00",
+          "end_date": "2024-07-01T00:00:00+00:00",
+          "is_default": false,
+          "employment_type": "Internship",
+          "seniority_level": "In Training",
+          "location": {
+           "raw": "Noida, Uttar Pradesh, India"
+          },
+          "function_category": ""
+         }
+        ]
+       }
+      }
+     }
+    }
+   ]
+  }
+ ],
+ "redacted": "personal data removed: names, profile, URLs and ids; employment entries kept (consenting team members)"
+}

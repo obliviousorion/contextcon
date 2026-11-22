@@ -1,0 +1,57 @@
+{
+ "endpoint": "/person/enrich",
+ "status": 200,
+ "retrieved_at": "2026-11-22T10:46:20+00:00",
+ "credits": 1.0,
+ "data": [
+  {
+   "matched_on": "<redacted>",
+   "match_type": "professional_network_profile_url",
+   "match_status": "matched",
+   "matches": [
+    {
+     "confidence_score": 1.0,
+     "person_data": {
+      "crustdata_person_id": "<redacted>",
+      "experience": {
+       "employment_details": {
+        "current": [],
+        "past": [
+         {
+          "name": "Honeywell Technologies",
+          "crustdata_company_id": 681325,
+          "title": "Software Engineer Intern",
+          "start_date": "2026-05-01T00:00:00+00:00",
+          "end_date": "2026-07-01T00:00:00+00:00",
+          "is_default": false,
+          "employment_type": "Internship",
+          "seniority_level": "In Training",
+          "location": {
+           "raw": "Bengaluru"
+          },
+          "function_category": "Engineering"
+         },
+         {
+          "name": "CSIR-NIScPR",
+          "crustdata_company_id": 11946101,
+          "title": "Data Science Intern",
+          "start_date": "2025-05-01T00:00:00+00:00",
+          "end_date": "2025-07-01T00:00:00+00:00",
+          "is_default": false,
+          "employment_type": "Internship",
+          "seniority_level": "In Training",
+          "location": {
+           "raw": "New Delhi, Delhi, India"
+          },
+          "function_category": ""
+         }
+        ]
+       }
+      }
+     }
+    }
+   ]
+  }
+ ],
+ "redacted": "personal data removed: names, profile, URLs and ids; employment entries kept (consenting team members)"
+}

@@ -1,0 +1,179 @@
+{
+ "endpoint": "/job/search",
+ "status": 200,
+ "retrieved_at": "2026-11-22T10:46:17+00:00",
+ "credits": 0.0,
+ "data": {
+  "job_listings": [],
+  "next_cursor": null,
+  "total_count": 588981,
+  "aggregations": [
+   {
+    "type": "group_by",
+    "field": "company.basic_info.industries",
+    "buckets": [
+     {
+      "key": "Professional Services",
+      "count": 130269
+     },
+     {
+      "key": "IT Services and IT Consulting",
+      "count": 77870
+     },
+     {
+      "key": "Financial Services",
+      "count": 42847
+     },
+     {
+      "key": "Technology, Information and Media",
+      "count": 38796
+     },
+     {
+      "key": "Manufacturing",
+      "count": 37814
+     },
+     {
+      "key": "Technology, Information and Internet",
+      "count": 33964
+     },
+     {
+      "key": "Business Consulting and Services",
+      "count": 33191
+     },
+     {
+      "key": "Software Development",
+      "count": 23614
+     },
+     {
+      "key": "Machinery Manufacturing",
+      "count": 10118
+     },
+     {
+      "key": "Credit Intermediation",
+      "count": 9198
+     },
+     {
+      "key": "Banking",
+      "count": 9002
+     },
+     {
+      "key": "Accommodation and Food Services",
+      "count": 8385
+     },
+     {
+      "key": "Hospitality",
+      "count": 7396
+     },
+     {
+      "key": "Chemical Manufacturing",
+      "count": 6572
+     },
+     {
+      "key": "Hospitals and Health Care",
+      "count": 6482
+     },
+     {
+      "key": "Computers and Electronics Manufacturing",
+      "count": 6344
+     },
+     {
+      "key": "Administrative and Support Services",
+      "count": 5134
+     },
+     {
+      "key": "Semiconductor Manufacturing",
+      "count": 5017
+     },
+     {
+      "key": "Pharmaceutical Manufacturing",
+      "count": 4746
+     },
+     {
+      "key": "Construction",
+      "count": 4637
+     },
+     {
+      "key": "Education",
+      "count": 4587
+     },
+     {
+      "key": "Transportation Equipment Manufacturing",
+      "count": 4455
+     },
+     {
+      "key": "Real Estate and Equipment Rental Services",
+      "count": 4327
+     },
+     {
+      "key": "Real Estate",
+      "count": 4313
+     },
+     {
+      "key": "Media and Telecommunications",
+      "count": 4219
+     },
+     {
+      "key": "Capital Markets",
+      "count": 4017
+     },
+     {
+      "key": "Research Services",
+      "count": 3738
+     },
+     {
+      "key": "Government Administration",
+      "count": 3724
+     },
+     {
+      "key": "Retail",
+      "count": 3661
+     },
+     {
+      "key": "Automation Machinery Manufacturing",
+      "count": 3610
+     },
+     {
+      "key": "Telecommunications",
+      "count": 3509
+     },
+     {
+      "key": "Advertising Services",
+      "count": 3434
+     },
+     {
+      "key": "Transportation, Logistics, Supply Chain and Storage",
+      "count": 3434
+     },
+     {
+      "key": "Staffing and Recruiting",
+      "count": 3432
+     },
+     {
+      "key": "Human Resources Services",
+      "count": 3413
+     },
+     {
+      "key": "Biotechnology Research",
+      "count": 3287
+     },
+     {
+      "key": "Information Technology & Services",
+      "count": 2733
+     },
+     {
+      "key": "Engineering Services",
+      "count": 2729
+     },
+     {
+      "key": "Appliances, Electrical, and Electronics Manufacturing",
+      "count": 2711
+     },
+     {
+      "key": "Industrial Machinery Manufacturing",
+      "count": 2649
+     }
+    ]
+   }
+  ]
+ }
+}

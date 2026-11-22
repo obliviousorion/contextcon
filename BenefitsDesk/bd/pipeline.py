@@ -23,7 +23,7 @@ class Run:
         self.store, self.req = store, request
         self.run_id = run_id or f"{request.get('id', 'run')}-{h(request)[:6]}"
         self.chaos_on = chaos
-        self.p_kill = float(load_config()["chaos"]["kill_probability"])
+        self.p_kill = float(os.environ.get("BD_CHAOS_P") or load_config()["chaos"]["kill_probability"])
         self.mode = mode
         self.t0 = time.time()
         self.skipped: list[str] = []
@@ -191,7 +191,8 @@ class Run:
 
     def _act(self, case: dict) -> None:
         """Send every APPROVED action of this run, exactly once. Unapproved ones wait."""
-        for it in actions.list_all(self.store, self.run_id):
+        pid = (case.get("persona") or {}).get("persona_id")
+        for it in actions.list_all(self.store, self.run_id, pid):
             if it["status"] in ("approved", "sending"):
                 self.store.event(self.run_id, f"act:{it['action']}", "start")
                 try:

@@ -1,0 +1,219 @@
+{
+ "endpoint": "/job/search",
+ "status": 200,
+ "retrieved_at": "2026-11-22T10:56:39+00:00",
+ "credits": 0.06,
+ "data": {
+  "job_listings": [
+   {
+    "crustdata_job_id": 3423005849283373,
+    "job_details": {
+     "job_id": 3423005849283373,
+     "title": "Team Leader",
+     "category": null,
+     "workplace_type": "On-site",
+     "url": "https://in.indeed.com/viewjob?jk=a18456e17209f680",
+     "reposted_job": false,
+     "number_of_openings": null,
+     "source": "indeed",
+     "employment_type": "full_time"
+    },
+    "company": {
+     "basic_info": {
+      "crustdata_company_id": 2764184,
+      "name": "SHREE VASU LOGISTICS LTD",
+      "primary_domain": "shreevasulogistics.com",
+      "website": "https://www.linkedin.com/company-beta/13453041",
+      "professional_network_id": "13453041",
+      "industries": [
+       "Transportation, Logistics, Supply Chain and Storage"
+      ]
+     },
+     "locations": {
+      "country": "India",
+      "state": "Chhattisgarh",
+      "city": null,
+      "street_address": "Logistics Park, Opp. Jaika Automobiles, Ring Road No.1, Raipur - 492001, Chhattisgarh., Rajendra Nagar (Raipur), Byron Bazar, Vivekanand Ashram, Dayanand Nagar, Kalibadi, Chhotapara, Purani Basti (Raipur), Raipur H.O, Ravigram, Raipur Kutchery, Chhattisgarh"
+     },
+     "headcount": {
+      "total": 264,
+      "range": "201-500",
+      "largest_headcount_country": "IND"
+     },
+     "followers": {
+      "count": 2761
+     },
+     "revenue": {
+      "estimated": {
+       "lower_bound_usd": 20000000,
+       "upper_bound_usd": 50000000
+      },
+      "public_markets": {
+       "stock_symbols": [
+        "SVLL"
+       ],
+       "fiscal_year_end": ""
+      },
+      "acquisition_status": null
+     },
+     "funding": {
+      "total_investment_usd": null,
+      "valuation_usd": 0.0,
+      "last_fundraise_date": null,
+      "last_round_type": "",
+      "num_funding_rounds": null,
+      "investors": null
+     },
+     "competitors": {
+      "websites": []
+     }
+    },
+    "location": {
+     "raw": "Ahmedabad, Gujarat",
+     "city": "Ahmedabad",
+     "district": null,
+     "state": "Gujarat",
+     "country": "India",
+     "pincode": null
+    },
+    "content": {
+     "description": "We are hiring a *Team Leader* experienced in handling operations for e-commerce giants like *Flipkart, Amazon, Meesho, and Myntra*. The candidate should have a strong background in managing teams and ensuring smooth logistics operations. *Key Responsibilities:* * Lead a team of warehouse staff for efficient order processing and dispatch. * Oversee daily operations, including picking, packing, and inventory management. * Ensure timely shipment and coordinate with courier partners. * Monitor team performance and implement SOPs for quality and efficiency. * Prepare basic reports on order fulfillment and stock status. *Requirements:* * *Experience:* 3-5 years in e-commerce operations with Flipkart, Amazon, Meesho, or Myntra. * *Skills:* Team leadership, WMS knowledge, problem-solving, attention to detail. * *Education:* Bachelor\u2019s degree; supply chain/logistics background preferred. * *Location:* Ahmedabad, Gujarat. * *Language:* Proficient in Hindi and English. Job Type: Full-time Pay: \u20b925,000.00 - \u20b930,000.00 per month Benefits: * Health insurance * Provident Fund Experience: * total work: 1 year (Preferred) Work Location: In person"
+    },
+    "metadata": {
+     "date_added": "2026-11-21T05:17:07",
+     "date_updated": "2026-11-22T01:48:22"
+    }
+   },
+   {
+    "crustdata_job_id": 8375557418150997,
+    "job_details": {
+     "job_id": 8375557418150997,
+     "title": "Senior DevOps Engineer",
+     "category": null,
+     "workplace_type": null,
+     "url": "https://in.indeed.com/viewjob?jk=0a4036bcf9cc1362",
+     "reposted_job": false,
+     "number_of_openings": null,
+     "source": "indeed",
+     "employment_type": null
+    },
+    "company": {
+     "basic_info": {
+      "crustdata_company_id": 1136329,
+      "name": "DHL",
+      "primary_domain": "dhl.de",
+      "website": "http://www.dhl.com",
+      "professional_network_id": "1355",
+      "industries": [
+       "Transportation, Logistics, Supply Chain and Storage"
+      ]
+     },
+     "locations": {
+      "country": "Germany",
+      "state": "North Rhine-Westphalia",
+      "city": null,
+      "street_address": "Charles-de-Gaulle-Str. 20, Bonn, North Rhine-Westphalia"
+     },
+     "headcount": {
+      "total": 240169,
+      "range": "10001+",
+      "largest_headcount_country": "USA"
+     },
+     "followers": {
+      "count": 3049879
+     },
+     "revenue": {
+      "estimated": {
+       "lower_bound_usd": 1000000000,
+       "upper_bound_usd": 1000000000000
+      },
+      "public_markets": {
+       "stock_symbols": [],
+       "fiscal_year_end": ""
+      },
+      "acquisition_status": null
+     },
+     "funding": {
+      "total_investment_usd": 3402048.0,
+      "valuation_usd": 0.0,
+      "last_fundraise_date": "2019-12-20T00:00:00",
+      "last_round_type": "corporate_round",
+      "num_funding_rounds": 1,
+      "investors": [
+       "Catena"
+      ]
+     },
+     "competitors": {
+      "websites": [
+       "http://www.blowhorn.com",
+       "http://Www.rivigo.com",
+       "http://www.kiongroup.com",
+       "http://www.wilsonsandhu.net",
+       "http://www.snowman.in",
+       "http://dtdc.com/",
+       "http://d2lpharma.com",
+       "http://www.deliveryhero.com",
+       "http://www.wowexpress.in",
+       "https://omlogisticssupplychain.com/",
+       "https://apollosupplychain.com/",
+       "https://www.freighttiger.com",
+       "http://sendd.co/",
+       "http://www.logicarts.in",
+       "https://www.ithinklogistics.com/signup?utm_source=CO&utm_medium=LinkedIn_DOM&utm_campaign=SM",
+       "https://www.jfll.com",
+       "http://www.driverlogistics.in",
+       "http://www.eitain.com/",
+       "http://www.speedboxapp.com",
+       "http://www.delygo.in",
+       "https://dot2dotz.com/",
+       "http://www.shreejitranslogistics.com",
+       "https://www.delhivery.com/",
+       "http://urdelivery.co.in",
+       "http://www.dezaro.uk",
+       "https://fasterfreight.com/",
+       "http://www.rcslogistics.com",
+       "http://www.eglobe-cargo.com",
+       "https://daakninja.com",
+       "http://www.fastlineexpress.com",
+       "https://www.dhalkot.com/",
+       "http://www.vlokal.com",
+       "https://www.bdginternational.in/",
+       "http://www.thenetglobal.group",
+       "https://www.indiamart.com/ppobox/",
+       "http://www.roadcast.in",
+       "http://expresscourier.net",
+       "http://www.korierwala.com",
+       "https://in.dlink.com/en/business",
+       "https://www.courierhome.com",
+       "https://logistics.beldara.com/",
+       "https://www.ecuworldwide.com/",
+       "https://www.allcargo.global/",
+       "http://www.facebook.com/MailboxIndia",
+       "http://www.bluedart.com",
+       "http://www.dhlbharat.com",
+       "http://www.transcorpint.com",
+       "http://xpressbees.com"
+      ]
+     }
+    },
+    "location": {
+     "raw": "Bengaluru, Karnataka",
+     "city": "Bengaluru",
+     "district": "Bangalore Division",
+     "state": "Karnataka",
+     "country": "India",
+     "pincode": null
+    },
+    "content": {
+     "description": "Your IT Future, Delivered. Senior Software Engineer \u2013 SAP BTP (CAPM) With a global team of 5600+ IT professionals, DHL IT Services connects people and keeps the global economy running by continuously innovating and creating sustainable digital solutions. We work beyond global borders and push boundaries across all dimensions of logistics. You can leave your mark shaping the technology backbone of the biggest logistics company of the world. Our locations, Malaysia, Czech Republic and India earned the #GreatPlaceToWork certification, reflecting our commitment to exceptional employee experience. Digitalization. Simply delivered. At IT Services, we are passionate about SAP and cloud innovation. Our SAP BTP development team is continuously expanding. No matter your level of expertise in SAP BTP and CAPM development, you can always grow within our diverse environment. #DHL #DHLITServices #GreatPlace #SAP #BTP #CAPM Grow together. We are looking for a Senior Software Engineer \u2013 SAP BTP (CAPM) who can bring strong expertise in building cloud-native applications on SAP BTP. This role demands a deep understanding of the Cloud Application Programming Model (CAP), modern development frameworks, and integration capabilities with SAP S/4HANA and enterprise systems. The candidate (m/f/d) will be responsible for designing scalable services, writing technical design documents, and implementing cloud-based solutions. Prior experience in building extensions on SAP BTP and working in cloud-native environments will be a strong advantage. Ready to embark on the journey? Here\u2019s what we are looking for: Degree in Computer Science or related disciplines At least 5 years of experience in SAP development, with 2+ years in SAP BTP / CAPM Strong hands-on experience with: SAP CAP (Node.js / Java) Core Data Services (CDS) SAP BTP (Cloud Foundry / Kyma) Experience in building and exposing REST / OData services Knowledge of: SAP Fiori / UI5 / Fiori Elements SAP BTP services (Destination, XSUAA, Connectivity, Event Mesh) Experience with integration of SAP and non-SAP systems Familiarity with CI/CD pipelines, Git, and DevOps practices Prior experience in customer advisory and consulting Strong collaboration skills in a multinational environment Your Role & Responsibilities: Writing technical design documents for SAP BTP applications Designing and developing applications using SAP CAPM Building and exposing APIs and services (REST/OData) on SAP BTP Developing side-by-side extensions for SAP S/4HANA Integrating BTP applications with SAP and external systems Implementing security and authorization concepts using BTP services Supporting CI/CD, testing, and deployment pipelines Troubleshooting incidents and managing user queries via ticketing systems Continuously improving application performance and scalability You can work independently, prioritize and organize your tasks under time and workload pressure. Working in a multinational environment, you can expect cross-region collaboration with teams around the globe, thus being advanced in spoken and written English will be certainly useful. An array of benefits for you: Hybrid work arrangements to balance in-office collaboration and home flexibility. Annual Leave: 42 days off apart from Public / National Holidays. Medical Insurance: Self + Spouse + 2 children. An option to opt for Voluntary Parental Insurance (Parents / Parent -in-laws) at a nominal premium covering pre existing disease. In House training programs: professional and technical training certifications."
+    },
+    "metadata": {
+     "date_added": "2026-11-20T16:19:18",
+     "date_updated": "2026-11-22T01:53:43"
+    }
+   }
+  ],
+  "next_cursor": "H4sIAAAAAAAA_xTLSwrCMBAA0KuErLvIJJlfryJSpsmULsRiPwsR7y4e4H3i6_L9Pa12rHEMkZQ1c7PG3Nmkm7Fkx3mWbkhNlkJOlMGVEtQyS6GlV_XsJq04xSHEY9vPOIYbsCIoIEpKaQhSGBG5ggAmVb4PIZ7baY-pbdfzL3Kl7y8AAP__owp3QpEAAAA=",
+  "total_count": 246
+ }
+}

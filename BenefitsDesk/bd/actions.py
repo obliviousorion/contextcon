@@ -23,7 +23,8 @@ class SandboxDown(Exception):
 
 
 def _sandbox() -> str:
-    return load_config()["sandbox"]["url"].rstrip("/")
+    import os
+    return (os.environ.get("BD_SANDBOX_URL") or load_config()["sandbox"]["url"]).rstrip("/")
 
 
 def sandbox_count(key: str) -> int:
@@ -64,9 +65,12 @@ def get(store: Store, key: str) -> dict | None:
     return d
 
 
-def list_all(store: Store, run_id: str | None = None) -> list[dict]:
-    rows = store.q("SELECT key FROM intents " + ("WHERE run_id=? " if run_id else "") + "ORDER BY created_at DESC",
-                   *([run_id] if run_id else []))
+def list_all(store: Store, run_id: str | None = None, persona_id: str | None = None) -> list[dict]:
+    if persona_id:
+        rows = store.q("SELECT key FROM intents WHERE run_id=? OR persona_id=? ORDER BY created_at DESC", run_id, persona_id)
+    else:
+        rows = store.q("SELECT key FROM intents " + ("WHERE run_id=? " if run_id else "") + "ORDER BY created_at DESC",
+                       *([run_id] if run_id else []))
     return [get(store, r["key"]) for r in rows]
 
 

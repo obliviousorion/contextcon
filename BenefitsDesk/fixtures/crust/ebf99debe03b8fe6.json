@@ -1,0 +1,15 @@
+{
+ "endpoint": "/person/enrich",
+ "status": 200,
+ "retrieved_at": "2026-11-22T10:56:40+00:00",
+ "credits": 0.0,
+ "data": [
+  {
+   "matched_on": "<redacted>",
+   "match_type": "professional_network_profile_url",
+   "match_status": "not_found",
+   "matches": []
+  }
+ ],
+ "redacted": "personal data removed: names, profile, URLs and ids; employment entries kept (consenting team members)"
+}

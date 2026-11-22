@@ -59,5 +59,7 @@ class Handler(BaseHTTPRequestHandler):
                          "note": "sandbox only: nothing was sent to a real insurer"})
 
 
-def serve(port: int = 8765) -> None:
+def serve(port: int | None = None) -> None:
+    import os
+    port = port or int(os.environ.get("BD_SANDBOX_PORT") or 8765)
     ThreadingHTTPServer(("127.0.0.1", port), Handler).serve_forever()
