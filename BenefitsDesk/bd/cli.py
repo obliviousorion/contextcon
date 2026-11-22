@@ -40,6 +40,10 @@ def main(argv: list[str] | None = None) -> int:
     f = sub.add_parser("forget"); f.add_argument("profile_url")
     sub.add_parser("sandbox"); sv = sub.add_parser("serve"); sv.add_argument("--port", type=int, default=8787)
     sm = sub.add_parser("smoke"); sm.add_argument("--mode", default="live")
+    wc = sub.add_parser("watch-create"); wc.add_argument("profile_url"); wc.add_argument("--mode", default="live")
+    wr = sub.add_parser("watch-register"); wr.add_argument("watch_id"); wr.add_argument("profile_url")
+    wp = sub.add_parser("watch-pull"); wp.add_argument("watch_id"); wp.add_argument("--mode", default="live")
+    wp.add_argument("--since", default="2026-09-01"); wp.add_argument("--as-of", default="2026-11-22")
     args = ap.parse_args(argv)
     store = Store()
 
@@ -91,6 +95,16 @@ def main(argv: list[str] | None = None) -> int:
     if args.cmd == "serve":
         from .api import serve
         serve(args.port); return 0
+    if args.cmd in ("watch-create", "watch-register", "watch-pull"):
+        from . import watch
+        from .crust import Crust
+        if args.cmd == "watch-register":
+            print(watch.register(store, args.watch_id, args.profile_url)); return 0
+        c = Crust(store, f"watch-{args.cmd}", "watch", mode=args.mode)
+        if args.cmd == "watch-create":
+            print(json.dumps(watch.create(store, c, args.profile_url), indent=1)); return 0
+        out = watch.pull(store, c, args.watch_id, args.since, args.as_of, f"watch-{args.watch_id}")
+        print(json.dumps(out, indent=1, default=str)); return 0 if "error" not in out else 1
     if args.cmd == "smoke":
         from .crust import Crust
         from .peers import base_filter, count, phrase_cond

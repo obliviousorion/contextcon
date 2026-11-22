@@ -32,3 +32,5 @@ chaos:
   kill_probability: 0.25     # chance of os._exit at each step boundary under --chaos
 ui:
   step_delay_seconds: 1.2    # pacing for runs started from the UI only, so a judge can press Kill mid-run
+watch:
+  webhook_url: null          # a public https endpoint we own (e.g. an ngrok tunnel to the sandbox). Unset: creation refused, pulling works.

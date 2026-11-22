@@ -173,4 +173,4 @@ Tier A must ship by 17:30; Tier B only if A is green; Tier C is cut unless there
 ### Status at build end (22 Nov 2026)
 All items above are met and tested, with two exceptions, both stated in the README:
 - Insurer regulator figures are CANNOT VERIFY: no IRDAI table URL was found.
-- The watch path for the alarm is not built: the direct request is the path.
+- The watch pull path is built and tested, but no live watch was created: a public webhook URL is needed.

@@ -38,7 +38,7 @@ uv run python -m bd run requests/T1_job_change.json
 uv run python -m bd approve <key printed under Actions> --by person
 uv run python -m bd sandbox &                                  # our own receiver; never a real insurer
 uv run python -m bd act <run_id>                               # sends approved actions exactly once
-uv run pytest -q                                               # 27 tests incl. the 20-trial kill test
+uv run pytest -q                                               # 30 tests incl. the 20-trial kill test
 # UI: cd web && npm install && npm run build && cd .. && uv run python -m bd serve   -> http://127.0.0.1:8787
 ```
 Modes: `--mode replay` (default, `config.yaml`), `record` (calls Crustdata, caches every response), `live`. `--chaos` kills the process at random step boundaries.
@@ -99,7 +99,7 @@ Same-company role change (compares `crustdata_company_id`, not `recently_changed
 
 ## Approaches weighed
 1. **A model that reads records and writes the advice:** fast to build, but it can state a fact that no record holds, and it can answer differently after a restart. Rejected for the core.
-2. **Watches as the only trigger for the alarm:** watches fire at most hourly and can be missed across a kill. We kept the **direct request** as the main path (same rule function); pulling watch runs is the next step.
+2. **Watches as the only trigger for the alarm:** watches fire at most hourly and a webhook can be missed across a kill. The **direct request** is the main path; the watch path pulls runs and shares the same rule function and action key.
 3. **Rules plus pointers (chosen):** every outcome comes from a rule in one file, and every fact is a pointer that code resolves. Same answer every time, and a five-minute live fix is a YAML edit.
 
 **What worked:**
@@ -118,7 +118,7 @@ Same-company role change (compares `crustdata_company_id`, not `recently_changed
 - A lookalike profile. Guard: a profile link is required, never a name.
 
 ## Not done (cut for time), and why not now
-- Watch path (create a watch on an opted-in person, pull runs, save the last run id). It costs 5 credits per alert, and the direct path already gives the same result.
+- **Live watch creation.** Crustdata needs a public notification URL and ours is local. `bd watch-create` refuses until `config.yaml watch.webhook_url` is set. The **pull path is built and tested**: `bd watch-pull <id>` reads finished runs after the last one processed, runs the same rule, prepares the same action key, and saves the run id. Direct and watch paths give the same alarm and one action (`tests/test_watch.py`).
 - Insurer figures need IRDAI's own table URL per figure (`rules.yaml insurers.panel`).
 - Monthly leavers on the timeline.
 - Sourced broker commission for the price.
