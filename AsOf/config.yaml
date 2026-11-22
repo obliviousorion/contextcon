@@ -30,3 +30,4 @@ approvals:                        # actions that wait for a person
   - exceed_budget
 sandbox:
   webhook_env: SANDBOX_WEBHOOK_URL   # our own channel; never a real outside party
+  allowed_hosts: []                  # https hosts the sandbox webhook may post to; empty = log to state/sandbox_outbox.jsonl only
