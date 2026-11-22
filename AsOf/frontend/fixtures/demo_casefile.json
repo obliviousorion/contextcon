@@ -41,7 +41,7 @@
         "value": 2011,
         "point_date": "2026-11-22",
         "label": "as recorded",
-        "statement": "Data point dated 2026-11-22 states year_founded 2011; stored copy retrieved 2026-11-22T08:03:40+00:00.",
+        "statement": "Data point dated 2026-11-22 states year_founded 2011; stored copy retrieved 2026-11-22T11:13:09+00:00.",
         "refusal_code": null,
         "missing": null,
         "gap_days": null,
@@ -56,7 +56,7 @@
         "value": "listed",
         "point_date": "2022-05-24",
         "label": "as recorded",
-        "statement": "Data point dated 2022-05-24 states IPO date 2022-05-24 (symbols: DELHIVERY); stored copy retrieved 2026-11-22T08:03:40+00:00.",
+        "statement": "Data point dated 2022-05-24 states IPO date 2022-05-24 (symbols: DELHIVERY); stored copy retrieved 2026-11-22T11:13:09+00:00.",
         "refusal_code": null,
         "missing": null,
         "gap_days": null,
@@ -71,7 +71,7 @@
         "value": 35295,
         "point_date": "2026-11-16",
         "label": "profile-derived count",
-        "statement": "Data point dated 2026-11-16 states employee_count 35295; stored copy retrieved 2026-11-22T08:03:40+00:00.",
+        "statement": "Data point dated 2026-11-16 states employee_count 35295; stored copy retrieved 2026-11-22T11:13:09+00:00.",
         "refusal_code": null,
         "missing": null,
         "gap_days": null,
@@ -89,7 +89,7 @@
         },
         "point_date": "2026-11-18",
         "label": "estimate",
-        "statement": "Data point dated 2026-11-18 states estimated revenue between USD 1,000,000,000 and USD 1,000,000,000,000; stored copy retrieved 2026-11-22T08:03:40+00:00.",
+        "statement": "Data point dated 2026-11-18 states estimated revenue between USD 1,000,000,000 and USD 1,000,000,000,000; stored copy retrieved 2026-11-22T11:13:09+00:00.",
         "refusal_code": null,
         "missing": null,
         "gap_days": null,
@@ -107,7 +107,7 @@
         ],
         "point_date": "2026-11-22",
         "label": "true at retrieval only",
-        "statement": "Data point dated 2026-11-22 states all_domains drl.aero, delhivery.com; stored copy retrieved 2026-11-22T08:03:40+00:00.",
+        "statement": "Data point dated 2026-11-22 states all_domains drl.aero, delhivery.com; stored copy retrieved 2026-11-22T11:13:09+00:00.",
         "refusal_code": null,
         "missing": null,
         "gap_days": null,
@@ -117,7 +117,7 @@
       }
     ],
     "subsequent_events": [],
-    "generated_at": "2026-11-22T15:32:01.439521+05:30"
+    "generated_at": "2026-11-22T16:53:05.102481+05:30"
   },
   "evidence": {
     "E1": {
@@ -128,8 +128,8 @@
       "field_path": "basic_info.all_domains",
       "excerpt": "domains ['delhivery.com', 'drl.aero'] -> crustdata_company_id 5798",
       "point_date": null,
-      "retrieved_at": "2026-11-22T08:03:40.534467Z",
-      "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+      "retrieved_at": "2026-11-22T11:13:06.938921Z",
+      "cache_key": "4816fddfeeb51c78eb44354a654b04e4612c752ccdaf819c80c5f979a0b07aab"
     },
     "E2": {
       "id": "E2",
@@ -139,8 +139,8 @@
       "field_path": "basic_info.year_founded",
       "excerpt": "{\"year_founded\": 2011}",
       "point_date": "2026-11-22",
-      "retrieved_at": "2026-11-22T08:03:40.534467Z",
-      "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+      "retrieved_at": "2026-11-22T11:13:09.363027Z",
+      "cache_key": "190bab76960df26b0a23cce548362fdd3406699ef1899edbd6cc21d2f554d536"
     },
     "E3": {
       "id": "E3",
@@ -150,8 +150,8 @@
       "field_path": "revenue.public_markets.ipo_date",
       "excerpt": "{\"ipo_date\": \"2022-05-24\", \"stock_symbols\": [\"DELHIVERY\"]}",
       "point_date": "2022-05-24",
-      "retrieved_at": "2026-11-22T08:03:40.534467Z",
-      "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+      "retrieved_at": "2026-11-22T11:13:09.363027Z",
+      "cache_key": "190bab76960df26b0a23cce548362fdd3406699ef1899edbd6cc21d2f554d536"
     },
     "E4": {
       "id": "E4",
@@ -161,8 +161,8 @@
       "field_path": "headcount.timeseries[2026-11-16].employee_count",
       "excerpt": "{\"date\": \"2026-11-16\", \"employee_count\": 35295}",
       "point_date": "2026-11-16",
-      "retrieved_at": "2026-11-22T08:03:40.534467Z",
-      "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+      "retrieved_at": "2026-11-22T11:13:09.363027Z",
+      "cache_key": "190bab76960df26b0a23cce548362fdd3406699ef1899edbd6cc21d2f554d536"
     },
     "E5": {
       "id": "E5",
@@ -172,8 +172,8 @@
       "field_path": "revenue.estimated.timeseries[2026-11-18]",
       "excerpt": "{\"date\": \"2026-11-18\", \"revenue_lower_bound_usd\": 1000000000, \"revenue_upper_bound_usd\": 1000000000000}",
       "point_date": "2026-11-18",
-      "retrieved_at": "2026-11-22T08:03:40.534467Z",
-      "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+      "retrieved_at": "2026-11-22T11:13:09.363027Z",
+      "cache_key": "190bab76960df26b0a23cce548362fdd3406699ef1899edbd6cc21d2f554d536"
     },
     "E6": {
       "id": "E6",
@@ -183,8 +183,8 @@
       "field_path": "basic_info.all_domains",
       "excerpt": "[\"drl.aero\", \"delhivery.com\"]",
       "point_date": "2026-11-22",
-      "retrieved_at": "2026-11-22T08:03:40.534467Z",
-      "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+      "retrieved_at": "2026-11-22T11:13:09.363027Z",
+      "cache_key": "190bab76960df26b0a23cce548362fdd3406699ef1899edbd6cc21d2f554d536"
     }
   },
   "evidence_request": null,
@@ -194,9 +194,10 @@
     "calls": 0,
     "cache_hits": 2,
     "recorded_credits": 2.2,
-    "recorded_inr": 58.08,
-    "cost_note": "₹0.00 spent this run (replay); ₹58.08 measured cost of the stored copies (2.2 credits)"
+    "recorded_inr": 62.12,
+    "cost_note": "₹0.00 spent this run (replay); ₹62.12 measured cost of the stored copies (2.2 credits)"
   },
   "status": "draft",
-  "idempotency_key": "38e15ccbbde1af234398c219ef9dbfffe11ce37dad38791fa0b01759c861bf06"
+  "idempotency_key": "38e15ccbbde1af234398c219ef9dbfffe11ce37dad38791fa0b01759c861bf06",
+  "cost_note": "₹0.00 spent this run (replay); ₹62.12 measured cost of the stored copies (2.2 credits)"
 }

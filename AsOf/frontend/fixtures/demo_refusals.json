@@ -16,12 +16,12 @@
         "value": null,
         "point_date": null,
         "label": null,
-        "statement": "CANNOT ATTEST headcount as of 2022-06-01 (NOT_YET_RECORDED): missing a headcount.timeseries point dated on or before 2022-06-01; the first point is dated 2022-11-28. Stored copy retrieved 2026-11-22T08:03:40+00:00.",
+        "statement": "CANNOT ATTEST headcount as of 2022-06-01 (NOT_YET_RECORDED): missing a headcount.timeseries point dated on or before 2022-06-01; the first point is dated 2022-11-28. Stored copy retrieved 2026-11-22T11:13:09+00:00.",
         "refusal_code": "NOT_YET_RECORDED",
         "missing": "a headcount.timeseries point dated on or before 2022-06-01; the first point is dated 2022-11-28",
         "gap_days": null,
         "evidence_ids": [
-          "E1"
+          "E4"
         ]
       },
       "case_file": {
@@ -65,9 +65,9 @@
               "as_of": "2022-06-01",
               "status": "attested",
               "value": 2011,
-              "point_date": null,
+              "point_date": "2026-11-22",
               "label": "as recorded",
-              "statement": "Data point dated n/a (undated record field basic_info.year_founded) states year_founded 2011; stored copy retrieved 2026-11-22T08:03:40+00:00.",
+              "statement": "Data point dated 2026-11-22 states year_founded 2011; stored copy retrieved 2026-11-22T11:13:09+00:00.",
               "refusal_code": null,
               "missing": null,
               "gap_days": null,
@@ -82,7 +82,7 @@
               "value": "listed",
               "point_date": "2022-05-24",
               "label": "as recorded",
-              "statement": "Data point dated 2022-05-24 states IPO date 2022-05-24 (symbols: DELHIVERY); stored copy retrieved 2026-11-22T08:03:40+00:00.",
+              "statement": "Data point dated 2022-05-24 states IPO date 2022-05-24 (symbols: DELHIVERY); stored copy retrieved 2026-11-22T11:13:09+00:00.",
               "refusal_code": null,
               "missing": null,
               "gap_days": null,
@@ -97,7 +97,7 @@
               "value": null,
               "point_date": null,
               "label": null,
-              "statement": "CANNOT ATTEST headcount as of 2022-06-01 (NOT_YET_RECORDED): missing a headcount.timeseries point dated on or before 2022-06-01; the first point is dated 2022-11-28. Stored copy retrieved 2026-11-22T08:03:40+00:00.",
+              "statement": "CANNOT ATTEST headcount as of 2022-06-01 (NOT_YET_RECORDED): missing a headcount.timeseries point dated on or before 2022-06-01; the first point is dated 2022-11-28. Stored copy retrieved 2026-11-22T11:13:09+00:00.",
               "refusal_code": "NOT_YET_RECORDED",
               "missing": "a headcount.timeseries point dated on or before 2022-06-01; the first point is dated 2022-11-28",
               "gap_days": null,
@@ -112,7 +112,7 @@
               "value": null,
               "point_date": null,
               "label": null,
-              "statement": "CANNOT ATTEST revenue_band as of 2022-06-01 (NOT_YET_RECORDED): missing a revenue.estimated.timeseries point dated on or before 2022-06-01; the first point is dated 2025-01-01. Stored copy retrieved 2026-11-22T08:03:40+00:00.",
+              "statement": "CANNOT ATTEST revenue_band as of 2022-06-01 (NOT_YET_RECORDED): missing a revenue.estimated.timeseries point dated on or before 2022-06-01; the first point is dated 2025-01-01. Stored copy retrieved 2026-11-22T11:13:09+00:00.",
               "refusal_code": "NOT_YET_RECORDED",
               "missing": "a revenue.estimated.timeseries point dated on or before 2022-06-01; the first point is dated 2025-01-01",
               "gap_days": null,
@@ -130,7 +130,7 @@
               ],
               "point_date": "2026-11-22",
               "label": "true at retrieval only",
-              "statement": "Data point dated 2026-11-22 states all_domains drl.aero, delhivery.com; stored copy retrieved 2026-11-22T08:03:40+00:00. True at retrieval only; this is not a historical record of the domains.",
+              "statement": "Data point dated 2026-11-22 states all_domains drl.aero, delhivery.com; stored copy retrieved 2026-11-22T11:13:09+00:00.",
               "refusal_code": null,
               "missing": null,
               "gap_days": null,
@@ -147,7 +147,7 @@
               "value": 18626,
               "point_date": "2022-11-28",
               "label": "profile-derived count",
-              "statement": "Data point dated 2022-11-28 states employee_count 18626; stored copy retrieved 2026-11-22T08:03:40+00:00. Dated after 2022-06-01: reported as a subsequent event, not attested.",
+              "statement": "Data point dated 2022-11-28 states employee_count 18626; stored copy retrieved 2026-11-22T11:13:09+00:00. Dated after 2022-06-01; not attested.",
               "refusal_code": null,
               "missing": null,
               "gap_days": null,
@@ -162,7 +162,7 @@
               "value": 35295,
               "point_date": "2026-11-16",
               "label": "profile-derived count",
-              "statement": "Data point dated 2026-11-16 states employee_count 35295; stored copy retrieved 2026-11-22T08:03:40+00:00. Dated after 2022-06-01: reported as a subsequent event, not attested.",
+              "statement": "Data point dated 2026-11-16 states employee_count 35295; stored copy retrieved 2026-11-22T11:13:09+00:00. Dated after 2022-06-01; not attested.",
               "refusal_code": null,
               "missing": null,
               "gap_days": null,
@@ -180,7 +180,7 @@
               },
               "point_date": "2025-01-01",
               "label": "estimate",
-              "statement": "Data point dated 2025-01-01 states estimated revenue between USD 1,000,000,000 and USD 1,000,000,000,000; stored copy retrieved 2026-11-22T08:03:40+00:00. Dated after 2022-06-01: reported as a subsequent event, not attested.",
+              "statement": "Data point dated 2025-01-01 states estimated revenue between USD 1,000,000,000 and USD 1,000,000,000,000; stored copy retrieved 2026-11-22T11:13:09+00:00. Dated after 2022-06-01; not attested.",
               "refusal_code": null,
               "missing": null,
               "gap_days": null,
@@ -198,7 +198,7 @@
               },
               "point_date": "2026-11-18",
               "label": "estimate",
-              "statement": "Data point dated 2026-11-18 states estimated revenue between USD 1,000,000,000 and USD 1,000,000,000,000; stored copy retrieved 2026-11-22T08:03:40+00:00. Dated after 2022-06-01: reported as a subsequent event, not attested.",
+              "statement": "Data point dated 2026-11-18 states estimated revenue between USD 1,000,000,000 and USD 1,000,000,000,000; stored copy retrieved 2026-11-22T11:13:09+00:00. Dated after 2022-06-01; not attested.",
               "refusal_code": null,
               "missing": null,
               "gap_days": null,
@@ -207,7 +207,7 @@
               ]
             }
           ],
-          "generated_at": "2026-11-22T15:16:48.900958+05:30"
+          "generated_at": "2026-11-22T16:53:03.327797+05:30"
         },
         "evidence": {
           "E1": {
@@ -218,8 +218,8 @@
             "field_path": "basic_info.all_domains",
             "excerpt": "domains ['delhivery.com', 'drl.aero'] -> crustdata_company_id 5798",
             "point_date": null,
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "retrieved_at": "2026-11-22T11:13:06.938921Z",
+            "cache_key": "4816fddfeeb51c78eb44354a654b04e4612c752ccdaf819c80c5f979a0b07aab"
           },
           "E2": {
             "id": "E2",
@@ -228,9 +228,9 @@
             "url": null,
             "field_path": "basic_info.year_founded",
             "excerpt": "{\"year_founded\": 2011}",
-            "point_date": null,
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "point_date": "2026-11-22",
+            "retrieved_at": "2026-11-22T11:13:09.363027Z",
+            "cache_key": "190bab76960df26b0a23cce548362fdd3406699ef1899edbd6cc21d2f554d536"
           },
           "E3": {
             "id": "E3",
@@ -240,8 +240,8 @@
             "field_path": "revenue.public_markets.ipo_date",
             "excerpt": "{\"ipo_date\": \"2022-05-24\", \"stock_symbols\": [\"DELHIVERY\"]}",
             "point_date": "2022-05-24",
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "retrieved_at": "2026-11-22T11:13:09.363027Z",
+            "cache_key": "190bab76960df26b0a23cce548362fdd3406699ef1899edbd6cc21d2f554d536"
           },
           "E4": {
             "id": "E4",
@@ -251,8 +251,8 @@
             "field_path": "headcount.timeseries[2022-11-28].employee_count",
             "excerpt": "{\"date\": \"2022-11-28\", \"employee_count\": 18626}",
             "point_date": "2022-11-28",
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "retrieved_at": "2026-11-22T11:13:09.363027Z",
+            "cache_key": "190bab76960df26b0a23cce548362fdd3406699ef1899edbd6cc21d2f554d536"
           },
           "E5": {
             "id": "E5",
@@ -262,8 +262,8 @@
             "field_path": "headcount.timeseries[2022-11-28].employee_count",
             "excerpt": "{\"date\": \"2022-11-28\", \"employee_count\": 18626}",
             "point_date": "2022-11-28",
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "retrieved_at": "2026-11-22T11:13:09.363027Z",
+            "cache_key": "190bab76960df26b0a23cce548362fdd3406699ef1899edbd6cc21d2f554d536"
           },
           "E6": {
             "id": "E6",
@@ -273,8 +273,8 @@
             "field_path": "headcount.timeseries[2026-11-16].employee_count",
             "excerpt": "{\"date\": \"2026-11-16\", \"employee_count\": 35295}",
             "point_date": "2026-11-16",
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "retrieved_at": "2026-11-22T11:13:09.363027Z",
+            "cache_key": "190bab76960df26b0a23cce548362fdd3406699ef1899edbd6cc21d2f554d536"
           },
           "E7": {
             "id": "E7",
@@ -284,8 +284,8 @@
             "field_path": "revenue.estimated.timeseries[2025-01-01]",
             "excerpt": "{\"date\": \"2025-01-01\", \"revenue_lower_bound_usd\": 1000000000, \"revenue_upper_bound_usd\": 1000000000000}",
             "point_date": "2025-01-01",
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "retrieved_at": "2026-11-22T11:13:09.363027Z",
+            "cache_key": "190bab76960df26b0a23cce548362fdd3406699ef1899edbd6cc21d2f554d536"
           },
           "E8": {
             "id": "E8",
@@ -295,8 +295,8 @@
             "field_path": "revenue.estimated.timeseries[2025-01-01]",
             "excerpt": "{\"date\": \"2025-01-01\", \"revenue_lower_bound_usd\": 1000000000, \"revenue_upper_bound_usd\": 1000000000000}",
             "point_date": "2025-01-01",
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "retrieved_at": "2026-11-22T11:13:09.363027Z",
+            "cache_key": "190bab76960df26b0a23cce548362fdd3406699ef1899edbd6cc21d2f554d536"
           },
           "E9": {
             "id": "E9",
@@ -306,8 +306,8 @@
             "field_path": "revenue.estimated.timeseries[2026-11-18]",
             "excerpt": "{\"date\": \"2026-11-18\", \"revenue_lower_bound_usd\": 1000000000, \"revenue_upper_bound_usd\": 1000000000000}",
             "point_date": "2026-11-18",
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "retrieved_at": "2026-11-22T11:13:09.363027Z",
+            "cache_key": "190bab76960df26b0a23cce548362fdd3406699ef1899edbd6cc21d2f554d536"
           },
           "E10": {
             "id": "E10",
@@ -317,8 +317,8 @@
             "field_path": "basic_info.all_domains",
             "excerpt": "[\"drl.aero\", \"delhivery.com\"]",
             "point_date": "2026-11-22",
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "retrieved_at": "2026-11-22T11:13:09.363027Z",
+            "cache_key": "190bab76960df26b0a23cce548362fdd3406699ef1899edbd6cc21d2f554d536"
           }
         },
         "evidence_request": {
@@ -331,13 +331,17 @@
           "idempotency_key": "5a46319468aff0a9ec3291738084bf0ce0e20ad4a28a9bf5363e2d01c2cb84f0"
         },
         "cost": {
-          "credits": 2.2,
-          "inr": 58.08,
-          "calls": 2,
-          "cache_hits": 0
+          "credits": 0.0,
+          "inr": 0.0,
+          "calls": 0,
+          "cache_hits": 2,
+          "recorded_credits": 2.2,
+          "recorded_inr": 62.12,
+          "cost_note": "₹0.00 spent this run (replay); ₹62.12 measured cost of the stored copies (2.2 credits)"
         },
         "status": "draft",
-        "idempotency_key": "31f39542c1652977a821b90f60674b926ac1670ab265f1a45c35dcf11d929a9f"
+        "idempotency_key": "31f39542c1652977a821b90f60674b926ac1670ab265f1a45c35dcf11d929a9f",
+        "cost_note": "₹0.00 spent this run (replay); ₹62.12 measured cost of the stored copies (2.2 credits)"
       }
     },
     "C07": {
@@ -356,12 +360,12 @@
         "value": null,
         "point_date": "2026-09-07",
         "label": null,
-        "statement": "CANNOT ATTEST headcount as of 2026-10-15 (STALE_DATA): missing a headcount.timeseries point within 14 days before 2026-10-15; the nearest point on or before 2026-10-15 is dated 2026-09-07, 38 days earlier. Stored copy retrieved 2026-11-22T08:03:40+00:00.",
+        "statement": "CANNOT ATTEST headcount as of 2026-10-15 (STALE_DATA): missing a headcount.timeseries point within 14 days before 2026-10-15; the nearest point on or before 2026-10-15 is dated 2026-09-07, 38 days earlier. Stored copy retrieved 2026-11-22T11:13:15+00:00.",
         "refusal_code": "STALE_DATA",
         "missing": "a headcount.timeseries point within 14 days before 2026-10-15; the nearest point on or before 2026-10-15 is dated 2026-09-07, 38 days earlier",
         "gap_days": 38,
         "evidence_ids": [
-          "E1"
+          "E4"
         ]
       },
       "case_file": {
@@ -403,9 +407,9 @@
               "as_of": "2026-10-15",
               "status": "attested",
               "value": 1996,
-              "point_date": null,
+              "point_date": "2026-11-22",
               "label": "as recorded",
-              "statement": "Data point dated n/a (undated record field basic_info.year_founded) states year_founded 1996; stored copy retrieved 2026-11-22T08:03:40+00:00.",
+              "statement": "Data point dated 2026-11-22 states year_founded 1996; stored copy retrieved 2026-11-22T11:13:15+00:00.",
               "refusal_code": null,
               "missing": null,
               "gap_days": null,
@@ -420,7 +424,7 @@
               "value": "listed",
               "point_date": "2016-12-16",
               "label": "as recorded",
-              "statement": "Data point dated 2016-12-16 states IPO date 2016-12-16 (symbols: TCIEXP); stored copy retrieved 2026-11-22T08:03:40+00:00.",
+              "statement": "Data point dated 2016-12-16 states IPO date 2016-12-16 (symbols: TCIEXP); stored copy retrieved 2026-11-22T11:13:15+00:00.",
               "refusal_code": null,
               "missing": null,
               "gap_days": null,
@@ -435,7 +439,7 @@
               "value": null,
               "point_date": "2026-09-07",
               "label": null,
-              "statement": "CANNOT ATTEST headcount as of 2026-10-15 (STALE_DATA): missing a headcount.timeseries point within 14 days before 2026-10-15; the nearest point on or before 2026-10-15 is dated 2026-09-07, 38 days earlier. Stored copy retrieved 2026-11-22T08:03:40+00:00.",
+              "statement": "CANNOT ATTEST headcount as of 2026-10-15 (STALE_DATA): missing a headcount.timeseries point within 14 days before 2026-10-15; the nearest point on or before 2026-10-15 is dated 2026-09-07, 38 days earlier. Stored copy retrieved 2026-11-22T11:13:15+00:00.",
               "refusal_code": "STALE_DATA",
               "missing": "a headcount.timeseries point within 14 days before 2026-10-15; the nearest point on or before 2026-10-15 is dated 2026-09-07, 38 days earlier",
               "gap_days": 38,
@@ -450,7 +454,7 @@
               "value": null,
               "point_date": "2026-09-22",
               "label": null,
-              "statement": "CANNOT ATTEST revenue_band as of 2026-10-15 (STALE_DATA): missing a revenue.estimated.timeseries point within 14 days before 2026-10-15; the nearest point on or before 2026-10-15 is dated 2026-09-22, 23 days earlier. Stored copy retrieved 2026-11-22T08:03:40+00:00.",
+              "statement": "CANNOT ATTEST revenue_band as of 2026-10-15 (STALE_DATA): missing a revenue.estimated.timeseries point within 14 days before 2026-10-15; the nearest point on or before 2026-10-15 is dated 2026-09-22, 23 days earlier. Stored copy retrieved 2026-11-22T11:13:15+00:00.",
               "refusal_code": "STALE_DATA",
               "missing": "a revenue.estimated.timeseries point within 14 days before 2026-10-15; the nearest point on or before 2026-10-15 is dated 2026-09-22, 23 days earlier",
               "gap_days": 23,
@@ -467,7 +471,7 @@
               ],
               "point_date": "2026-11-22",
               "label": "true at retrieval only",
-              "statement": "Data point dated 2026-11-22 states all_domains tciexpress.in; stored copy retrieved 2026-11-22T08:03:40+00:00. True at retrieval only; this is not a historical record of the domains.",
+              "statement": "Data point dated 2026-11-22 states all_domains tciexpress.in; stored copy retrieved 2026-11-22T11:13:15+00:00.",
               "refusal_code": null,
               "missing": null,
               "gap_days": null,
@@ -484,7 +488,7 @@
               "value": 1773,
               "point_date": "2026-11-02",
               "label": "profile-derived count",
-              "statement": "Data point dated 2026-11-02 states employee_count 1773; stored copy retrieved 2026-11-22T08:03:40+00:00. Dated after 2026-10-15: reported as a subsequent event, not attested.",
+              "statement": "Data point dated 2026-11-02 states employee_count 1773; stored copy retrieved 2026-11-22T11:13:15+00:00. Dated after 2026-10-15; not attested.",
               "refusal_code": null,
               "missing": null,
               "gap_days": null,
@@ -502,7 +506,7 @@
               },
               "point_date": "2026-10-22",
               "label": "estimate",
-              "statement": "Data point dated 2026-10-22 states estimated revenue between USD 500,000,000 and USD 1,000,000,000; stored copy retrieved 2026-11-22T08:03:40+00:00. Dated after 2026-10-15: reported as a subsequent event, not attested.",
+              "statement": "Data point dated 2026-10-22 states estimated revenue between USD 500,000,000 and USD 1,000,000,000; stored copy retrieved 2026-11-22T11:13:15+00:00. Dated after 2026-10-15; not attested.",
               "refusal_code": null,
               "missing": null,
               "gap_days": null,
@@ -520,7 +524,7 @@
               },
               "point_date": "2026-11-21",
               "label": "estimate",
-              "statement": "Data point dated 2026-11-21 states estimated revenue between USD 500,000,000 and USD 1,000,000,000; stored copy retrieved 2026-11-22T08:03:40+00:00. Dated after 2026-10-15: reported as a subsequent event, not attested.",
+              "statement": "Data point dated 2026-11-21 states estimated revenue between USD 500,000,000 and USD 1,000,000,000; stored copy retrieved 2026-11-22T11:13:15+00:00. Dated after 2026-10-15; not attested.",
               "refusal_code": null,
               "missing": null,
               "gap_days": null,
@@ -529,7 +533,7 @@
               ]
             }
           ],
-          "generated_at": "2026-11-22T15:16:48.906198+05:30"
+          "generated_at": "2026-11-22T16:53:03.585729+05:30"
         },
         "evidence": {
           "E1": {
@@ -540,8 +544,8 @@
             "field_path": "basic_info.all_domains",
             "excerpt": "domains ['tciexpress.in'] -> crustdata_company_id 5051",
             "point_date": null,
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "retrieved_at": "2026-11-22T11:13:10.800163Z",
+            "cache_key": "0780ada975391448c405d6666113c362f59f6dfd1c2ea0b44f2a31fde709a1e2"
           },
           "E2": {
             "id": "E2",
@@ -550,9 +554,9 @@
             "url": null,
             "field_path": "basic_info.year_founded",
             "excerpt": "{\"year_founded\": 1996}",
-            "point_date": null,
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "point_date": "2026-11-22",
+            "retrieved_at": "2026-11-22T11:13:15.002279Z",
+            "cache_key": "b408fa6c3010a4d02317b5837eec8e4f12e8656d685836fc108905b145d4ade5"
           },
           "E3": {
             "id": "E3",
@@ -562,8 +566,8 @@
             "field_path": "revenue.public_markets.ipo_date",
             "excerpt": "{\"ipo_date\": \"2016-12-16\", \"stock_symbols\": [\"TCIEXP\"]}",
             "point_date": "2016-12-16",
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "retrieved_at": "2026-11-22T11:13:15.002279Z",
+            "cache_key": "b408fa6c3010a4d02317b5837eec8e4f12e8656d685836fc108905b145d4ade5"
           },
           "E4": {
             "id": "E4",
@@ -573,8 +577,8 @@
             "field_path": "headcount.timeseries[2026-09-07].employee_count",
             "excerpt": "{\"date\": \"2026-09-07\", \"employee_count\": 1752}",
             "point_date": "2026-09-07",
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "retrieved_at": "2026-11-22T11:13:15.002279Z",
+            "cache_key": "b408fa6c3010a4d02317b5837eec8e4f12e8656d685836fc108905b145d4ade5"
           },
           "E5": {
             "id": "E5",
@@ -584,8 +588,8 @@
             "field_path": "headcount.timeseries[2026-11-02].employee_count",
             "excerpt": "{\"date\": \"2026-11-02\", \"employee_count\": 1773}",
             "point_date": "2026-11-02",
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "retrieved_at": "2026-11-22T11:13:15.002279Z",
+            "cache_key": "b408fa6c3010a4d02317b5837eec8e4f12e8656d685836fc108905b145d4ade5"
           },
           "E6": {
             "id": "E6",
@@ -595,8 +599,8 @@
             "field_path": "revenue.estimated.timeseries[2026-09-22]",
             "excerpt": "{\"date\": \"2026-09-22\", \"revenue_lower_bound_usd\": 500000000, \"revenue_upper_bound_usd\": 1000000000}",
             "point_date": "2026-09-22",
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "retrieved_at": "2026-11-22T11:13:15.002279Z",
+            "cache_key": "b408fa6c3010a4d02317b5837eec8e4f12e8656d685836fc108905b145d4ade5"
           },
           "E7": {
             "id": "E7",
@@ -606,8 +610,8 @@
             "field_path": "revenue.estimated.timeseries[2026-10-22]",
             "excerpt": "{\"date\": \"2026-10-22\", \"revenue_lower_bound_usd\": 500000000, \"revenue_upper_bound_usd\": 1000000000}",
             "point_date": "2026-10-22",
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "retrieved_at": "2026-11-22T11:13:15.002279Z",
+            "cache_key": "b408fa6c3010a4d02317b5837eec8e4f12e8656d685836fc108905b145d4ade5"
           },
           "E8": {
             "id": "E8",
@@ -617,8 +621,8 @@
             "field_path": "revenue.estimated.timeseries[2026-11-21]",
             "excerpt": "{\"date\": \"2026-11-21\", \"revenue_lower_bound_usd\": 500000000, \"revenue_upper_bound_usd\": 1000000000}",
             "point_date": "2026-11-21",
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "retrieved_at": "2026-11-22T11:13:15.002279Z",
+            "cache_key": "b408fa6c3010a4d02317b5837eec8e4f12e8656d685836fc108905b145d4ade5"
           },
           "E9": {
             "id": "E9",
@@ -628,8 +632,8 @@
             "field_path": "basic_info.all_domains",
             "excerpt": "[\"tciexpress.in\"]",
             "point_date": "2026-11-22",
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "retrieved_at": "2026-11-22T11:13:15.002279Z",
+            "cache_key": "b408fa6c3010a4d02317b5837eec8e4f12e8656d685836fc108905b145d4ade5"
           }
         },
         "evidence_request": {
@@ -642,13 +646,17 @@
           "idempotency_key": "43b5b532e145e2ede9a0476ea0230f143653320e8d73b6087e32ed01cd96d3b0"
         },
         "cost": {
-          "credits": 2.2,
-          "inr": 58.08,
-          "calls": 2,
-          "cache_hits": 0
+          "credits": 0.0,
+          "inr": 0.0,
+          "calls": 0,
+          "cache_hits": 2,
+          "recorded_credits": 2.2,
+          "recorded_inr": 62.12,
+          "cost_note": "₹0.00 spent this run (replay); ₹62.12 measured cost of the stored copies (2.2 credits)"
         },
         "status": "draft",
-        "idempotency_key": "0f79e1c50a2ae735eb71d3d525f3dbf7935c9225011ed7dd251bde12bf38cbc8"
+        "idempotency_key": "0f79e1c50a2ae735eb71d3d525f3dbf7935c9225011ed7dd251bde12bf38cbc8",
+        "cost_note": "₹0.00 spent this run (replay); ₹62.12 measured cost of the stored copies (2.2 credits)"
       }
     },
     "C08": {
@@ -897,9 +905,9 @@
               "as_of": "2020-01-01",
               "status": "attested",
               "value": 1996,
-              "point_date": null,
+              "point_date": "2026-11-22",
               "label": "as recorded",
-              "statement": "Data point dated n/a (undated record field basic_info.year_founded) states year_founded 1996; stored copy retrieved 2026-11-22T08:03:40+00:00.",
+              "statement": "Data point dated 2026-11-22 states year_founded 1996; stored copy retrieved 2026-11-22T11:13:15+00:00.",
               "refusal_code": null,
               "missing": null,
               "gap_days": null,
@@ -914,7 +922,7 @@
               "value": "listed",
               "point_date": "2016-12-16",
               "label": "as recorded",
-              "statement": "Data point dated 2016-12-16 states IPO date 2016-12-16 (symbols: TCIEXP); stored copy retrieved 2026-11-22T08:03:40+00:00.",
+              "statement": "Data point dated 2016-12-16 states IPO date 2016-12-16 (symbols: TCIEXP); stored copy retrieved 2026-11-22T11:13:15+00:00.",
               "refusal_code": null,
               "missing": null,
               "gap_days": null,
@@ -929,7 +937,7 @@
               "value": 418,
               "point_date": "2019-12-30",
               "label": "profile-derived count",
-              "statement": "Data point dated 2019-12-30 states employee_count 418; stored copy retrieved 2026-11-22T08:03:40+00:00.",
+              "statement": "Data point dated 2019-12-30 states employee_count 418; stored copy retrieved 2026-11-22T11:13:15+00:00.",
               "refusal_code": null,
               "missing": null,
               "gap_days": null,
@@ -944,7 +952,7 @@
               "value": null,
               "point_date": null,
               "label": null,
-              "statement": "CANNOT ATTEST revenue_band as of 2020-01-01 (NOT_YET_RECORDED): missing a revenue.estimated.timeseries point dated on or before 2020-01-01; the first point is dated 2025-01-01. Stored copy retrieved 2026-11-22T08:03:40+00:00.",
+              "statement": "CANNOT ATTEST revenue_band as of 2020-01-01 (NOT_YET_RECORDED): missing a revenue.estimated.timeseries point dated on or before 2020-01-01; the first point is dated 2025-01-01. Stored copy retrieved 2026-11-22T11:13:15+00:00.",
               "refusal_code": "NOT_YET_RECORDED",
               "missing": "a revenue.estimated.timeseries point dated on or before 2020-01-01; the first point is dated 2025-01-01",
               "gap_days": null,
@@ -961,7 +969,7 @@
               ],
               "point_date": "2026-11-22",
               "label": "true at retrieval only",
-              "statement": "Data point dated 2026-11-22 states all_domains tciexpress.in; stored copy retrieved 2026-11-22T08:03:40+00:00. True at retrieval only; this is not a historical record of the domains.",
+              "statement": "Data point dated 2026-11-22 states all_domains tciexpress.in; stored copy retrieved 2026-11-22T11:13:15+00:00.",
               "refusal_code": null,
               "missing": null,
               "gap_days": null,
@@ -978,7 +986,7 @@
               "value": 418,
               "point_date": "2020-01-06",
               "label": "profile-derived count",
-              "statement": "Data point dated 2020-01-06 states employee_count 418; stored copy retrieved 2026-11-22T08:03:40+00:00. Dated after 2020-01-01: reported as a subsequent event, not attested.",
+              "statement": "Data point dated 2020-01-06 states employee_count 418; stored copy retrieved 2026-11-22T11:13:15+00:00. Dated after 2020-01-01; not attested.",
               "refusal_code": null,
               "missing": null,
               "gap_days": null,
@@ -993,7 +1001,7 @@
               "value": 1773,
               "point_date": "2026-11-02",
               "label": "profile-derived count",
-              "statement": "Data point dated 2026-11-02 states employee_count 1773; stored copy retrieved 2026-11-22T08:03:40+00:00. Dated after 2020-01-01: reported as a subsequent event, not attested.",
+              "statement": "Data point dated 2026-11-02 states employee_count 1773; stored copy retrieved 2026-11-22T11:13:15+00:00. Dated after 2020-01-01; not attested.",
               "refusal_code": null,
               "missing": null,
               "gap_days": null,
@@ -1011,7 +1019,7 @@
               },
               "point_date": "2025-01-01",
               "label": "estimate",
-              "statement": "Data point dated 2025-01-01 states estimated revenue between USD 500,000,000 and USD 1,000,000,000; stored copy retrieved 2026-11-22T08:03:40+00:00. Dated after 2020-01-01: reported as a subsequent event, not attested.",
+              "statement": "Data point dated 2025-01-01 states estimated revenue between USD 500,000,000 and USD 1,000,000,000; stored copy retrieved 2026-11-22T11:13:15+00:00. Dated after 2020-01-01; not attested.",
               "refusal_code": null,
               "missing": null,
               "gap_days": null,
@@ -1029,7 +1037,7 @@
               },
               "point_date": "2026-11-21",
               "label": "estimate",
-              "statement": "Data point dated 2026-11-21 states estimated revenue between USD 500,000,000 and USD 1,000,000,000; stored copy retrieved 2026-11-22T08:03:40+00:00. Dated after 2020-01-01: reported as a subsequent event, not attested.",
+              "statement": "Data point dated 2026-11-21 states estimated revenue between USD 500,000,000 and USD 1,000,000,000; stored copy retrieved 2026-11-22T11:13:15+00:00. Dated after 2020-01-01; not attested.",
               "refusal_code": null,
               "missing": null,
               "gap_days": null,
@@ -1038,7 +1046,7 @@
               ]
             }
           ],
-          "generated_at": "2026-11-22T15:16:48.910943+05:30"
+          "generated_at": "2026-11-22T16:53:04.087989+05:30"
         },
         "evidence": {
           "E1": {
@@ -1049,8 +1057,8 @@
             "field_path": "basic_info.all_domains",
             "excerpt": "domains ['tciexpress.in'] -> crustdata_company_id 5051",
             "point_date": null,
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "retrieved_at": "2026-11-22T11:13:10.800163Z",
+            "cache_key": "0780ada975391448c405d6666113c362f59f6dfd1c2ea0b44f2a31fde709a1e2"
           },
           "E2": {
             "id": "E2",
@@ -1059,9 +1067,9 @@
             "url": null,
             "field_path": "basic_info.year_founded",
             "excerpt": "{\"year_founded\": 1996}",
-            "point_date": null,
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "point_date": "2026-11-22",
+            "retrieved_at": "2026-11-22T11:13:15.002279Z",
+            "cache_key": "b408fa6c3010a4d02317b5837eec8e4f12e8656d685836fc108905b145d4ade5"
           },
           "E3": {
             "id": "E3",
@@ -1071,8 +1079,8 @@
             "field_path": "revenue.public_markets.ipo_date",
             "excerpt": "{\"ipo_date\": \"2016-12-16\", \"stock_symbols\": [\"TCIEXP\"]}",
             "point_date": "2016-12-16",
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "retrieved_at": "2026-11-22T11:13:15.002279Z",
+            "cache_key": "b408fa6c3010a4d02317b5837eec8e4f12e8656d685836fc108905b145d4ade5"
           },
           "E4": {
             "id": "E4",
@@ -1082,8 +1090,8 @@
             "field_path": "headcount.timeseries[2019-12-30].employee_count",
             "excerpt": "{\"date\": \"2019-12-30\", \"employee_count\": 418}",
             "point_date": "2019-12-30",
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "retrieved_at": "2026-11-22T11:13:15.002279Z",
+            "cache_key": "b408fa6c3010a4d02317b5837eec8e4f12e8656d685836fc108905b145d4ade5"
           },
           "E5": {
             "id": "E5",
@@ -1093,8 +1101,8 @@
             "field_path": "headcount.timeseries[2020-01-06].employee_count",
             "excerpt": "{\"date\": \"2020-01-06\", \"employee_count\": 418}",
             "point_date": "2020-01-06",
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "retrieved_at": "2026-11-22T11:13:15.002279Z",
+            "cache_key": "b408fa6c3010a4d02317b5837eec8e4f12e8656d685836fc108905b145d4ade5"
           },
           "E6": {
             "id": "E6",
@@ -1104,8 +1112,8 @@
             "field_path": "headcount.timeseries[2026-11-02].employee_count",
             "excerpt": "{\"date\": \"2026-11-02\", \"employee_count\": 1773}",
             "point_date": "2026-11-02",
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "retrieved_at": "2026-11-22T11:13:15.002279Z",
+            "cache_key": "b408fa6c3010a4d02317b5837eec8e4f12e8656d685836fc108905b145d4ade5"
           },
           "E7": {
             "id": "E7",
@@ -1115,8 +1123,8 @@
             "field_path": "revenue.estimated.timeseries[2025-01-01]",
             "excerpt": "{\"date\": \"2025-01-01\", \"revenue_lower_bound_usd\": 500000000, \"revenue_upper_bound_usd\": 1000000000}",
             "point_date": "2025-01-01",
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "retrieved_at": "2026-11-22T11:13:15.002279Z",
+            "cache_key": "b408fa6c3010a4d02317b5837eec8e4f12e8656d685836fc108905b145d4ade5"
           },
           "E8": {
             "id": "E8",
@@ -1126,8 +1134,8 @@
             "field_path": "revenue.estimated.timeseries[2025-01-01]",
             "excerpt": "{\"date\": \"2025-01-01\", \"revenue_lower_bound_usd\": 500000000, \"revenue_upper_bound_usd\": 1000000000}",
             "point_date": "2025-01-01",
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "retrieved_at": "2026-11-22T11:13:15.002279Z",
+            "cache_key": "b408fa6c3010a4d02317b5837eec8e4f12e8656d685836fc108905b145d4ade5"
           },
           "E9": {
             "id": "E9",
@@ -1137,8 +1145,8 @@
             "field_path": "revenue.estimated.timeseries[2026-11-21]",
             "excerpt": "{\"date\": \"2026-11-21\", \"revenue_lower_bound_usd\": 500000000, \"revenue_upper_bound_usd\": 1000000000}",
             "point_date": "2026-11-21",
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "retrieved_at": "2026-11-22T11:13:15.002279Z",
+            "cache_key": "b408fa6c3010a4d02317b5837eec8e4f12e8656d685836fc108905b145d4ade5"
           },
           "E10": {
             "id": "E10",
@@ -1148,19 +1156,23 @@
             "field_path": "basic_info.all_domains",
             "excerpt": "[\"tciexpress.in\"]",
             "point_date": "2026-11-22",
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "retrieved_at": "2026-11-22T11:13:15.002279Z",
+            "cache_key": "b408fa6c3010a4d02317b5837eec8e4f12e8656d685836fc108905b145d4ade5"
           }
         },
         "evidence_request": null,
         "cost": {
-          "credits": 2.2,
-          "inr": 58.08,
-          "calls": 2,
-          "cache_hits": 0
+          "credits": 0.0,
+          "inr": 0.0,
+          "calls": 0,
+          "cache_hits": 2,
+          "recorded_credits": 2.2,
+          "recorded_inr": 62.12,
+          "cost_note": "₹0.00 spent this run (replay); ₹62.12 measured cost of the stored copies (2.2 credits)"
         },
         "status": "draft",
-        "idempotency_key": "83ba114e407de8556c44cf86b35ce0e8a0637313b35a08167583bb819a1c6558"
+        "idempotency_key": "83ba114e407de8556c44cf86b35ce0e8a0637313b35a08167583bb819a1c6558",
+        "cost_note": "₹0.00 spent this run (replay); ₹62.12 measured cost of the stored copies (2.2 credits)"
       }
     },
     {
@@ -1211,9 +1223,9 @@
               "as_of": "2022-06-01",
               "status": "attested",
               "value": 2011,
-              "point_date": null,
+              "point_date": "2026-11-22",
               "label": "as recorded",
-              "statement": "Data point dated n/a (undated record field basic_info.year_founded) states year_founded 2011; stored copy retrieved 2026-11-22T08:03:40+00:00.",
+              "statement": "Data point dated 2026-11-22 states year_founded 2011; stored copy retrieved 2026-11-22T11:13:09+00:00.",
               "refusal_code": null,
               "missing": null,
               "gap_days": null,
@@ -1228,7 +1240,7 @@
               "value": "listed",
               "point_date": "2022-05-24",
               "label": "as recorded",
-              "statement": "Data point dated 2022-05-24 states IPO date 2022-05-24 (symbols: DELHIVERY); stored copy retrieved 2026-11-22T08:03:40+00:00.",
+              "statement": "Data point dated 2022-05-24 states IPO date 2022-05-24 (symbols: DELHIVERY); stored copy retrieved 2026-11-22T11:13:09+00:00.",
               "refusal_code": null,
               "missing": null,
               "gap_days": null,
@@ -1243,7 +1255,7 @@
               "value": null,
               "point_date": null,
               "label": null,
-              "statement": "CANNOT ATTEST headcount as of 2022-06-01 (NOT_YET_RECORDED): missing a headcount.timeseries point dated on or before 2022-06-01; the first point is dated 2022-11-28. Stored copy retrieved 2026-11-22T08:03:40+00:00.",
+              "statement": "CANNOT ATTEST headcount as of 2022-06-01 (NOT_YET_RECORDED): missing a headcount.timeseries point dated on or before 2022-06-01; the first point is dated 2022-11-28. Stored copy retrieved 2026-11-22T11:13:09+00:00.",
               "refusal_code": "NOT_YET_RECORDED",
               "missing": "a headcount.timeseries point dated on or before 2022-06-01; the first point is dated 2022-11-28",
               "gap_days": null,
@@ -1258,7 +1270,7 @@
               "value": null,
               "point_date": null,
               "label": null,
-              "statement": "CANNOT ATTEST revenue_band as of 2022-06-01 (NOT_YET_RECORDED): missing a revenue.estimated.timeseries point dated on or before 2022-06-01; the first point is dated 2025-01-01. Stored copy retrieved 2026-11-22T08:03:40+00:00.",
+              "statement": "CANNOT ATTEST revenue_band as of 2022-06-01 (NOT_YET_RECORDED): missing a revenue.estimated.timeseries point dated on or before 2022-06-01; the first point is dated 2025-01-01. Stored copy retrieved 2026-11-22T11:13:09+00:00.",
               "refusal_code": "NOT_YET_RECORDED",
               "missing": "a revenue.estimated.timeseries point dated on or before 2022-06-01; the first point is dated 2025-01-01",
               "gap_days": null,
@@ -1276,7 +1288,7 @@
               ],
               "point_date": "2026-11-22",
               "label": "true at retrieval only",
-              "statement": "Data point dated 2026-11-22 states all_domains drl.aero, delhivery.com; stored copy retrieved 2026-11-22T08:03:40+00:00. True at retrieval only; this is not a historical record of the domains.",
+              "statement": "Data point dated 2026-11-22 states all_domains drl.aero, delhivery.com; stored copy retrieved 2026-11-22T11:13:09+00:00.",
               "refusal_code": null,
               "missing": null,
               "gap_days": null,
@@ -1293,7 +1305,7 @@
               "value": 18626,
               "point_date": "2022-11-28",
               "label": "profile-derived count",
-              "statement": "Data point dated 2022-11-28 states employee_count 18626; stored copy retrieved 2026-11-22T08:03:40+00:00. Dated after 2022-06-01: reported as a subsequent event, not attested.",
+              "statement": "Data point dated 2022-11-28 states employee_count 18626; stored copy retrieved 2026-11-22T11:13:09+00:00. Dated after 2022-06-01; not attested.",
               "refusal_code": null,
               "missing": null,
               "gap_days": null,
@@ -1308,7 +1320,7 @@
               "value": 35295,
               "point_date": "2026-11-16",
               "label": "profile-derived count",
-              "statement": "Data point dated 2026-11-16 states employee_count 35295; stored copy retrieved 2026-11-22T08:03:40+00:00. Dated after 2022-06-01: reported as a subsequent event, not attested.",
+              "statement": "Data point dated 2026-11-16 states employee_count 35295; stored copy retrieved 2026-11-22T11:13:09+00:00. Dated after 2022-06-01; not attested.",
               "refusal_code": null,
               "missing": null,
               "gap_days": null,
@@ -1326,7 +1338,7 @@
               },
               "point_date": "2025-01-01",
               "label": "estimate",
-              "statement": "Data point dated 2025-01-01 states estimated revenue between USD 1,000,000,000 and USD 1,000,000,000,000; stored copy retrieved 2026-11-22T08:03:40+00:00. Dated after 2022-06-01: reported as a subsequent event, not attested.",
+              "statement": "Data point dated 2025-01-01 states estimated revenue between USD 1,000,000,000 and USD 1,000,000,000,000; stored copy retrieved 2026-11-22T11:13:09+00:00. Dated after 2022-06-01; not attested.",
               "refusal_code": null,
               "missing": null,
               "gap_days": null,
@@ -1344,7 +1356,7 @@
               },
               "point_date": "2026-11-18",
               "label": "estimate",
-              "statement": "Data point dated 2026-11-18 states estimated revenue between USD 1,000,000,000 and USD 1,000,000,000,000; stored copy retrieved 2026-11-22T08:03:40+00:00. Dated after 2022-06-01: reported as a subsequent event, not attested.",
+              "statement": "Data point dated 2026-11-18 states estimated revenue between USD 1,000,000,000 and USD 1,000,000,000,000; stored copy retrieved 2026-11-22T11:13:09+00:00. Dated after 2022-06-01; not attested.",
               "refusal_code": null,
               "missing": null,
               "gap_days": null,
@@ -1353,7 +1365,7 @@
               ]
             }
           ],
-          "generated_at": "2026-11-22T15:16:48.900958+05:30"
+          "generated_at": "2026-11-22T16:53:04.385713+05:30"
         },
         "evidence": {
           "E1": {
@@ -1364,8 +1376,8 @@
             "field_path": "basic_info.all_domains",
             "excerpt": "domains ['delhivery.com', 'drl.aero'] -> crustdata_company_id 5798",
             "point_date": null,
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "retrieved_at": "2026-11-22T11:13:06.938921Z",
+            "cache_key": "4816fddfeeb51c78eb44354a654b04e4612c752ccdaf819c80c5f979a0b07aab"
           },
           "E2": {
             "id": "E2",
@@ -1374,9 +1386,9 @@
             "url": null,
             "field_path": "basic_info.year_founded",
             "excerpt": "{\"year_founded\": 2011}",
-            "point_date": null,
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "point_date": "2026-11-22",
+            "retrieved_at": "2026-11-22T11:13:09.363027Z",
+            "cache_key": "190bab76960df26b0a23cce548362fdd3406699ef1899edbd6cc21d2f554d536"
           },
           "E3": {
             "id": "E3",
@@ -1386,8 +1398,8 @@
             "field_path": "revenue.public_markets.ipo_date",
             "excerpt": "{\"ipo_date\": \"2022-05-24\", \"stock_symbols\": [\"DELHIVERY\"]}",
             "point_date": "2022-05-24",
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "retrieved_at": "2026-11-22T11:13:09.363027Z",
+            "cache_key": "190bab76960df26b0a23cce548362fdd3406699ef1899edbd6cc21d2f554d536"
           },
           "E4": {
             "id": "E4",
@@ -1397,8 +1409,8 @@
             "field_path": "headcount.timeseries[2022-11-28].employee_count",
             "excerpt": "{\"date\": \"2022-11-28\", \"employee_count\": 18626}",
             "point_date": "2022-11-28",
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "retrieved_at": "2026-11-22T11:13:09.363027Z",
+            "cache_key": "190bab76960df26b0a23cce548362fdd3406699ef1899edbd6cc21d2f554d536"
           },
           "E5": {
             "id": "E5",
@@ -1408,8 +1420,8 @@
             "field_path": "headcount.timeseries[2022-11-28].employee_count",
             "excerpt": "{\"date\": \"2022-11-28\", \"employee_count\": 18626}",
             "point_date": "2022-11-28",
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "retrieved_at": "2026-11-22T11:13:09.363027Z",
+            "cache_key": "190bab76960df26b0a23cce548362fdd3406699ef1899edbd6cc21d2f554d536"
           },
           "E6": {
             "id": "E6",
@@ -1419,8 +1431,8 @@
             "field_path": "headcount.timeseries[2026-11-16].employee_count",
             "excerpt": "{\"date\": \"2026-11-16\", \"employee_count\": 35295}",
             "point_date": "2026-11-16",
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "retrieved_at": "2026-11-22T11:13:09.363027Z",
+            "cache_key": "190bab76960df26b0a23cce548362fdd3406699ef1899edbd6cc21d2f554d536"
           },
           "E7": {
             "id": "E7",
@@ -1430,8 +1442,8 @@
             "field_path": "revenue.estimated.timeseries[2025-01-01]",
             "excerpt": "{\"date\": \"2025-01-01\", \"revenue_lower_bound_usd\": 1000000000, \"revenue_upper_bound_usd\": 1000000000000}",
             "point_date": "2025-01-01",
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "retrieved_at": "2026-11-22T11:13:09.363027Z",
+            "cache_key": "190bab76960df26b0a23cce548362fdd3406699ef1899edbd6cc21d2f554d536"
           },
           "E8": {
             "id": "E8",
@@ -1441,8 +1453,8 @@
             "field_path": "revenue.estimated.timeseries[2025-01-01]",
             "excerpt": "{\"date\": \"2025-01-01\", \"revenue_lower_bound_usd\": 1000000000, \"revenue_upper_bound_usd\": 1000000000000}",
             "point_date": "2025-01-01",
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "retrieved_at": "2026-11-22T11:13:09.363027Z",
+            "cache_key": "190bab76960df26b0a23cce548362fdd3406699ef1899edbd6cc21d2f554d536"
           },
           "E9": {
             "id": "E9",
@@ -1452,8 +1464,8 @@
             "field_path": "revenue.estimated.timeseries[2026-11-18]",
             "excerpt": "{\"date\": \"2026-11-18\", \"revenue_lower_bound_usd\": 1000000000, \"revenue_upper_bound_usd\": 1000000000000}",
             "point_date": "2026-11-18",
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "retrieved_at": "2026-11-22T11:13:09.363027Z",
+            "cache_key": "190bab76960df26b0a23cce548362fdd3406699ef1899edbd6cc21d2f554d536"
           },
           "E10": {
             "id": "E10",
@@ -1463,8 +1475,8 @@
             "field_path": "basic_info.all_domains",
             "excerpt": "[\"drl.aero\", \"delhivery.com\"]",
             "point_date": "2026-11-22",
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "retrieved_at": "2026-11-22T11:13:09.363027Z",
+            "cache_key": "190bab76960df26b0a23cce548362fdd3406699ef1899edbd6cc21d2f554d536"
           }
         },
         "evidence_request": {
@@ -1477,13 +1489,17 @@
           "idempotency_key": "5a46319468aff0a9ec3291738084bf0ce0e20ad4a28a9bf5363e2d01c2cb84f0"
         },
         "cost": {
-          "credits": 2.2,
-          "inr": 58.08,
-          "calls": 2,
-          "cache_hits": 0
+          "credits": 0.0,
+          "inr": 0.0,
+          "calls": 0,
+          "cache_hits": 2,
+          "recorded_credits": 2.2,
+          "recorded_inr": 62.12,
+          "cost_note": "₹0.00 spent this run (replay); ₹62.12 measured cost of the stored copies (2.2 credits)"
         },
         "status": "draft",
-        "idempotency_key": "31f39542c1652977a821b90f60674b926ac1670ab265f1a45c35dcf11d929a9f"
+        "idempotency_key": "31f39542c1652977a821b90f60674b926ac1670ab265f1a45c35dcf11d929a9f",
+        "cost_note": "₹0.00 spent this run (replay); ₹62.12 measured cost of the stored copies (2.2 credits)"
       }
     },
     {
@@ -1532,9 +1548,9 @@
               "as_of": "2026-10-15",
               "status": "attested",
               "value": 1996,
-              "point_date": null,
+              "point_date": "2026-11-22",
               "label": "as recorded",
-              "statement": "Data point dated n/a (undated record field basic_info.year_founded) states year_founded 1996; stored copy retrieved 2026-11-22T08:03:40+00:00.",
+              "statement": "Data point dated 2026-11-22 states year_founded 1996; stored copy retrieved 2026-11-22T11:13:15+00:00.",
               "refusal_code": null,
               "missing": null,
               "gap_days": null,
@@ -1549,7 +1565,7 @@
               "value": "listed",
               "point_date": "2016-12-16",
               "label": "as recorded",
-              "statement": "Data point dated 2016-12-16 states IPO date 2016-12-16 (symbols: TCIEXP); stored copy retrieved 2026-11-22T08:03:40+00:00.",
+              "statement": "Data point dated 2016-12-16 states IPO date 2016-12-16 (symbols: TCIEXP); stored copy retrieved 2026-11-22T11:13:15+00:00.",
               "refusal_code": null,
               "missing": null,
               "gap_days": null,
@@ -1564,7 +1580,7 @@
               "value": null,
               "point_date": "2026-09-07",
               "label": null,
-              "statement": "CANNOT ATTEST headcount as of 2026-10-15 (STALE_DATA): missing a headcount.timeseries point within 14 days before 2026-10-15; the nearest point on or before 2026-10-15 is dated 2026-09-07, 38 days earlier. Stored copy retrieved 2026-11-22T08:03:40+00:00.",
+              "statement": "CANNOT ATTEST headcount as of 2026-10-15 (STALE_DATA): missing a headcount.timeseries point within 14 days before 2026-10-15; the nearest point on or before 2026-10-15 is dated 2026-09-07, 38 days earlier. Stored copy retrieved 2026-11-22T11:13:15+00:00.",
               "refusal_code": "STALE_DATA",
               "missing": "a headcount.timeseries point within 14 days before 2026-10-15; the nearest point on or before 2026-10-15 is dated 2026-09-07, 38 days earlier",
               "gap_days": 38,
@@ -1579,7 +1595,7 @@
               "value": null,
               "point_date": "2026-09-22",
               "label": null,
-              "statement": "CANNOT ATTEST revenue_band as of 2026-10-15 (STALE_DATA): missing a revenue.estimated.timeseries point within 14 days before 2026-10-15; the nearest point on or before 2026-10-15 is dated 2026-09-22, 23 days earlier. Stored copy retrieved 2026-11-22T08:03:40+00:00.",
+              "statement": "CANNOT ATTEST revenue_band as of 2026-10-15 (STALE_DATA): missing a revenue.estimated.timeseries point within 14 days before 2026-10-15; the nearest point on or before 2026-10-15 is dated 2026-09-22, 23 days earlier. Stored copy retrieved 2026-11-22T11:13:15+00:00.",
               "refusal_code": "STALE_DATA",
               "missing": "a revenue.estimated.timeseries point within 14 days before 2026-10-15; the nearest point on or before 2026-10-15 is dated 2026-09-22, 23 days earlier",
               "gap_days": 23,
@@ -1596,7 +1612,7 @@
               ],
               "point_date": "2026-11-22",
               "label": "true at retrieval only",
-              "statement": "Data point dated 2026-11-22 states all_domains tciexpress.in; stored copy retrieved 2026-11-22T08:03:40+00:00. True at retrieval only; this is not a historical record of the domains.",
+              "statement": "Data point dated 2026-11-22 states all_domains tciexpress.in; stored copy retrieved 2026-11-22T11:13:15+00:00.",
               "refusal_code": null,
               "missing": null,
               "gap_days": null,
@@ -1613,7 +1629,7 @@
               "value": 1773,
               "point_date": "2026-11-02",
               "label": "profile-derived count",
-              "statement": "Data point dated 2026-11-02 states employee_count 1773; stored copy retrieved 2026-11-22T08:03:40+00:00. Dated after 2026-10-15: reported as a subsequent event, not attested.",
+              "statement": "Data point dated 2026-11-02 states employee_count 1773; stored copy retrieved 2026-11-22T11:13:15+00:00. Dated after 2026-10-15; not attested.",
               "refusal_code": null,
               "missing": null,
               "gap_days": null,
@@ -1631,7 +1647,7 @@
               },
               "point_date": "2026-10-22",
               "label": "estimate",
-              "statement": "Data point dated 2026-10-22 states estimated revenue between USD 500,000,000 and USD 1,000,000,000; stored copy retrieved 2026-11-22T08:03:40+00:00. Dated after 2026-10-15: reported as a subsequent event, not attested.",
+              "statement": "Data point dated 2026-10-22 states estimated revenue between USD 500,000,000 and USD 1,000,000,000; stored copy retrieved 2026-11-22T11:13:15+00:00. Dated after 2026-10-15; not attested.",
               "refusal_code": null,
               "missing": null,
               "gap_days": null,
@@ -1649,7 +1665,7 @@
               },
               "point_date": "2026-11-21",
               "label": "estimate",
-              "statement": "Data point dated 2026-11-21 states estimated revenue between USD 500,000,000 and USD 1,000,000,000; stored copy retrieved 2026-11-22T08:03:40+00:00. Dated after 2026-10-15: reported as a subsequent event, not attested.",
+              "statement": "Data point dated 2026-11-21 states estimated revenue between USD 500,000,000 and USD 1,000,000,000; stored copy retrieved 2026-11-22T11:13:15+00:00. Dated after 2026-10-15; not attested.",
               "refusal_code": null,
               "missing": null,
               "gap_days": null,
@@ -1658,7 +1674,7 @@
               ]
             }
           ],
-          "generated_at": "2026-11-22T15:16:48.906198+05:30"
+          "generated_at": "2026-11-22T16:53:04.626056+05:30"
         },
         "evidence": {
           "E1": {
@@ -1669,8 +1685,8 @@
             "field_path": "basic_info.all_domains",
             "excerpt": "domains ['tciexpress.in'] -> crustdata_company_id 5051",
             "point_date": null,
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "retrieved_at": "2026-11-22T11:13:10.800163Z",
+            "cache_key": "0780ada975391448c405d6666113c362f59f6dfd1c2ea0b44f2a31fde709a1e2"
           },
           "E2": {
             "id": "E2",
@@ -1679,9 +1695,9 @@
             "url": null,
             "field_path": "basic_info.year_founded",
             "excerpt": "{\"year_founded\": 1996}",
-            "point_date": null,
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "point_date": "2026-11-22",
+            "retrieved_at": "2026-11-22T11:13:15.002279Z",
+            "cache_key": "b408fa6c3010a4d02317b5837eec8e4f12e8656d685836fc108905b145d4ade5"
           },
           "E3": {
             "id": "E3",
@@ -1691,8 +1707,8 @@
             "field_path": "revenue.public_markets.ipo_date",
             "excerpt": "{\"ipo_date\": \"2016-12-16\", \"stock_symbols\": [\"TCIEXP\"]}",
             "point_date": "2016-12-16",
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "retrieved_at": "2026-11-22T11:13:15.002279Z",
+            "cache_key": "b408fa6c3010a4d02317b5837eec8e4f12e8656d685836fc108905b145d4ade5"
           },
           "E4": {
             "id": "E4",
@@ -1702,8 +1718,8 @@
             "field_path": "headcount.timeseries[2026-09-07].employee_count",
             "excerpt": "{\"date\": \"2026-09-07\", \"employee_count\": 1752}",
             "point_date": "2026-09-07",
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "retrieved_at": "2026-11-22T11:13:15.002279Z",
+            "cache_key": "b408fa6c3010a4d02317b5837eec8e4f12e8656d685836fc108905b145d4ade5"
           },
           "E5": {
             "id": "E5",
@@ -1713,8 +1729,8 @@
             "field_path": "headcount.timeseries[2026-11-02].employee_count",
             "excerpt": "{\"date\": \"2026-11-02\", \"employee_count\": 1773}",
             "point_date": "2026-11-02",
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "retrieved_at": "2026-11-22T11:13:15.002279Z",
+            "cache_key": "b408fa6c3010a4d02317b5837eec8e4f12e8656d685836fc108905b145d4ade5"
           },
           "E6": {
             "id": "E6",
@@ -1724,8 +1740,8 @@
             "field_path": "revenue.estimated.timeseries[2026-09-22]",
             "excerpt": "{\"date\": \"2026-09-22\", \"revenue_lower_bound_usd\": 500000000, \"revenue_upper_bound_usd\": 1000000000}",
             "point_date": "2026-09-22",
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "retrieved_at": "2026-11-22T11:13:15.002279Z",
+            "cache_key": "b408fa6c3010a4d02317b5837eec8e4f12e8656d685836fc108905b145d4ade5"
           },
           "E7": {
             "id": "E7",
@@ -1735,8 +1751,8 @@
             "field_path": "revenue.estimated.timeseries[2026-10-22]",
             "excerpt": "{\"date\": \"2026-10-22\", \"revenue_lower_bound_usd\": 500000000, \"revenue_upper_bound_usd\": 1000000000}",
             "point_date": "2026-10-22",
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "retrieved_at": "2026-11-22T11:13:15.002279Z",
+            "cache_key": "b408fa6c3010a4d02317b5837eec8e4f12e8656d685836fc108905b145d4ade5"
           },
           "E8": {
             "id": "E8",
@@ -1746,8 +1762,8 @@
             "field_path": "revenue.estimated.timeseries[2026-11-21]",
             "excerpt": "{\"date\": \"2026-11-21\", \"revenue_lower_bound_usd\": 500000000, \"revenue_upper_bound_usd\": 1000000000}",
             "point_date": "2026-11-21",
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "retrieved_at": "2026-11-22T11:13:15.002279Z",
+            "cache_key": "b408fa6c3010a4d02317b5837eec8e4f12e8656d685836fc108905b145d4ade5"
           },
           "E9": {
             "id": "E9",
@@ -1757,8 +1773,8 @@
             "field_path": "basic_info.all_domains",
             "excerpt": "[\"tciexpress.in\"]",
             "point_date": "2026-11-22",
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "retrieved_at": "2026-11-22T11:13:15.002279Z",
+            "cache_key": "b408fa6c3010a4d02317b5837eec8e4f12e8656d685836fc108905b145d4ade5"
           }
         },
         "evidence_request": {
@@ -1771,13 +1787,17 @@
           "idempotency_key": "43b5b532e145e2ede9a0476ea0230f143653320e8d73b6087e32ed01cd96d3b0"
         },
         "cost": {
-          "credits": 2.2,
-          "inr": 58.08,
-          "calls": 2,
-          "cache_hits": 0
+          "credits": 0.0,
+          "inr": 0.0,
+          "calls": 0,
+          "cache_hits": 2,
+          "recorded_credits": 2.2,
+          "recorded_inr": 62.12,
+          "cost_note": "₹0.00 spent this run (replay); ₹62.12 measured cost of the stored copies (2.2 credits)"
         },
         "status": "draft",
-        "idempotency_key": "0f79e1c50a2ae735eb71d3d525f3dbf7935c9225011ed7dd251bde12bf38cbc8"
+        "idempotency_key": "0f79e1c50a2ae735eb71d3d525f3dbf7935c9225011ed7dd251bde12bf38cbc8",
+        "cost_note": "₹0.00 spent this run (replay); ₹62.12 measured cost of the stored copies (2.2 credits)"
       }
     },
     {
@@ -1828,9 +1848,9 @@
               "as_of": "2026-11-22",
               "status": "attested",
               "value": 2011,
-              "point_date": null,
+              "point_date": "2026-11-22",
               "label": "as recorded",
-              "statement": "Data point dated n/a (undated record field basic_info.year_founded) states year_founded 2011; stored copy retrieved 2026-11-22T08:03:40+00:00.",
+              "statement": "Data point dated 2026-11-22 states year_founded 2011; stored copy retrieved 2026-11-22T11:13:09+00:00.",
               "refusal_code": null,
               "missing": null,
               "gap_days": null,
@@ -1845,7 +1865,7 @@
               "value": "listed",
               "point_date": "2022-05-24",
               "label": "as recorded",
-              "statement": "Data point dated 2022-05-24 states IPO date 2022-05-24 (symbols: DELHIVERY); stored copy retrieved 2026-11-22T08:03:40+00:00.",
+              "statement": "Data point dated 2022-05-24 states IPO date 2022-05-24 (symbols: DELHIVERY); stored copy retrieved 2026-11-22T11:13:09+00:00.",
               "refusal_code": null,
               "missing": null,
               "gap_days": null,
@@ -1860,7 +1880,7 @@
               "value": 35295,
               "point_date": "2026-11-16",
               "label": "profile-derived count",
-              "statement": "Data point dated 2026-11-16 states employee_count 35295; stored copy retrieved 2026-11-22T08:03:40+00:00.",
+              "statement": "Data point dated 2026-11-16 states employee_count 35295; stored copy retrieved 2026-11-22T11:13:09+00:00.",
               "refusal_code": null,
               "missing": null,
               "gap_days": null,
@@ -1878,7 +1898,7 @@
               },
               "point_date": "2026-11-18",
               "label": "estimate",
-              "statement": "Data point dated 2026-11-18 states estimated revenue between USD 1,000,000,000 and USD 1,000,000,000,000; stored copy retrieved 2026-11-22T08:03:40+00:00.",
+              "statement": "Data point dated 2026-11-18 states estimated revenue between USD 1,000,000,000 and USD 1,000,000,000,000; stored copy retrieved 2026-11-22T11:13:09+00:00.",
               "refusal_code": null,
               "missing": null,
               "gap_days": null,
@@ -1896,7 +1916,7 @@
               ],
               "point_date": "2026-11-22",
               "label": "true at retrieval only",
-              "statement": "Data point dated 2026-11-22 states all_domains drl.aero, delhivery.com; stored copy retrieved 2026-11-22T08:03:40+00:00. True at retrieval only; this is not a historical record of the domains.",
+              "statement": "Data point dated 2026-11-22 states all_domains drl.aero, delhivery.com; stored copy retrieved 2026-11-22T11:13:09+00:00.",
               "refusal_code": null,
               "missing": null,
               "gap_days": null,
@@ -1906,7 +1926,7 @@
             }
           ],
           "subsequent_events": [],
-          "generated_at": "2026-11-22T15:16:48.894061+05:30"
+          "generated_at": "2026-11-22T16:53:04.876338+05:30"
         },
         "evidence": {
           "E1": {
@@ -1917,8 +1937,8 @@
             "field_path": "basic_info.all_domains",
             "excerpt": "domains ['delhivery.com', 'drl.aero'] -> crustdata_company_id 5798",
             "point_date": null,
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "retrieved_at": "2026-11-22T11:13:06.938921Z",
+            "cache_key": "4816fddfeeb51c78eb44354a654b04e4612c752ccdaf819c80c5f979a0b07aab"
           },
           "E2": {
             "id": "E2",
@@ -1927,9 +1947,9 @@
             "url": null,
             "field_path": "basic_info.year_founded",
             "excerpt": "{\"year_founded\": 2011}",
-            "point_date": null,
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "point_date": "2026-11-22",
+            "retrieved_at": "2026-11-22T11:13:09.363027Z",
+            "cache_key": "190bab76960df26b0a23cce548362fdd3406699ef1899edbd6cc21d2f554d536"
           },
           "E3": {
             "id": "E3",
@@ -1939,8 +1959,8 @@
             "field_path": "revenue.public_markets.ipo_date",
             "excerpt": "{\"ipo_date\": \"2022-05-24\", \"stock_symbols\": [\"DELHIVERY\"]}",
             "point_date": "2022-05-24",
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "retrieved_at": "2026-11-22T11:13:09.363027Z",
+            "cache_key": "190bab76960df26b0a23cce548362fdd3406699ef1899edbd6cc21d2f554d536"
           },
           "E4": {
             "id": "E4",
@@ -1950,8 +1970,8 @@
             "field_path": "headcount.timeseries[2026-11-16].employee_count",
             "excerpt": "{\"date\": \"2026-11-16\", \"employee_count\": 35295}",
             "point_date": "2026-11-16",
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "retrieved_at": "2026-11-22T11:13:09.363027Z",
+            "cache_key": "190bab76960df26b0a23cce548362fdd3406699ef1899edbd6cc21d2f554d536"
           },
           "E5": {
             "id": "E5",
@@ -1961,8 +1981,8 @@
             "field_path": "revenue.estimated.timeseries[2026-11-18]",
             "excerpt": "{\"date\": \"2026-11-18\", \"revenue_lower_bound_usd\": 1000000000, \"revenue_upper_bound_usd\": 1000000000000}",
             "point_date": "2026-11-18",
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "retrieved_at": "2026-11-22T11:13:09.363027Z",
+            "cache_key": "190bab76960df26b0a23cce548362fdd3406699ef1899edbd6cc21d2f554d536"
           },
           "E6": {
             "id": "E6",
@@ -1972,19 +1992,23 @@
             "field_path": "basic_info.all_domains",
             "excerpt": "[\"drl.aero\", \"delhivery.com\"]",
             "point_date": "2026-11-22",
-            "retrieved_at": "2026-11-22T08:03:40.534467Z",
-            "cache_key": "f5e7b498196116e1892431f0c2d54a262685a94556e1a982cf7aa2533b70294a"
+            "retrieved_at": "2026-11-22T11:13:09.363027Z",
+            "cache_key": "190bab76960df26b0a23cce548362fdd3406699ef1899edbd6cc21d2f554d536"
           }
         },
         "evidence_request": null,
         "cost": {
-          "credits": 2.2,
-          "inr": 58.08,
-          "calls": 2,
-          "cache_hits": 0
+          "credits": 0.0,
+          "inr": 0.0,
+          "calls": 0,
+          "cache_hits": 2,
+          "recorded_credits": 2.2,
+          "recorded_inr": 62.12,
+          "cost_note": "₹0.00 spent this run (replay); ₹62.12 measured cost of the stored copies (2.2 credits)"
         },
         "status": "draft",
-        "idempotency_key": "38e15ccbbde1af234398c219ef9dbfffe11ce37dad38791fa0b01759c861bf06"
+        "idempotency_key": "38e15ccbbde1af234398c219ef9dbfffe11ce37dad38791fa0b01759c861bf06",
+        "cost_note": "₹0.00 spent this run (replay); ₹62.12 measured cost of the stored copies (2.2 credits)"
       }
     }
   ]
