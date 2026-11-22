@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import hashlib
 import inspect
+import os
 import re
 from datetime import date, datetime
 from typing import Any
@@ -40,9 +41,15 @@ def _field(v: Any) -> str:
     return v.strip().lower()
 
 
+def _bind(s: Session, tool: str, *parts: Any) -> None:
+    s.use_run("rq-" + _sha(tool, *parts)[:20])
+
+
 # ---- resolve --------------------------------------------------------------
 async def resolve(name: str | None = None, domain: str | None = None) -> ResolveResult:
-    return await resolver.resolve(get_session(), name=name, domain=domain)
+    s = get_session()
+    _bind(s, "resolve", (domain or "").strip().lower(), (name or "").strip().lower())
+    return await resolver.resolve(s, name=name, domain=domain)
 
 
 def _refusal(field: str, as_of: date, code: str, missing: str, statement: str) -> AttestLine:
@@ -92,6 +99,7 @@ async def _attest_one(s: Session, entity: Entity, field: str, as_of: date, prefi
 async def attest_full(domain: str, field: str, as_of) -> tuple[AttestLine, list[AttestLine], dict[str, Evidence]]:
     s = get_session()
     field, d = _field(field), _date(as_of)
+    _bind(s, "attest", str(domain).strip().lower(), field, d)
     r = await resolver.resolve(s, domain=domain)
     if r.status != "resolved":
         return _unresolved_line(field, d, r), [], {}
@@ -107,6 +115,7 @@ async def observe(domain: str, field: str, d1, d2) -> tuple[AttestLine, AttestLi
     """Two dated lines side by side. Never a growth or ratio verdict."""
     s = get_session()
     field, a, b = _field(field), _date(d1, "d1"), _date(d2, "d2")
+    _bind(s, "observe", str(domain).strip().lower(), field, a, b)
     r = await resolver.resolve(s, domain=domain)
     if r.status != "resolved":
         return _unresolved_line(field, a, r), _unresolved_line(field, b, r)
@@ -227,9 +236,10 @@ async def _case(kind: str, domain: str, as_of: date) -> CaseFile:
     from backend.platform import runstate
 
     s = get_session()
-    mark, served0 = s.ledger_mark(), s.served_mark()
     dom = resolver.normalize_domain(domain)
     run_id = "cf-" + _sha(kind, dom, as_of, ",".join(FIELDS))[:20]
+    s.use_run(run_id)  # same ledger file for the same request, across kill and restart
+    mark, served0 = s.ledger_mark(), s.served_mark()
     loop = asyncio.get_running_loop()
     call = lambda coro: asyncio.run_coroutine_threadsafe(coro, loop).result()  # noqa: E731
 
@@ -302,6 +312,7 @@ async def audit_claims(domain: str, claims: list[ClaimInput | dict]) -> AuditRep
         cl = [c if isinstance(c, ClaimInput) else ClaimInput.model_validate(c) for c in claims]
     except Exception:
         raise RequestError("claims must be structured: {id, text, field, value, as_of}") from None
+    _bind(s, "audit", str(domain).strip().lower(), ";".join(f"{c.id}:{c.field}:{c.value}:{c.as_of}" for c in cl))
     r = await resolver.resolve(s, domain=domain)
     key = _sha("audit", r.entity.crustdata_company_id if r.entity else domain,
                ";".join(f"{c.id}:{c.field}:{c.value}:{c.as_of}" for c in cl))
@@ -368,21 +379,43 @@ _ACTION = {"CaseFile": "issue_case_file", "AuditReport": "issue_audit_report",
            "EvidenceRequest": "send_evidence_request"}
 
 
-async def approve(artifact_id: str) -> dict:
-    """Records the person's approval in the platform (one transition; a double click is a no-op)."""
-    obj = store.load(artifact_id)
+def _approver(by: str | None) -> str:
+    return (by or os.environ.get("USER") or "unknown")[:80]
+
+
+def _is_watch(i: str) -> bool:
+    return isinstance(i, str) and i.startswith("watch:")
+
+
+async def approve(artifact_id: str, by: str | None = None) -> dict:
+    """Human approval (CLI only). Records who and when; refuses unless the artifact is still a draft."""
     plat = _platform()
+    who, at = _approver(by), datetime.now().astimezone().isoformat()
+    if _is_watch(artifact_id):
+        if _watch_entry(artifact_id) is None:
+            raise RequestError(f"no held watcher {artifact_id!r}; run watch first")
+        if store.meta_load(artifact_id).get("approval"):
+            raise RequestError(f"{artifact_id} was already approved; nothing to do")
+        key = artifact_id
+    else:
+        obj = store.load(artifact_id)
+        if getattr(obj, "status", "draft") != "draft" or store.meta_load(artifact_id).get("approval"):
+            raise RequestError(f"{artifact_id} is no longer a draft (status {obj.status}); approval refused")
+        key = obj.idempotency_key
     if plat is None:
         return {"id": artifact_id, "status": "held_for_approval", "note": "platform not installed; nothing approved"}
-    first = bool(await _maybe(plat.approve(obj.idempotency_key)))
-    if hasattr(obj, "status") and obj.status == "draft":
+    first = bool(await _maybe(plat.approve(key)))
+    store.meta_update(artifact_id, approval={"by": who, "at": at})
+    if not _is_watch(artifact_id):
         obj.status = "approved"
         store.save(obj)
-    return {"id": artifact_id, "status": "approved", "first_approval": first}
+    return {"id": artifact_id, "status": "approved", "first_approval": first, "approved_by": who, "approved_at": at}
 
 
 async def issue(artifact_id: str) -> dict:
     """Goes through platform.actions: held until approved, sandbox-only, exactly once per key."""
+    if _is_watch(artifact_id):
+        return await _issue_watch(artifact_id)
     obj = store.load(artifact_id)
     plat = _platform()
     action = _ACTION[type(obj).__name__]
@@ -406,14 +439,143 @@ def _jsonable(v: Any) -> Any:
     return v if isinstance(v, (dict, list, str, int, float, bool, type(None))) else str(v)
 
 
+def _watchers():
+    try:
+        from backend.platform import watchers
+        return watchers
+    except Exception:
+        return None
+
+
+def _watch_entry(key: str) -> dict | None:
+    w = _watchers()
+    return w._registry().get(key) if w is not None else None
+
+
+def _watch_by_id(ident: str) -> tuple[str, dict] | None:
+    w = _watchers()
+    if w is None:
+        return None
+    for k, e in w._registry().items():
+        if ident in (k, e.get("watch_id")):
+            return k, e
+    return None
+
+
 async def watch(domain: str) -> dict:
     """Creates a held watcher request (create_watcher needs approval). Alerts cost 5 credits each."""
     s = get_session()
     r = await resolver.resolve(s, domain=domain)
     if r.status != "resolved":
         return {"status": "cannot_resolve", "missing": r.missing}
-    try:
-        from backend.platform import watchers
-    except Exception:
+    w = _watchers()
+    if w is None:
         return {"status": "held_for_approval", "note": "watchers module not installed; nothing created"}
-    return _jsonable(watchers.create(resolver.normalize_domain(domain), r.entity.crustdata_company_id))
+    ent = _jsonable(w.create(resolver.normalize_domain(domain), r.entity.crustdata_company_id))
+    ent["watch_id_handle"] = ent["key"]
+    ent["next"] = f"approve {ent['key']}, then issue {ent['key']}"
+    return ent
+
+
+async def _issue_watch(key: str) -> dict:
+    w = _watchers()
+    ent = _watch_entry(key)
+    if w is None or ent is None:
+        raise RequestError(f"no held watcher {key!r}; run watch first")
+    s = get_session()
+
+    def create_fn():
+        if s.client.mode != "replay":
+            raise RequestError("live watcher creation is not wired in the pipeline; use replay")
+        return "w-" + key.split(":", 1)[-1][:12]
+
+    out = w.activate(key, create_fn)
+    if out.get("status") != "created":
+        return {"id": key, "status": "held_for_approval", "note": "run approve first; nothing created"}
+    return {"id": key, "status": "created", "watch_id": out.get("watch_id")}
+
+
+async def watch_test(watch_id: str) -> dict:
+    """Fire the free /test alert: re-attest the watched company as of today, snapshot it, mark the stored
+    case file lines STALE. The same signal date again is a no-op."""
+    import json as _json
+    w = _watchers()
+    found = _watch_by_id(watch_id) if w is not None else None
+    if found is None or not found[1].get("watch_id"):
+        raise RequestError(f"no active watcher {watch_id!r}; approve and issue the watch first")
+    key, ent = found
+    wid, cid, field, dom = ent["watch_id"], int(ent["company_id"]), ent.get("field") or "headcount", ent["domain"]
+    try:
+        w.test(wid)  # free
+    except Exception:
+        pass
+    s = get_session()
+    d = today()
+    line, _, _ = await attest_full(dom, field, d)
+    h = _sha(line.model_dump_json())
+    stale = []
+    for aid in store.all_ids():
+        try:
+            obj = store.load(aid)
+        except RequestError:
+            continue
+        if isinstance(obj, CaseFile) and obj.attestation and obj.attestation.entity.crustdata_company_id == cid:
+            if any(l.field == field for l in obj.attestation.lines):
+                stale.append(f"{obj.id}#{field}")
+    snap, is_new = w.on_alert(wid, cid, field, d, h, stale)
+    if not is_new:
+        return {"status": "no_op", "reason": "duplicate signal date (or monthly alert cap)",
+                "snapshot": _jsonable(snap), "current_line": _jsonable(line)}
+    for sid in stale:
+        cid_ = sid.split("#")[0]
+        m = store.meta_load(cid_)
+        lst = list(m.get("stale") or [])
+        lst.append({"line": sid, "field": field, "snapshot": _json.loads(snap.model_dump_json()),
+                    "newer_point": line.point_date.isoformat() if line.point_date else None})
+        store.meta_update(cid_, stale=lst)
+    return {"status": "alert", "snapshot": _jsonable(snap), "stale_line_ids": stale,
+            "current_line": _jsonable(line), "alert_cost_credits": 5.0}
+
+
+async def show(artifact_id: str) -> dict:
+    obj = store.load(artifact_id)
+    m = store.meta_load(artifact_id)
+    d = obj.model_dump(mode="json")
+    stale = {x["field"] for x in m.get("stale") or []}
+    if isinstance(obj, CaseFile) and d.get("attestation"):
+        for ln in d["attestation"]["lines"]:
+            if ln["field"] in stale:
+                ln["stale"] = True
+                ln["stale_note"] = "STALE: a watcher alert reports newer data; re-attest before relying on this line"
+    return {"artifact": d, "approval": m.get("approval"), "stale": m.get("stale") or []}
+
+
+def cost_note(c) -> str:
+    mode = "replay" if (c.calls == 0 and c.cache_hits > 0) else "live"
+    return (f"\u20b9{c.inr:.2f} spent this run ({mode}); \u20b9{c.recorded_inr:.2f} measured cost of the stored "
+            f"copies ({c.recorded_credits:g} credits)")
+
+
+async def cost() -> dict:
+    """Ledger view across processes: persisted run ledgers plus every stored case file's cost."""
+    from backend.crust.ledger import CREDIT_TO_INR
+    files = []
+    for aid in store.all_ids():
+        try:
+            obj = store.load(aid)
+        except RequestError:
+            continue
+        if isinstance(obj, CaseFile):
+            c = obj.cost
+            files.append({"id": obj.id, "kind": obj.kind, "domain": obj.request.get("domain"),
+                          "credits": c.credits, "inr": c.inr, "recorded_credits": c.recorded_credits,
+                          "recorded_inr": c.recorded_inr, "label": cost_note(c)})
+    from .session import state_dir
+    spent = 0.0
+    ld = state_dir() / "ledger"
+    for p in (ld.glob("*.jsonl") if ld.exists() else []):
+        from backend.crust.ledger import Ledger
+        spent += Ledger(p.stem, ld).total
+    return {"case_files": files, "ledger_credits_spent": round(spent, 6),
+            "ledger_inr_spent": round(spent * CREDIT_TO_INR, 2),
+            "total_recorded_credits": round(sum(f["recorded_credits"] for f in files), 6)}

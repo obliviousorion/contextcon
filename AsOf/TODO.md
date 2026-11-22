@@ -4,7 +4,7 @@ Ordered by what unblocks "done". See `STATUS.md` for where each item stands.
 
 ## Now: council round 1519 fixes
 - [x] platform: the safety and robustness fix list (49 tests; the live watch_create body is a guess and needs checking against the docs)
-- [ ] pipeline: beat 5 (watch → STALE), approval record, ledger view and ₹ label, stable run_id, `resolve` with a positional name
+- [x] pipeline: beat 5 (watch → STALE), approval record, ledger view and ₹ label, stable run_id, `resolve` with a positional name (33 tests)
 - [x] engine: existence dated, exact template, whole-token ratio check
 - [x] lead: agy runner guards; MCP e2e test updated
 - [ ] lead: full suite, commit, re-run the 4 failed reviewers (facts, safety, e2e, robustness), gate until PASS

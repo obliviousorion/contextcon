@@ -16,10 +16,10 @@ Updated 2026-11-22 15:25. Mode is `MODE=replay` against `fixtures/live_check/`. 
 | Beat | State |
 |---|---|
 | 1. "Shree Balaji Logistics" → CANNOT_RESOLVE, 25 candidates, needs a domain | ✅ |
-| 2. `clear delhivery.com` → 5 cited lines; cost 0 spent plus a recorded 2.2 credits / ₹58.08 | ✅ (ledger view in progress) |
+| 2. `clear delhivery.com` → 5 cited lines; cost 0 spent plus a recorded 2.2 credits / ₹58.08 | ✅ cost_note: "₹0.00 spent this run (replay); ₹58.08 measured cost of the stored copies (2.2 credits)" |
 | 3. TCI 2020-01-01 → 418 (from the 2019-12-30 point); 2026-10-15 → STALE_DATA (38 days) | ✅ |
 | 4. Approve, kill mid-send, restart → sent exactly once | ✅ The chaos harness passes on the real issue path. |
-| 5. Watcher `/test` fires → a line goes STALE | ❌ being wired (pipeline + platform) |
+| 5. Watcher `/test` fires → a line goes STALE | ✅ watch → approve → issue → watch_test marks the headcount line STALE; a repeat test is a no-op |
 
 ## Council 1519 findings and their state
 - **Engine (facts):** existence is now dated, attested statements now match the config template exactly, and ratio detection matches whole tokens. ✅ Fixed and committed (f587c55, 99 engine tests).
@@ -35,7 +35,7 @@ Updated 2026-11-22 15:25. Mode is `MODE=replay` against `fixtures/live_check/`. 
   - The outbox dedupes by key.
   - A state file with wrong-typed fields counts as torn.
   - Malformed 2xx bodies aren't cached.
-- **Pipeline (e2e + safety + robustness):** in progress.
+- **Pipeline (e2e + safety + robustness):** ✅ fixed and committed. The full suite gives 180 passed + 1 xfail.
   - Wire watch → approve → test → STALE end to end.
   - Record the approver and timestamp.
   - Add a cross-process ledger view with a ₹ label.

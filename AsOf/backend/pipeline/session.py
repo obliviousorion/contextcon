@@ -107,6 +107,17 @@ class Session:
         self.index = ReplayIndex(Path(client.cache.dir)) if client.mode == "replay" else None
 
     # --- ledger -------------------------------------------------------------
+    def use_run(self, run_id: str) -> None:
+        """Bind the client to the ledger file of this request's stable run_id, so a kill and restart reads
+        the same ledger (the credit cap counts prior spend; nothing is double counted)."""
+        from backend.crust.ledger import Ledger
+        led = getattr(self.client, "ledger", None)
+        path = getattr(led, "path", None)
+        if path is None or not isinstance(led, Ledger):
+            return
+        self.client.run_id = run_id
+        self.client.ledger = Ledger(run_id, path.parent)
+
     def ledger_mark(self) -> int:
         return len(self.client.ledger.entries)
 

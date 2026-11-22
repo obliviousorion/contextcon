@@ -181,8 +181,11 @@ async def test_issue_held_then_approved_sends_once(session, tmp_path, monkeypatc
     cf = await clear_counterparty("delhivery.com")
     held = await api.issue(cf.id)
     assert held["status"] == "held_for_approval"
-    assert (await api.approve(cf.id))["first_approval"] is True
-    assert (await api.approve(cf.id))["first_approval"] is False  # double click
+    ap = await api.approve(cf.id, by="priya")
+    assert ap["first_approval"] is True and ap["approved_by"] == "priya" and ap["approved_at"]
+    assert (await api.show(cf.id))["approval"]["by"] == "priya"
+    with pytest.raises(RequestError):  # no longer a draft: a double click is refused cleanly
+        await api.approve(cf.id)
     a = await api.issue(cf.id)
     b = await api.issue(cf.id)
     assert a["status"] == b["status"] == "done"
@@ -253,3 +256,77 @@ async def test_sandbox_payload_carries_idempotency_key(session, monkeypatch):
     await api.approve(cf.id)
     await api.issue(cf.id)
     assert sent and sent[0]["idempotency_key"] == cf.idempotency_key
+
+
+async def test_beat5_watch_to_stale_flow(session):
+    from backend.pipeline import api
+    cf = await clear_counterparty("delhivery.com")
+    held = await api.watch("delhivery.com")
+    key = held["key"]
+    assert held["status"] == "held_for_approval"
+    assert (await api.issue(key))["status"] == "held_for_approval"
+    await api.approve(key, by="ops")
+    made = await api.issue(key)
+    assert made["status"] == "created" and made["watch_id"].startswith("w-")
+    alert = await api.watch_test(made["watch_id"])
+    assert alert["status"] == "alert" and alert["stale_line_ids"] == [f"{cf.id}#headcount"]
+    shown = await api.show(cf.id)
+    flagged = [l["field"] for l in shown["artifact"]["attestation"]["lines"] if l.get("stale")]
+    assert flagged == ["headcount"] and shown["stale"][0]["snapshot"]["stale_line_ids"]
+    again = await api.watch_test(made["watch_id"])
+    assert again["status"] == "no_op"
+    assert len((await api.show(cf.id))["stale"]) == 1
+
+
+async def test_watch_test_unknown_id_clean_error(session):
+    from backend.pipeline import api
+    with pytest.raises(RequestError):
+        await api.watch_test("w-nope")
+
+
+async def test_cost_view_label(session):
+    from backend.pipeline import api
+    await clear_counterparty("delhivery.com")
+    f = (await api.cost())["case_files"][0]
+    assert f["label"] == "\u20b90.00 spent this run (replay); \u20b958.08 measured cost of the stored copies (2.2 credits)"
+
+
+def test_cli_cost_note(capsys, monkeypatch):
+    label = "\u20b90.00 spent this run (replay); \u20b958.08 measured cost of the stored copies (2.2 credits)"
+    monkeypatch.setenv("MODE", "replay")
+    set_session(None)
+    assert main(["clear", "delhivery.com"]) == 0
+    assert json.loads(capsys.readouterr().out)["cost_note"] == label
+
+
+def test_cli_positional_name_and_audit_help(capsys, monkeypatch):
+    monkeypatch.setenv("MODE", "replay")
+    set_session(None)
+    assert main(["resolve", "Shree Balaji Logistics"]) == 0
+    assert json.loads(capsys.readouterr().out)["status"] == "cannot_resolve"
+    assert main(["audit", "--help"]) == 0
+    assert '"field"' in capsys.readouterr().out or "claim schema" in capsys.readouterr().out
+
+
+async def test_ledger_run_id_stable_across_restart(tmp_path):
+    from backend.crust.client import CrustClient
+    from backend.pipeline.session import FIXTURE_CACHE
+
+    def fresh():
+        c = CrustClient(run_id="random-" + str(time.time_ns()), mode="replay", cache_dir=FIXTURE_CACHE,
+                        ledger_dir=tmp_path / "ledger")
+        set_session(Session(client=c))
+        return c
+
+    c1 = fresh()
+    cf1 = await clear_counterparty("delhivery.com")
+    path1, lines1 = c1.ledger.path, c1.ledger.path.read_text() if c1.ledger.path.exists() else ""
+    c2 = fresh()  # "kill": all process state dropped, new random client run_id
+    cf2 = await clear_counterparty("delhivery.com")
+    assert c2.ledger.path == path1 and c2.run_id == c1.run_id and c2.run_id.startswith("cf-")
+    after = path1.read_text() if path1.exists() else ""
+    assert after == lines1  # resumed run added nothing: no double count
+    assert cf2.cost.recorded_credits == cf1.cost.recorded_credits
+    c3 = fresh()
+    await attest("delhivery.com", "headcount", "2024-07-15")
+    assert c3.run_id.startswith("rq-")
