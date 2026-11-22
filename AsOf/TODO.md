@@ -10,9 +10,11 @@ Ordered by what unblocks "done". See `STATUS.md` for where each item stands.
 - [x] lead: full suite, commit, re-run the reviewers; gate 1535 PASS
 
 ## UI (Antigravity)
-- [ ] agy finishes `frontend/src` and `npm run build` passes
-- [ ] lead review: only `frontend/` changed, fixture values match `enrich.json` and the hidden cases, no "was true on" wording, labels present
-- [ ] commit the frontend
+- [x] agy finishes `frontend/src` and `npm run build` passes
+- [x] lead review: only `frontend/` changed, the main fixture is regenerated from the CLI, cost relabelled, no "was true on" wording
+- [ ] regenerate the 4 timeline case files in `frontend/fixtures/demo_refusals.json` from CLI dispute/clear output
+- [ ] point the UI at the real API (VITE_API_URL) or keep it fixture-only for the demo (decide)
+- [x] commit the frontend
 
 ## Phase 4: live data (needs the user's OK, about 15 credits, MODE=record)
 - [ ] `company/identify drl.aero` → settles C17 and removes its xfail
@@ -28,6 +30,9 @@ Ordered by what unblocks "done". See `STATUS.md` for where each item stands.
 - [ ] rehearse the 2-minute demo in replay, including the kill mid-send
 
 ## Non-blocking cleanups (from the council)
+- [ ] the webhook has no host allow-list (https only today); add a sandbox hosts config key (lead) or document the env var as trusted
+- [ ] remove the dead person-endpoint prices in backend/crust/ledger.py
+- [ ] a torn last ledger line loses that one charge (the cap undercounts by at most one call)
 - [ ] index config keys without fallback defaults (platform config.py, watchers.py, engine rules.py, pipeline session.py)
 - [ ] read the recorded unit costs from the ledger fixture instead of hard-coding them
 - [ ] delete the ReplayIndex after the Phase 4 per-company recordings

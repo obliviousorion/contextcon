@@ -1,12 +1,12 @@
 # AsOf build status
 
-Updated 2026-11-22 15:25. Mode is `MODE=replay` against `fixtures/live_check/`. Live credits spent this session: **0**.
+Updated 2026-11-22 15:40. Mode is `MODE=replay` against `fixtures/live_check/`. Live credits spent this session: **0**.
 
 ## Phases
 | Phase | State | Notes |
 |---|---|---|
 | 0 Check | ✅ done | `uv sync` ran; the crust client's 17 tests pass; `../.env` is present; agy is 1.5.14; `mcp` 2.3 and `pyyaml` 6.0 were added. |
-| 1 Build | ✅ done, except the UI | engine, platform and pipeline are built and committed. The UI is in progress on Antigravity. |
+| 1 Build | ✅ done | The engine, platform and pipeline are built. The UI was built by Antigravity in `frontend/`, `npm run build` passes, and it was reviewed and committed by the lead. |
 | 2 Integrate | ✅ done | The full suite gives 146 passed + 1 xfail (C17). MCP over stdio lists the tools and answers C01. `clear delhivery.com` gives 5 cited lines in about 0.2 s. |
 | 3 Council | ✅ gate PASS (round 1535) | 1519 BLOCKED (4 FAIL) → fixes → 1526 (contracts FAIL: MCP kwargs) → 1531 (attest kwargs) → 1535 all 5 PASS. Full suite 182 passed + 1 xfail. |
 | 4 Live data | ⏸ waits for user approval | About 15 credits in record mode. |
@@ -51,4 +51,12 @@ Updated 2026-11-22 15:25. Mode is `MODE=replay` against `fixtures/live_check/`. 
   - Headless mode silently denies commands and doesn't name the one it denied.
   - agy waits for its own background tasks: it hung for 25 minutes after `npm install` finished.
   - There's no progress output until it exits.
-- **Current run:** continues the UI from its saved state, foreground commands only, 10-minute cap.
+- **UI result:** the full-permission continue run built `frontend/src` and `dist`, scope was checked clean (nothing outside `frontend/`), and ../.env was untouched.
+- **Incident:** the lead edited `run_task.sh` while a run was executing it. Bash read the changed file from its old position and launched a second agy run, which the lead stopped by PID. Rule: never edit `agy/run_task.sh` while a run is in flight.
+- **Timeout:** agy ignored its own `--print-timeout 600s`. Watch the elapsed time and stop it by PID (`pgrep -x agy`, never `pkill -f`, which matches the lead's own shell).
+
+## UI review (lead)
+- `demo_casefile.json` was regenerated from real `clear delhivery.com` CLI output: existence is dated, and cost reads 0 spent + ₹58.08 measured.
+- The cost panel was relabelled from "Total Fee (estimate)" to "Spent this run" and "Measured cost of this file". The ₹600 price is the only figure marked as an estimate.
+- The C02, C07 and C08 refusal fixtures match the hidden cases. No "was true on" wording anywhere.
+- **Pending:** the 4 date-slider timeline case files in `demo_refusals.json` are still hand-made. Regenerate them from CLI `dispute` / `clear` output (they may still carry the old undated existence line and the old cost shape).
