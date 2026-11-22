@@ -7,19 +7,23 @@ These rules keep every idea comparable, sourced and reviewed the same way. If yo
    - [../README.md](../README.md), the leaderboard;
    - [_council/PROCESS.md](_council/PROCESS.md);
    - the current champion [01-asof.md](01-asof.md);
-   - the rules in `ContextCon05_BITS_Problem_Statement.pdf` (repo root; `pdftotext -layout <file> -`).
+   - **the Builder Handbook, which is the final source of truth:** [../docs/builder-handbook.txt](../docs/builder-handbook.txt), especially "What every service does", "What a test case looks like", "How winners are picked" and "What we want to hear". The older `ContextCon05_BITS_Problem_Statement.pdf` is background only. Where it disagrees with the Handbook, the Handbook wins.
 2. Read [_council/round2-brief-and-data-check.md](_council/round2-brief-and-data-check.md) for the real Crustdata data limits. Never contradict those facts without new live evidence.
 3. Check the leaderboard for an existing idea that already covers yours. If one does, improve that idea's document (see §4) instead of adding a duplicate.
 
 ## 1. Hard constraints every idea must satisfy
 An idea that fails any of these is marked **Dropped** with the reason.
-- It serves the one fictional Indian 3PL client from the problem statement.
-- It does a whole paid service job, from the request to the result.
+- It does a whole job that businesses pay people or firms to do today, from a real request to a finished result, with no one stepping in except where a person's answer changes the result.
+- At least one decision rests on live data.
+- The approach isn't obvious, and it is more than a chat interface on top of a model.
+- *(Optional framing: the problem statement's fictional Indian 3PL client. The Handbook doesn't require it.)*
 - Every fact in its output links to the exact passage or field it came from, plus that record's date. No facts from model memory.
 - When sources can't settle a question, it answers **"cannot verify"** and names what is missing. A wrong answer counts against us more than "cannot verify".
 - Irreversible actions (sending anything outside, payments, rejections, suspensions) wait for a human.
 - Each run has a cost limit and a time limit, and the cost of every call is recorded in a ledger.
-- It survives a kill and restart with each action happening exactly once.
+- It survives a crash or timeout: it continues where it stopped, each message, payment or order happens exactly once, and a timed-out source is retried or held, never read as an answer.
+- One person or company under two names stays one record.
+- It uses only the personal data the job needs.
 - It never contacts real outside people. A "send" means our own sandbox webhook.
 - It is unique. The event judges said track-example builds are overdone: hiring screeners, vendor checks, investor scouts, invoice matchers and the like. Say explicitly why other teams won't build yours.
 

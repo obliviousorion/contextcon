@@ -7,7 +7,34 @@ Every idea has its own document in [`ideas/`](ideas/) with all the spec, data an
 
 **Why we re-ideated:** the event judges told us the standard track examples (hiring screeners, vendor checks, investor scouts, invoice matchers, ...) are what most teams build. We need a unique, out-of-the-box use of Crustdata's APIs, watchers and MCP. We also want to cover as much of Crustdata's API as is genuinely useful.
 
-**What we're judged on:** one fictional Indian 3PL client for all teams. Every fact needs a source, with the exact passage and the record date. "Cannot verify" beats a wrong answer. Irreversible actions wait for a person. Each run has a cost ledger and limits. There are hidden test cases (duplicates, lookalike names, unsettleable questions). A judge kills the process on stage and each action must still happen exactly once. Finals: live run 20 · robustness 15 · design / live fix 15 · **ethics 25** · **finance 25**. Source: `ContextCon05_BITS_Problem_Statement.pdf`.
+**Source of truth: the Builder Handbook, 39-page edition, [`docs/builder-handbook.pdf`](docs/builder-handbook.pdf)** ([text version](docs/builder-handbook.txt)). The older 34-page edition is in `docs/old/`.
+
+**What we're judged on (Handbook, "How winners are picked").** Each criterion is scored 1–5, for 100 points in total. Ties go to end-to-end execution, then facts and verification.
+
+| Criterion | Points | What the judges look for |
+|---|---|---|
+| End-to-end execution | **25** | A real request goes in and a finished result comes out (an offer drafted, a claim settled, an invoice paid, a case file written), with no one stepping in. The product asks a person only when the answer changes the result. |
+| Facts and verification | **20** | Every person, company, number and date is right, **and right for the day it is used**. Each decision has reasons and sources. **One person or company under two names stays one record.** "I can't verify" beats a wrong fact. |
+| Robustness and edge cases | **20** | It handles messy text, missing fields, unusual cases, and tools that time out or return nonsense. After a crash or retry it continues and never sends or pays twice. A person approves anything that can't be undone, and it uses only the personal data the job needs. |
+| Customer value and idea | **20** | A job businesses pay people or firms to do today, with **an approach that isn't obvious**. The product does the work itself, not a chat interface on top of a model. |
+| Demo and understanding | **15** | A clear demo, plus the approaches weighed, what worked and what didn't, the hardest case, who the product could get wrong, and what comes next. |
+
+**What every service must do (Handbook, "What every service does"):**
+- Decisions rest on live data.
+- Every claim has a source that links to the exact passage or field, with the record's date.
+- A person approves anything that can't be undone. Payments run in test mode.
+- Every run has a time limit and a credit limit, and a ledger records every call, model calls included.
+- It survives a crash or timeout and continues where it stopped, with each action happening exactly once.
+
+**Test cases:** we gather our own before coding. They must include a duplicate record, a lookalike name, and a case where the right answer is "I can't verify", and be dated after 1 Sep 2026.
+
+**Logistics:**
+- Building runs 10:15–18:00. Code freeze at 18:00 is the one hard deadline.
+- Submit a **public repo whose commit history starts at 10:15 on 22 Nov**, a 2-minute demo video, a public diagram link, and a declaration of "anything written before 10:15".
+- Finals: **2 minutes of demo plus 1 minute of questions**. Be ready for "100 times the volume, or a second client?" and, if you can, show a duplicate record, a changed fact, a failed call or a restart mid-run.
+- Judges want to hear the business case: who buys it, the price in rupees, and what one job costs to run.
+
+**What changed from earlier assumptions.** The ideas below were first scored against the separate `ContextCon05_BITS_Problem_Statement.pdf`. Its rubric was ethics 25, finance 25, live run 20, robustness 15 and design 15, and it also described a fictional Indian 3PL client, a kickoff kit, an organizer repo, an hour-3 requirement change and a judge killing the process on stage. **The Handbook mentions none of these**, so treat them as unconfirmed. The council scores in the leaderboard use the old rubric; see the note under the table.
 
 ---
 
@@ -36,6 +63,8 @@ Round 1 is five judges scoring 1–5 each, maximum 25. Round 2 is three judges, 
 | — | Raise | Fundraising agent for founders | not scored | — | Retired (doesn't serve the 3PL client) | [17-raise.md](ideas/17-raise.md) |
 
 The three Round 1 scores in Sentinel's row are Receivables Sentinel, Carrier Pulse and LaneWatch, the three ideas merged into it. All rupee fee figures are agent estimates unless marked as sourced.
+
+> ⚠️ **These scores used the problem statement's rubric** (ethics 25 and finance 25), not the Handbook's. Under the Handbook, AsOf's core still lines up closely with *Facts and verification*: "right for the day it is used" and "one company under two names stays one record". *Customer value and idea* now rewards a non-obvious approach directly. A re-score against the Handbook rubric is pending; see open question 5.
 
 ---
 
@@ -152,9 +181,11 @@ Full doc: [ideas/03-sentinel.md](ideas/03-sentinel.md)
 
 ## Open questions for the team
 1. Do we go with AsOf, and lead with **carrier clearance** (strongest buyer) or the **dated dispute file** (most novel)?
-2. Where are the kickoff kit (client records, input and output formats) and the organizer repo?
+2. Do the kickoff kit and organizer repo exist? Only the problem statement mentions them. The Handbook says to submit our own new public repo and to gather our own test cases.
 3. Who sources the finance numbers: KYB vendor quotes, the MCA21 fee schedule, and IRDAI surveyor fees?
 4. Is it OK to spend about 1.5 credits verifying `drl.aero` and measuring the web-fetch cost?
+5. Should we re-run the council against the **Handbook rubric** (E2E 25 · Facts 20 · Robustness 20 · Customer value 20 · Demo 15)? And do we drop the 3PL-client framing, which only the problem statement mentions?
+6. The build code must go in a **new public repo with commits starting after 10:15**. The local `sourced/` repo has commits from 08:27, so it can't be the one we submit.
 
 ## Repo map
 - `ideas/` holds one document per idea, plus `_council/` (the process, the Round 1 pool, the Round 2 brief and data check).

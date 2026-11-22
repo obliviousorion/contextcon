@@ -5,17 +5,22 @@ Shared preamble. Prepend it to every prompt:
 >
 > Read first:
 > - ideas/RULES.md
-> - the problem statement: `pdftotext -layout ContextCon05_BITS_Problem_Statement.pdf -`
+> - docs/builder-handbook.txt, the final source of truth, especially "How winners are picked" and "What every service does"
 > - ideas/_council/round2-brief-and-data-check.md
 > - the idea document(s) you are given
 >
-> Context:
-> - Every team serves one fictional Indian 3PL client.
-> - Facts need an exact passage and a record date. "Cannot verify" beats a wrong answer.
-> - Irreversible actions need human approval. Each run has cost and time limits and a ledger.
-> - Hidden tests include duplicates, lookalike names and unsettleable questions. A judge kills the process on stage, and each action must still happen exactly once.
-> - Finals: live run 20 · robustness 15 · design / live fix 15 · ethics 25 · finance 25.
-> - The event judges want unique, out-of-the-box use of Crustdata. Track examples are overdone.
+> Context (from the Handbook):
+> - The scoring is: **End-to-end execution 25 · Facts and verification 20 · Robustness and edge cases 20 · Customer value and idea 20 · Demo and understanding 15**. Ties go to E2E, then Facts.
+> - Facts must be right **for the day they are used**, and one company under two names stays one record.
+> - "I can't verify" beats a wrong fact.
+> - A person approves anything that can't be undone.
+> - Each run has time and credit limits and a ledger, model calls included.
+> - It survives a crash or timeout and never sends or pays twice.
+> - It uses only the personal data the job needs.
+> - Our own test cases must include a duplicate, a lookalike name, and a case where the answer is "I can't verify", dated after 1 Sep 2026.
+> - Finals: 2 minutes of demo plus 1 minute of questions, including the scale question ("100x volume or a second client?").
+> - The event judges want a non-obvious, out-of-the-box use of Crustdata. Track examples are overdone.
+> - Map the lenses below onto those criteria: CS covers E2E, robustness and facts; Ethics covers the safety part of robustness; Finance covers customer value and the business case; Novelty covers customer value and the demo; Builder checks it can ship by 18:00.
 >
 > Save your output verbatim to `ideas/_council/reviews/NN-<lens>-<YYYYMMDD-HHMM>.md`.
 

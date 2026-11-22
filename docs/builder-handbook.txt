@@ -1,9 +1,9 @@
 Builder Handbook
-Sunday 22 November 2026, Pilani Campus, BITS Pilani. Hosted by BITS Pilani, with Crustdata
-(YC F24), in partnership with Y Combinator.
+Sunday 22 November 2026, J. C. Chaudhry NAB Auditorium, BITS Pilani. Hosted by BITS Pilani,
+with Crustdata (YC F24), in partnership with Y Combinator.
 
 
-   10:45 AM                   2:30 PM                   6:00 PM                    7:30 PM      8:40 PM
+   10:15 AM                   2:30 PM                   6:00 PM                    7:30 PM      8:40 PM
   Building                  Checkpoint                 Code freeze                The ten      Winners
   begins                                                                          finalists
 
@@ -18,21 +18,21 @@ Sunday 22 November 2026, Pilani Campus, BITS Pilani. Hosted by BITS Pilani, with
 
 
 
-ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                      1 of 34
+ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                      1 of 39
   Join the WhatsApp                            Claim your 15,000                         Pick a theme
   group                                        credits                                   Take a job people are paid
   Every announcement goes                      Your BITS Pilani email, and               to do, and build the agents
   there first.                                 this code:                                that do all of it.
 
   You are added from your                      CONTEXTCON-BITS                           See the themes
-  registration, starting                       Every step, with pictures
-  Thursday. If you are not in it
-  yet, ask at the desk.
+  registration. If you are not                 Every step, with pictures
+  in it yet, ask at the check-in
+  desk.
 
 
 Bring your laptop, your charger and your college ID. The Crustdata team is on the floor all day to help.
 
-Looking for something? Jump to the full schedule, the four challenges or how to submit.
+Looking for something? Jump to the full schedule, the six challenges or how to submit.
 
 
 
@@ -51,7 +51,7 @@ rather than invoices read, fraud caught rather than flagged, offers signed rathe
 
 Pick a job people do today, in-house or at a firm, from hiring to underwriting to freight, and build the
 agents that do all of it. Bring in a human only for the exceptions, make every decision cite its reasons, and
-do it all in seven hours.
+do it all in seven hours and forty-five minutes.
 
 
 What you could build
@@ -65,7 +65,7 @@ What you could build
 
 
 
-ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                            2 of 34
+ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                            2 of 39
    ●​ Or what these agents run on: memory that lasts for months, a check on every action before it goes
        out, agents that pay their own way
 
@@ -99,25 +99,26 @@ server or a CLI. Take a theme in your own direction, combine two, or follow an i
 
 
   Get set up
- Before 10:45 AM
+ Before 10:15 AM
 
-  Where                    Pilani Campus, BITS Pilani. BITS Pilani runs the venue through the day.
+  Where                    J. C. Chaudhry NAB Auditorium, BITS Pilani. BITS Pilani runs the venue through
+                           the day.
 
-  Check-in                 From 9:00 AM. Have your college ID ready, collect your name sticker and your
-                           T-shirt, and have breakfast.
+  Check-in                 From 8:30 AM. Have your college ID ready, check in on the check-in form on your
+                           phone, signed in with your BITS Pilani Google account, then collect your name
+                           sticker and your T-shirt, and have breakfast.
 
-  Food                     Breakfast at 9:00 AM at check-in, lunch at 1:00 PM, evening snacks at 4:30 PM
+  Food                     Breakfast at 8:30 AM at check-in, lunch at 12:30 PM, evening snacks at 4:30 PM
                            and snacks at 6:15 PM, all on us.
 
-  Wi-Fi and                BITS Pilani shares the Wi-Fi details at check-in and on the wall signs, and will
-  restrooms                point the way to the restrooms.
+  Wi-Fi and                BITS Pilani shares the Wi-Fi details at check-in and on the wall signs, and the
+  restrooms                crew will point you to the restrooms.
 
 
 
-
-ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                            3 of 34
+ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                            3 of 39
 Worth doing before building begins
-   ●​ Your team: one to four builders. Come solo if you like, or find teammates at team formation, 10:35
+   ●​ Your team: one to four builders. Come solo if you like, or find teammates at team formation, 10:05
        AM.
    ●​ A theme and an idea: bring an idea, not code. Think through the service: how the people who do it
        today work, and where they slip.
@@ -126,8 +127,8 @@ ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November
    ●​ A first call: make your first Crustdata call, and connect your agent.
 
 The WhatsApp group
-It carries this handbook, every link and the reminders through the day. In the evening come the ten finalists
-at 7:30 PM, the last call for the People’s Choice vote at 8:15 PM and the winners at 8:40 PM.
+It carries this handbook, every link and the reminders through the day. In the evening, it posts the ten
+finalists at 7:30 PM, the last call for the People’s Choice vote at 8:15 PM and the winners at 8:40 PM.
 
 
 Your credits
@@ -139,14 +140,13 @@ to redeem it. Then take the tour of your dashboard.
 
 
   Through the day
- 10:45 AM to 6:00 PM
+ 10:15 AM to 6:00 PM
 
 A suggested pace
-These are suggestions, so go at whatever pace suits your team. The one hard deadline is code freeze at
-6:00 PM.
+Go at the pace that suits your team. The one hard deadline is code freeze at 6:00 PM.
 
   Around               A good place to be                 What it means
-   1:00 PM             One request runs                   Your product takes one real request from start to finish,
+  1:00 PM              One request runs                   Your product takes one real request from start to finish,
                                                           however rough.
 
    2:30 PM             Submitted once, hardest            Submit once at the checkpoint: the latest submission
@@ -159,7 +159,7 @@ These are suggestions, so go at whatever pace suits your team. The one hard dead
 
 
 
-ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                          4 of 34
+ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                          4 of 39
 When you need it
   Crustdata for your build                    Building a service                         Sample requests
   Every endpoint, first calls, your           What a service looks like in               One per theme, to run your
@@ -167,7 +167,7 @@ ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November
   something fails.                            you build.
 
 
-  The four challenges                         Resources                                  Questions builders ask
+  The six challenges                          Resources                                  Questions builders ask
   How to join, the rules and the              The docs that matter, and tools            Credits, costs, rate limits,
   questions.                                  for agents, hosting, video and             photos and hiring.
                                               diagrams.
@@ -176,29 +176,34 @@ ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November
 
 
 The schedule
-   9:00 AM             Doors open. Check in with your college ID, collect your name sticker and your T-shirt, and
+   8:30 AM             Doors open. Check in with your college ID, collect your name sticker and your T-shirt, and
                        have breakfast.
 
-   9:45 AM             Kickoff and theme briefing, by BITS Pilani and Crustdata.
+   8:30 AM             Rubik’s Cube, live on stage, from check-in until 9:10 AM. How to play.
 
-   10:15 AM            Crustdata API walkthrough. Team formation follows at 10:35 AM: solo builders pitch an idea
+   9:15 AM             Kickoff and theme briefing, by BITS Pilani and Crustdata.
+
+   9:45 AM             Crustdata API walkthrough. Team formation follows at 10:05 AM: solo builders pitch an idea
                        in one line, or join a pitch they like.
 
-   10:45 AM            Building begins. The Crustdata team is on the floor through the day.
+   10:15 AM            Building begins. The Crustdata team is on the floor through the day.
 
-   12:30 PM            Activities: the push-ups. How to play.
+   12:00 PM            Push-ups, live on stage. How to play.
 
-   1:00 PM             Lunch, on us. At 1:30 PM, a talk from the Crustdata team at the front: How Crustdata builds on
-                       live web data.
+   12:30 PM            Lunch, on us.
+
+   12:30 PM            Chess arena on Lichess, over lunch, until 12:55 PM. How to play.
+
+   1:30 PM             Talk at the front, from the Crustdata team: How Crustdata builds on live web data.
 
    2:30 PM             Checkpoint. Every team submits once on the submission form, and the latest submission
                        counts. Show a mentor your hardest case and what breaks.
 
-   3:30 PM             Activities: the typing race. How to play.
+   3:00 PM             Typing race, on your laptop, then a final on stage. How to play.
+
+   4:00 PM             Eyeball It, on your phone or laptop, until 4:25 PM. How to play.
 
    4:30 PM             Evening snacks.
-
-   4:45 PM             Activities: the Chimp test. How to play.
 
    5:30 PM             Last call: thirty minutes to code freeze.
 
@@ -218,10 +223,10 @@ The schedule
 
 
 
-ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                                  5 of 34
+ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                                  5 of 39
 Rules
    ●​ Build it today. Plan and sketch however you like, and use any open-source libraries and AI coding
-       tools. Coding starts at 10:45 AM on 22 November, in a new repo whose commit history starts then.
+       tools. Coding starts at 10:15 AM on 22 November, in a new repo whose commit history starts then.
    ●​ Build with anything that helps: any model, framework or tool. We’d love you to try Crustdata, with
        your 15,000 credits; every project is judged on the same criteria either way.
    ●​ Keep your agents in the room. During the event, your agents talk to your own team and to us, rather
@@ -253,15 +258,15 @@ team. It is also on the ContextCon site.
 
 
 
-ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                   6 of 34
+ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                   6 of 39
 Who to contact
 
   The BITS Pilani team                         The Crustdata team on                     Anything else
-  Pilani Campus, access and                    the floor                                 Submissions and the form:
-  Wi-Fi                                        Credits and the promo code                ask in the WhatsApp group
+  The hall, campus access                      the floor                                 Submissions and the form:
+  and Wi-Fi                                    Credits and the promo code                ask in the WhatsApp group
   The WhatsApp group                           Crustdata APIs and the                    Anything urgent: the BITS
   Food and dietary needs                       MCP server                                Pilani team at the desk.
-  The activities and their                     Your idea and your build                  Before or after the day:
+  The challenges and their                     Your idea and your build                  Before or after the day:
   rules                                                                                  contextcon@crustdata.co
 
 
@@ -296,22 +301,29 @@ What the form asks for
   Demo video                       One Loom, unlisted YouTube or Google Drive link: two minutes, one video
                                    and not a folder, set so anyone with the link can watch it.
 
-  How your product                 The service it replaces and what it does today, your engineering approach
-  works                            and the models you used, and what you would build next.
+  How does your product            What it does today and where it still needs a person, the approaches you
+  work?                            considered and the one you chose, the models and tools you used, and
+                                   what you would build next.
 
-  High-level diagram               A link to a diagram of how your product is built, open to anyone with the
+
+
+
+ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                              7 of 39
+  Diagram                          A link to a diagram of how your product is built, open to anyone with the
                                    link.
 
+  Anything written                 Code, prompts or designs your team prepared before building began.
+  before 10:15 AM?                 Leave it blank if there is none.
 
-ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                              7 of 34
-  Every member                     One page per member, up to four: the name and email exactly as on their
-                                   registration, the BITS Pilani email, the roll number, a personal email and the
-                                   GitHub username.
+  Every member                     One page for each member: name, as on the registration; BITS Pilani email,
+                                   the one used for credits; YC registration email, the one used on Y
+                                   Combinator’s events page, if it is different; student ID number, the BITS ID
+                                   number; personal email; and GitHub username.
 
 
 
 Before you press submit
-  ☐ Your repo is public, and its commit history starts at 10:45 AM on 22 November.
+  ☐ Your repo is public, and its commit history starts at 10:15 AM on 22 November.
 
   ☐ Your README is in the repo.
 
@@ -320,8 +332,9 @@ Before you press submit
 
   ☐ Your diagram link opens for anyone.
 
-  ☐ Every member’s name and email match their registration, on the registration form and the Y
-  Combinator events page, and everyone used their @pilani.bits-pilani.ac.in address for credits.
+  ☐ Every member’s name matches what they gave on the registration form, and everyone used their
+  @pilani.bits-pilani.ac.in address for credits. If anyone registered on Y Combinator’s events page with
+  another email, add it as their YC registration email on the submission form.
 
 
 
@@ -335,17 +348,22 @@ Your README is where the judges start. Some suggestions for it:
    ●​ What it could do in the future: what you would build next with more time, and why now isn’t the
         right time.
    ●​ The future of this service: where you see it heading once agents can do the whole job.
-   ●​ How to run it.
+   ●​ How to run it: the steps to set it up and run it from a fresh clone.
    ●​ How it’s built: a diagram or short write-up of the agents, models, tools and data, where it calls
         Crustdata, where its state lives and what it runs on.
+   ●​ Its sources and checks: each data source it calls, where a person approves, and the ledger of what
+        each call cost.
    ●​ The approaches you tried, what worked and what didn’t.
 
 
-Your demo video
-Two minutes of your product taking a request it has never seen all the way to finished work. Record it on
-loom.com, or upload it to YouTube as unlisted or to Google Drive with anyone-with-the-link access, before
-code freeze. The judges pick the ten finalists from the submissions, so make it shine. If you make the
-finals, it is also your backup if anything goes wrong on stage.
+
+
+ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                       8 of 39
+Your demo video
+Show your product taking a request it has never seen all the way to finished work, in two minutes. Record
+it on loom.com, or upload it to YouTube as unlisted or to Google Drive with anyone-with-the-link access,
+before code freeze. The judges pick the ten finalists from the submissions, so make it shine. If you make
+the finals, it is also your backup if anything goes wrong on stage.
 
 Some suggestions: start with the request going in and end with the finished work coming out, show where
 each fact came from, and keep the introduction to one sentence.
@@ -353,13 +371,12 @@ each fact came from, and keep the introduction to one sentence.
 
 
 
-ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                       8 of 34
-  The evening
+  The evening
  6:00 PM to 9:00 PM
 
 Snacks
-Snacks are at 6:15 PM, on us, while the judges review the submissions. Take a moment to watch every
-demo and vote for the People’s Choice, and scan these two while you eat:
+Snacks are at 6:15 PM, on us, while the judges review the submissions. Play the CTF until 7:00 PM, watch
+every demo and vote for the People’s Choice, and scan these two while you eat:
 
 
 
@@ -379,24 +396,25 @@ How the finals run
    ●​ Finalists come to the front by 7:40 PM with their laptop charged and their demo open.
    ●​ You have two minutes to demo, then one minute of questions from the judges. A timekeeper keeps
        every team to the same time, on a timer everyone can see.
-   ●​ If you can, show it handling more than the prepared request: a duplicate record, a changed fact or a
-       call that fails.
+   ●​ Be ready for a question on scale, such as how your service would handle a hundred times the
+       volume, or a second client.
+   ●​ If you can, show it handling more than the prepared request: a duplicate record, a changed fact, a
+       call that fails or a restart mid-run.
    ●​ Present as a whole team or pick one speaker, whichever suits you.
 
-
-What we want to hear
+ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                                  9 of 39
+What we want to hear
 Above all, we want to see how well you understand the problem. Across your demo video, your README
 and your live demo, tell us:
 
    ●​ The service you took on: who pays for it today, and why you picked it.
+   ●​ The business case: who would buy your service, the price you would charge in rupees, and what
+       one job costs you to run.
    ●​ The approaches you looked at for solving it, and why you chose yours.
    ●​ What worked in those approaches, and what didn’t.
    ●​ The hardest case you met, and how your product handles it.
    ●​ How you tested it, and how you know it works.
-
-
-ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                                  9 of 34
-   ●​ What you left out to ship in seven hours.
+   ●​ What you left out to ship in seven hours and forty-five minutes.
    ●​ What you would improve next, and why now isn’t the right time to do it.
 
 
@@ -423,12 +441,21 @@ average of their totals decides. They score five things:
                                                  the day it is used. Each decision comes with its reasons and
                                                  sources. One person or company under two names stays one
                                                  record. When the product cannot check a fact, it says so
-                                                 instead of guessing.
+                                                 instead of guessing: a wrong fact counts against it more than
+                                                 an honest “I can’t verify”.
+
+
+
+
+ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                         10 of 39
+  Criterion                         Points       What the judges look for
 
   Robustness and edge               20           It handles inputs beyond the prepared example: messy text,
   cases                                          missing fields, an unusual case, a tool that times out or returns
                                                  nonsense. After a crash or a retry it continues where it stopped
-                                                 and never sends or pays twice.
+                                                 and never sends or pays twice. It stays safe for the people it
+                                                 affects: a person approves anything it cannot take back, and it
+                                                 uses only the personal data the job needs.
 
   Customer value and                20           The team picked a job that businesses pay people or firms to
   idea                                           do today, and found an approach that is not obvious. The
@@ -438,16 +465,13 @@ average of their totals decides. They score five things:
   Demo and                          15           The demo shows the product doing the job, clearly enough for
   understanding                                  anyone in the room to follow. The team can say which
                                                  approaches it weighed and why it chose this one, what worked
-                                                 and what did not, the hardest case, and what comes next.
+                                                 and what did not, the hardest case, who the product could get
+                                                 wrong and how it guards against that, and what comes next.
 
-
-
-
-ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                         10 of 34
-Each criterion is scored from 1 to 5, and the points add up to 100. A finalist’s result is the average of the
-judges’ totals from the finals. Ties go to End-to-end execution, then Facts and verification. To be judged:
-submitted by 6:00 PM, a demo video that plays, a repo that opens, and a commit history that starts at
-10:45 AM on 22 November.
+Each criterion is scored from 1 to 5, and the points add up to 100. A finalist’s result is the average of the
+judges’ totals from the finals. Ties go to End-to-end execution, then Facts and verification. A team is
+judged once it has submitted by 6:00 PM, with a demo video that plays, a repo that opens and a commit
+history that starts at 10:15 AM on 22 November.
 
 
 People’s Choice
@@ -462,14 +486,15 @@ for, or the one a firm doing that job would buy first.
 
                                   Every demo and its description, one after another. Press Vote on the one
                                   you’d pay for, sign in with Google, score it 1 to 5 on the five criteria, and
-                                  add one line on why. Every team is in it. Every builder votes once, for any
-                                  project but their own, and the first vote is the one that counts. The judges
-                                  do not vote.
+                                  add one line on why. Every team is on the page. Each builder votes once,
+                                  for any project but their own, and the first vote is the one that counts. The
+                                  judges leave this vote to the builders.
 
 
 
 
-Prizes
+ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                            11 of 39
+Prizes
 Every team that submits by 6:00 PM is in the running for the finals, and the winners come from the ten
 finalists. Winners are announced at 8:40 PM, on stage.
 
@@ -477,7 +502,7 @@ finalists. Winners are announced at 8:40 PM, on stage.
   First place                                  Second place                              Third place
 
   $8,000                                       $3,000                                    $1,000
-  Places                           All three places are in Crustdata credits.
+  Places                           All three places are in Crustdata credits, split equally in the team
 
   Top three teams                  One-to-one office hours with Jon Xu, General Partner at Y Combinator
 
@@ -495,47 +520,51 @@ To close
 Closing remarks at 8:55 PM, and the group photo at 9:00 PM. Please stay for the photo.
 
 
-ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                            11 of 34
-  Annexure A. Your credits, step by step
+
+
+  Annexure A. Your credits, step by step
 Your BITS Pilani email, ending @pilani.bits-pilani.ac.in, and the promo code CONTEXTCON-BITS.
 It takes two minutes.
 
 
-    Step 1      Open app.crustdata.com and type your BITS Pilani email
+
+
+ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                    12 of 39
+    Step 1      Open app.crustdata.com and type your BITS Pilani email
   Go to app.crustdata.com, or to crustdata.com and click Sign In. Type your BITS Pilani email, ending
   @pilani.bits-pilani.ac.in. Use that email, rather than a personal email or Google sign-in.
 
 
 
 
-ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.             12 of 34
-    Step 2      Click Have a promo code?
+    Step 2      Click Have a promo code?
   It sits under the Continue button. Click it before you continue.
 
 
 
 
-    Step 3      Enter the promo code
+ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.             13 of 39
+    Step 3      Enter the promo code
   The Promo code box opens under your email. Enter CONTEXTCON-BITS.
 
 
 
 
-ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.   13 of 34
-    Step 4      Click Continue
+    Step 4      Click Continue
   Your email and the code go in together.
 
 
 
 
-    Step 5      Open the sign-up link in your email
+ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.   14 of 39
+    Step 5      Open the sign-up link in your email
   The page says Check your email. Open the link Crustdata emails to your BITS Pilani inbox, and finish
   setting up your account. No email after a minute? Check your spam folder, then click Resend link.
 
 
 
 
-ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                14 of 34
+ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                15 of 39
     Step 6      Your dashboard opens
   Your 15,000 credits show under Credits in the sidebar. Your API key is in two places, both marked
   here.
@@ -549,7 +578,7 @@ ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November
 
 
 
-ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                15 of 34
+ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                16 of 39
 You’re in. If you get stuck, find anyone from the Crustdata team on the floor.
 
 
@@ -576,7 +605,7 @@ Your dashboard
 
 
 
-ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                   16 of 34
+ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                   17 of 39
   The docs
   docs.crustdata.com has the documentation, the API reference and guides, and for agents, the MCP
   server, the CLI and llms.txt.
@@ -591,7 +620,7 @@ ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November
 
 
 
-ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.              17 of 34
+ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.              18 of 39
   Search in your dashboard
   Open Search in your dashboard: describe what you need in plain English, or paste a cURL from the
   docs. Review the plan, then run it.
@@ -609,6 +638,9 @@ Agents that turn a whole service into software. Build inside a theme, or bring y
 service people are paid to do is fair game.
 
 1. Hiring
+Paid today: Search firms, for each role they fill, and background-check firms, for each candidate they
+verify.
+
 Recruiting firms earn their fee when a person starts the job; a stack of profiles earns nothing. The right
 engineer calls the job something else, changed roles last month and shares a name with two strangers.
 
@@ -617,13 +649,17 @@ Build an agent that fills roles with no one at the keyboard:
    ●​ 1.1 The Search Desk: From a manager’s three lines to a first call, tested on real hires.
    ●​ 1.2 The Career Check: Every line of a CV checked against the record.
 
-We’re looking for shortlists that hold the people companies really hired, built only from what the record
+
+
+ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                 19 of 39
+We’re looking for shortlists that hold the people companies really hired, built only from what the record
 showed before each hire.
 
 
+2. Investing
+Paid today: Venture scouts and outside diligence firms, for the companies they surface and the claims
+they check.
 
-ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                 18 of 34
-2. Investing
 A fund’s analysts hunt for companies early, test what founders claim and watch every company in the
 portfolio. Every call rests on what was public that day, and the answer arrives years later.
 
@@ -637,6 +673,8 @@ that date.
 
 
 3. Research and markets
+Paid today: Market research and strategy consulting firms, for each market map or answer they deliver.
+
 Research firms and strategy teams answer questions about markets for clients who act on the answer. The
 reading never ends, and a model answers from old memory with full confidence.
 
@@ -650,6 +688,9 @@ a wrong answer costs more than none.
 
 
 4. Insurance
+Paid today: Brokers, through a commission on each policy they place, and insurers, through the premium
+on each one they write.
+
 Underwriters price a business from the answers on its application, and the applicant writes those answers.
 Forms understate size and leave out risky work, and checking each one by hand takes days.
 
@@ -662,7 +703,12 @@ reason.
 
 
 5. Trust and compliance
-Compliance analysts decide whether a business or a person is who they claim to be, before money moves.
+Paid today: Verification and screening firms, for each business or person they check for a bank, a
+payment firm or a large buyer.
+
+
+ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                20 of 39
+Compliance analysts decide whether a business or a person is who they claim to be, before money moves.
 Records share no common key, a slow source looks like a missing one, and a front company can carry
 genuine papers.
 
@@ -674,10 +720,10 @@ Build an agent that decides who to trust:
 We’re looking for fronts caught with evidence, while honest firms and innocent namesakes pass.
 
 
+6. Buying and paying
+Paid today: Outsourced accounting firms, for running a company’s payables and closing its books each
+month.
 
-
-ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.              19 of 34
-6. Buying and paying
 Payables teams stand between an invoice and the company’s bank account. Duplicates slip through in
 new formats, and the costliest fraud is a polite email asking to change bank details.
 
@@ -690,6 +736,8 @@ account.
 
 
 7. Agents that spend
+Paid today: Research operations teams, for buying the data a client’s job needs, inside its budget.
+
 An agent doing real work has to pay along the way: for data, a tool, an hour of compute. Owners either
 approve every purchase by hand or hand over a card with no ceiling.
 
@@ -702,6 +750,8 @@ every credit on the ledger.
 
 
 8. Supply chain
+Paid today: Sourcing agents, through a commission on each order they place with a factory.
+
 Sourcing teams find manufacturers, check they are real and able to deliver, and run quotes by email and
 spreadsheet. Traders pose as factories, certificates lapse, and a promise of four weeks means eight.
 
@@ -712,7 +762,13 @@ Build an agent that runs freight and parts operations end to end:
 We’re looking for parts made by real factories at the quoted price and date, with every record agreeing.
 
 
-9. Revenue
+
+
+ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                 21 of 39
+9. Revenue
+Paid today: Sales development agencies and lead qualification firms, for each meeting they book with the
+right buyer.
+
 A sales team earns its keep by reaching the person who owns a problem in the week it turns urgent. The
 person and the week both keep changing, and buyers ignore a generic message.
 
@@ -726,15 +782,15 @@ source.
 
 
 10. Infrastructure for agents
+Paid today: Audit and assurance firms, for checking work before a client sees it.
+
 Each service above leans on the same few parts, and most of those parts are still missing. An agent that
 cannot show where a fact came from, or check an action before it happens, cannot run a service alone.
 
 Build the building blocks every other agent needs:
 
    ●​ 10.1 The Evidence Ledger: Where every fact came from, re-checked on demand.
-
-ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                 20 of 34
-   ●​ 10.2 The Sign-Off Gate: Approve, hold or block every action before it happens.
+   ●​ 10.2 The Sign-Off Gate: Approve, hold or block every action before it happens.
 
 We’re looking for parts that keep their promises through a crash, a change of model and a poisoned input.
 
@@ -752,73 +808,79 @@ you: explore the APIs, combine them however your product needs, and come up with
 All endpoints are on https://api.crustdata.com and take two headers: authorization: Bearer
 YOUR_API_KEY and x-api-version: 2025-11-01.
 
-  API                              What it gives you                                                  Requests per
-                                                                                                      minute
+  API                              What it gives you                                          Requests per
+                                                                                              minute
 
-  Person Search                    Find people by title, current or past employer, skills,            30
+  Person Search                    Find people by title, current or past employer, skills,    30
                                    education and location.
 
-  Person Enrich                    A person’s full career history with dates, education and           15
+  Person Enrich                    A person’s full career history with dates, education and   15
                                    skills.
 
-  Company Search                   Find companies by industry, size, growth, funding and              30
+ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                  22 of 39
+  API                              What it gives you                                       Requests per
+                                                                                           minute
+
+  Company Search                   Find companies by industry, size, growth, funding and   30
                                    location.
 
-  Company Identify                 Resolve a name or a domain to a company.                           30
+  Company Identify                 Resolve a name or a domain to a company.                30
 
-  Company Enrich                   Headcount over time, funding, leadership and web                   15
+  Company Enrich                   Headcount over time, funding, leadership and web        15
                                    traffic.
 
-  Job Search                       Job postings by company, role and location.                        30
+  Job Search                       Job postings by company, role and location.             30
 
-  Web Search and Fetch             Search the web, news and academic sources, and fetch               10
+  Web Search and Fetch             Search the web, news and academic sources, and fetch    10
                                    any page.
 
-  Watcher                          A webhook when a person, company or job posting you                10
+  Watcher                          A webhook when a person, company or job posting you     10
                                    watch changes.
 
-  MCP server                       All of it for your agents, through the Model Context               See the docs
+  MCP server                       All of it for your agents, through the Model Context    See the docs
                                    Protocol.
 
-Default limits per key; your plan’s may differ. Each key also has a limit of 200 requests per minute across all endpoints.
+Default limits per key; your plan’s may differ.
 
 
-
-
-ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                             21 of 34
-Make your first calls
-Resolve a domain to one company. Company Identify is free, so try it as often as you like:
+Make your first calls
+Resolve a domain to one company. Company Identify costs 0.2 credits for each identifier it matches, and
+an unmatched one is free:
 
    curl --request POST \
-      --url https://api.crustdata.com/company/identify \
-      --header 'authorization: Bearer YOUR_API_KEY' \
-      --header 'content-type: application/json' \
-      --header 'x-api-version: 2025-11-01' \
-      --data '{ "domains": ["crustdata.com"] }'
+        --url https://api.crustdata.com/company/identify \
+        --header 'authorization: Bearer YOUR_API_KEY' \
+        --header 'content-type: application/json' \
+        --header 'x-api-version: 2025-11-01' \
+        --data '{ "domains": ["crustdata.com"] }'
 
 
 
 The answer, shortened to the fields that matter:
 
    [{ "matched_on": "crustdata.com", "match_type": "domain",
-       "matches": [{ "confidence_score": 1, "company_data": {
-         "crustdata_company_id": 6036032,
-         "basic_info": { "name": "Crustdata (YC F24)", "year_founded": 2024 },
-         "headcount": { "total": 47 } } }] }]
+        "matches": [{ "confidence_score": 1, "company_data": {
+          "crustdata_company_id": 6036032,
+          "basic_info": { "name": "Crustdata (YC F24)", "year_founded": 2024 },
+          "headcount": { "total": 47 } } }] }]
 
 
 
 Now search people. This one asks how many people on the graph went to BITS Pilani, for 0.03 credits. The
 answer holds the total_count, and one profile:
 
-   curl --request POST \
-      --url https://api.crustdata.com/person/search \
-      --header 'authorization: Bearer YOUR_API_KEY' \
-      --header 'content-type: application/json' \
-      --header 'x-api-version: 2025-11-01' \
-      --data '{ "filters": { "field": "education.schools.school", "type": "=",
+
+
+
+ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.               23 of 39
+   curl --request POST \
+       --url https://api.crustdata.com/person/search \
+       --header 'authorization: Bearer YOUR_API_KEY' \
+       --header 'content-type: application/json' \
+       --header 'x-api-version: 2025-11-01' \
+       --data '{ "filters": { "field": "education.schools.school", "type": "=",
                                   "value": "Birla Institute of Technology and Science, Pilani" },
-              "limit": 1 }'
+                 "limit": 1 }'
 
 
 
@@ -834,11 +896,7 @@ browser with a Crustdata account:
 
 Any other MCP client, with your API key:
 
-
-
-
-ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.              22 of 34
-   {
+   {
        "mcpServers": {
            "crustdata": {
                "type": "streamable-http",
@@ -870,7 +928,9 @@ A first route through the APIs. Change it as soon as you know better.
 
   Supply chain                          Company Search → Company Identify → Web Search and Fetch
 
-  Revenue                               Job Search → Person Search → Watcher
+
+ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.              24 of 39
+  Revenue                               Job Search → Person Search → Watcher
 
   Infrastructure for agents             MCP server → Watcher
 
@@ -891,10 +951,6 @@ When something fails
   429                           You are over the limit for that endpoint. Wait a few seconds and retry, and
                                 build a retry into your client. The x-ratelimit-reset header says how long to
                                 wait.
-
-
-ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                      23 of 34
-  What you see                  What to do
 
   No results                    Loosen one filter at a time, and look up the exact value with the
                                 Autocomplete API.
@@ -922,6 +978,12 @@ down to the same steps, and each is a place to be careful:
   Plan                        Breaks the job into steps, and keeps                  What if the run crashes halfway?
                               track of what is done.
 
+
+
+
+ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                              25 of 39
+  Step                        What it does                                          The question to design for
+
   Gather the facts            Calls data, the web and other tools, and              What if two sources disagree, or a
                               records where each fact came from.                    tool fails?
 
@@ -938,14 +1000,43 @@ down to the same steps, and each is a place to be careful:
 
 
 
-Design principles
+What every service does
+These hold for every theme, and for your own idea:
+
+  1. Decisions on live data                     At least one decision rests on live data: the Crustdata API, a
+                                                government registry or public API, web search or your own
+                                                crawler. Keep mock data for your tests.
+
+  2. A source for every claim                   Each claim links to the record behind it: a web page, an API
+                                                response or a filing. The link lands on the exact passage or field,
+                                                and gives the record’s date. The record states the claim itself. A
+                                                page on the same topic, or a model’s memory, is background
+                                                rather than a source. Where no record settles a question, your
+                                                service says “I can’t verify” and names what is missing.
+
+  3. A person approves anything you             Sending a message, paying, placing an order and rejecting an
+  cannot take back                              applicant each wait for a person’s approval. Payments run in a
+                                                payment provider’s test mode, such as Razorpay’s or Stripe’s.
+
+  4. A ceiling on every run                     Each run has a time limit and a credit limit. Every Crustdata
+                                                response reports what it cost. Your service records each call in
+                                                its own ledger, model calls included.
+
+  5. Through a crash or a timeout               Stop the process at any moment and start it again. The run
+                                                carries on where it stopped, and each message, payment and
+                                                order happens exactly once. When a source times out, your
+                                                service retries or holds the case for a person, rather than
+                                                reading the silence as an answer.
+
+
+
+
+ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                             26 of 39
+Design principles
 Keep these six principles in mind while you build, and they will show in your demo, your README and your
 submission.
 
-
-
-ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                              24 of 34
-  1. Explore more than one way                  Before you write code, sketch two or three ways you could build
+  1. Explore more than one way                  Before you write code, sketch two or three ways you could build
                                                 it.
 
   2. Know what works, and what                  For each way, note what makes it promising and where it falls
@@ -988,16 +1079,17 @@ start to finish, and practise your demo on it.
                                 trading business: who runs it, how long it has existed, and anything that looks
                                 off.”
 
-  Buying and paying             “We need a payroll provider for 200 people in India. Give me three suppliers
-                                an auditor would sign off on, with the reasons for each.”
+
+
+ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                      27 of 39
+  Buying and paying             “Here are this week’s invoices from our accounts inbox. Match each one to its
+                                purchase order, check the vendor and its bank account, pay each one once,
+                                and hold anything unusual for my approval with the reason.”
 
   Agents that spend             “Sign our three-person team up for the tools a two-week data project needs,
                                 keep it under ₹50,000 a month, and show me every rupee.”
 
-
-
-ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                      25 of 34
-  Supply chain                  “Find three leather-goods manufacturers in Uttar Pradesh, check each is real
+  Supply chain                  “Find three leather-goods manufacturers in Uttar Pradesh, check each is real
                                 and active, and draft the first email to each.”
 
   Revenue                       “Find Indian companies that started hiring a head of data in the last 30 days,
@@ -1008,12 +1100,44 @@ ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November
                                 to do.”
 
 
+
+What a test case looks like
+Before anyone writes code, gather your test cases and the right answer for each. Include the edge cases:
+a duplicate record, a lookalike name, and a question no source can settle, where the right answer is “I
+can’t verify”. Pick cases dated after 1 September 2026, past the training data of the models you use. Here
+is one for Buying and paying.
+
+The request: “Post these bank statement lines from October 2026 to the right payee and account.”
+
+  Bank line                     The right result
+
+  3 Oct 2026 · SWIGGY           Payee: Swiggy Limited. Account: staff meals.
+  BANGALORE · ₹1,240
+
+  7 Oct 2026 · GOOGLE           Payee: Google Cloud India Private Limited. Account: cloud hosting.
+  CLOUD · ₹18,500
+
+  7 Oct 2026 · GOOGLE           The same payee, amount and date as the line above. Held for a person as a
+  CLOUD · ₹18,500               possible duplicate charge.
+
+  9 Oct 2026 · UPI              “I can’t verify”: many businesses trade under that name, and no record ties
+  SHARMA TRADERS ·              this payment to one of them. Held for a person.
+  ₹4,000
+
+Each result carries its source. For the first line: payee Swiggy Limited, from the company name field of
+its Ministry of Corporate Affairs record, retrieved on 9 October 2026.
+
+The last two lines are the edge cases. A service that posts the duplicate, or guesses a payee for the
+last line, gets the case wrong.
+
+
 Back to Through the day
 
 
 
 
-  Annexure E. Resources
+ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                    28 of 39
+  Annexure E. Resources
 Any model, framework or tool is welcome. These are starting points.
 
 For your agents
@@ -1050,8 +1174,7 @@ The Crustdata docs that matter today
 
   Web Fetch                                  A public page, by URL.
 
-ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                    26 of 34
-  Pricing                                    What each call costs.
+  Pricing                                    What each call costs.
 
   Rate limits                                Designing your client to avoid a 429.
 
@@ -1064,7 +1187,9 @@ Building agents
 
   Claude Code                                A coding agent in your terminal.
 
-  Codex CLI                                  A coding agent in your terminal.
+
+ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                29 of 39
+  Codex CLI                                  A coding agent in your terminal.
 
   Claude Agent SDK                           Build agents on Claude.
 
@@ -1090,7 +1215,7 @@ Running and storing it
 
 
 Showing it
-  A new GitHub repo                          Start it at 10:45 AM.
+  A new GitHub repo                          Start it at 10:15 AM.
 
   Loom                                       Record your demo video.
 
@@ -1106,23 +1231,32 @@ Back to Through the day
 
 
 
-ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.        27 of 34
-  Annexure F. The four challenges
-Four challenges through the day, run by BITS Pilani. Anyone can join.
+ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.     30 of 39
+  Annexure F. The six challenges
+Six challenges through the day: BITS Pilani hosts the Rubik’s Cube, the push-ups, the typing race
+and Eyeball It, and Crustdata hosts the chess arena and the CTF. Every builder is welcome in all
+six.
 
 
  Time            Challenge                           Platform                    Who wins
 
 
- 12:30 PM        Push-ups                            None, on stage              Most clean push-ups across the
+ 8:30 AM         Rubik’s Cube                        csTimer, on stage           Fastest solve across all the rounds
+
+
+ 12:00 PM        Push-ups                            On stage                    Most clean push-ups across the
                                                                                  rounds
 
 
- 3:30 PM         Typing race                         Monkeytype                  Fastest in the final on the big screen
+ 12:30 PM        Chess arena                         Lichess                     Most points on the final standings at
+                                                                                 12:55 PM
 
 
- 4:45 PM         Chimp test                          Human Benchmark             Highest score in the final on the big
-                                                                                 screen
+ 3:00 PM         Typing race                         Monkeytype                  Fastest in the final on the big screen
+
+
+ 4:00 PM         Eyeball It                          The Eyeball It app          Highest score on the leaderboard at
+                                                                                 4:25 PM
 
 
  6:15 PM         CTF                                 The CTF site                Most points on the live leaderboard
@@ -1130,40 +1264,74 @@ Four challenges through the day, run by BITS Pilani. Anyone can join.
 
 
 
-Rules for all four
+Rules for all six
    ●​ Solo: every challenge is solo, with one entry and one account each.
    ●​ Who can win: every builder checked in today, so keep your name sticker on you. The BITS Pilani
-        crew and the Crustdata team cheer from the side.
+       crew and the Crustdata team cheer from the side.
    ●​ Be in the room: winners are called up in the hall, and if a winner has not come up within two
-        minutes, the win goes to the next person.
-   ●​ The referee: BITS Pilani names one referee for all four. Raise any concern with the referee before
-        the winner is read out. The referee’s decision is final.
+       minutes, the win goes to the next person.
+   ●​ The referee: BITS Pilani names one referee for all six. Raise any concern with the referee before the
+       winner is read out. The referee’s decision is final.
    ●​ Fair play: the referee sets aside any entry that breaks the rules, and the next person moves up.
 
-Questions about all four
-Do the activities affect my hackathon? They are separate from it. The judges score your repo, your demo
-video and, if you make the finals, your live demo, and they do not see the activity results. Code freeze
-stays at 6:00 PM whatever you play, and your teammates can keep building.
+Questions about all six
+Do the challenges affect my hackathon? They are separate from it. The judges score your repo, your
+demo video and, if you make the finals, your live demo, and they do not see the challenge results. Code
+freeze stays at 6:00 PM whatever you play, and your teammates can keep building.
 
-Do I need a team for the activities? All four challenges are solo, the CTF included, and each has its own
-time.
+ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                             31 of 39
+Do I need a team for the challenges? All six challenges are solo, the chess arena and the CTF included,
+and each has its own time.
 
-Is there a prize for the activities? Each winner is called up and named in front of the room. If BITS Pilani
+Is there a prize for the challenges? Each winner is called up and named in front of the room. If BITS Pilani
 adds a prize, the MC says so when that challenge starts.
 
-Can a friend who is not at the hackathon play in an activity? They are welcome to play along, and the win
-goes to builders checked in today.
+Can a friend who is not at the hackathon play in a challenge? They are welcome to play along, and the
+win goes to builders checked in today.
+
+I think someone cheated in a challenge. Who do I tell? Tell the BITS Pilani referee before the winner is
+read out. The referee checks it, and the referee’s decision is final.
+
+What happens if a site goes down during a challenge? The day moves on to what comes next, and the
+MC lets the room and the WhatsApp group know.
 
 
-ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                             28 of 34
-I think someone cheated in an activity. Who do I tell? Tell the BITS Pilani referee before the winner is read
-out. The referee checks it, and the referee’s decision is final.
-
-What happens if a site goes down during an activity? BITS Pilani skips that challenge, and the MC says
-so in the room and in the WhatsApp group.
+Rubik’s Cube, 8:30 AM
+  Where and              On stage in the hall, with cubes provided and nothing to bring. About forty minutes,
+  when                   from check-in at 8:30 AM until 9:10 AM. Solo, in rounds of five, with csTimer on the
+                         big screen for the scramble and the clock.
 
 
-Push-ups, 12:30 PM
+  How to play            When the MC calls a round, come up on stage. Everyone in the round gets the same
+                         scramble, then fifteen seconds to inspect and two minutes to solve. Put your hand
+                         up when you finish: a volunteer reads your time, and the referee checks the cube.
+
+
+  Who wins               The fastest solve across all the rounds. A tie goes to one more solve between those
+                         tied. The MC names the winner at the kickoff, 9:15 AM.
+
+                         The cube: a standard 3×3 cube from the stage, with the same scramble for
+  Rules
+                         everyone in the round.
+                         The time: fifteen seconds to inspect, then two minutes to solve, on csTimer on the
+                         big screen.
+                         A finished cube: the referee checks every cube before its time stands.
+
+
+                         How many people can play the Rubik’s Cube? Five a round, in as many rounds as
+  Questions
+                         the forty minutes allow. Come to the front from 8:30 AM.
+                         What if I do not finish in two minutes? That solve ends at two minutes, and you are
+                         welcome to cheer on the rest of the round.
+
+
+Back to All six challenges
+
+
+
+
+ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                   32 of 39
+Push-ups, 12:00 PM
 
 
 
@@ -1192,13 +1360,51 @@ Push-ups, 12:30 PM
   Questions
                          Pilani team if you need first aid.
                          How many people can play the push-ups? Five a round, and about six rounds fit in
-                         the ten minutes, so about 30 people. Come to the front by 12:30 PM.
+                         the ten minutes, so about 30 people. Come to the front by 12:00 PM.
 
 
 
 
-ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                     29 of 34
-Typing race, 3:30 PM
+ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                     33 of 39
+Chess arena, 12:30 PM
+  Where and              A Lichess arena, free, on your phone or laptop. About twenty-five minutes, over
+  when                   lunch, from 12:30 to 12:55 PM. Solo: one person, one account.
+
+
+  How to play            Make your free Lichess account before the day, on mobile data, because Lichess
+                         holds up many sign-ups from one campus network. At 12:30 PM the private entry
+                         code goes up in the builders’ WhatsApp group and on screen. Join the arena with it,
+                         and Lichess pairs you for game after game until 12:55 PM.
+
+
+  Who wins               Most points on the final standings at 12:55 PM. A tie goes to Lichess’s tournament
+                         performance. The winner shows the account signed in, and is named at about 12:57
+                         PM.
+
+                         The clock: three minutes each, plus two seconds a move (3+2).
+  Rules
+                         Points: a win scores 2 and a draw 1, and two wins in a row start double points.
+                         Lichess pairs and ranks everyone by itself.
+                         Settings: unrated, with Berserk off.
+                         Connections: if a connection drops, Lichess decides the game.
+
+
+                         Can I play the chess arena on my phone? Yes, in the Lichess app or on the
+  Questions
+                         website, on a phone or a laptop.
+                         Lichess will not let me sign up on the campus Wi-Fi. What now? Switch to mobile
+                         data and sign up there: Lichess holds up many sign-ups from one network.
+                         Can my team keep building while I play chess? Yes. The arena runs over lunch,
+                         and code freeze stays at 6:00 PM.
+
+
+Back to All six challenges
+
+
+
+
+ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                     34 of 39
+Typing race, 3:00 PM
 
 
 
@@ -1234,51 +1440,52 @@ ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November
                          The typing test will not load. What now? Try a phone hotspot. Once the page is
                          open, the test runs in your browser and the Wi-Fi no longer matters.
 
-Back to All four challenges
+Back to All six challenges
 
 
 
 
-ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                        30 of 34
-Chimp test, 4:45 PM
+ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                        35 of 39
+Eyeball It, 4:00 PM
+  Where and              Eyeball It, perception trials, on your phone or laptop. From 4:00 PM until 4:25 PM,
+  when                   before the evening snacks at 4:30 PM. Solo: one person, one account.
 
 
+  How to play            Open Eyeball It and sign in with your BITS Pilani Google account. Each run draws
+                         five of eight short tests, each of two or three rounds, and takes about five minutes.
+                         The Tempo test needs sound, so use earphones.
 
 
-  Where and              The Chimp Test on Human Benchmark, free, with no account. About ten minutes.
-  when                   Solo, on your own laptop first, then a final on one laptop on stage.
+  Who wins               The highest score on the leaderboard at 4:25 PM, when the referee screenshots it.
+                         A tie goes to the lower average error, as the app ranks it. The winner shows the
+                         account signed in, and the MC names them at about 4:27 PM.
 
-
-  How to play            Open the page or scan the slide, then choose Start Test. Click the squares in
-                         number order. The numbers hide after your first click, each round adds a number,
-                         and three mistakes end the test. Keep your result on the screen.
-
-
-  Who wins               The MC counts up the scores: who reached 8, 10, 12, until four hands are left. If
-                         more than four cannot go higher, the highest scores on their screens go through.
-                         Those four play one at a time on the big screen. Highest score wins, and a tie goes
-                         to another go. A finalist who does not come up within a minute is replaced by the
-                         next highest.
-
-                         Your own laptop gets you to the final, and you can retake the test until the MC
+                         The tests: Count, Track, Angle, Tempo, Split, Hue, Area and Hold. Each run draws
   Rules
-                         starts counting up. Anyone who comes up shows their result on their laptop.
-                         The final: one go each, on the stage laptop with the same mouse, with your hands
-                         free of notes and phones.
-                         Quiet, please: the grid is on the big screen, so the room stays silent. If anyone calls
-                         out a number, that go is replayed. If the site or the laptop fails, the referee gives
-                         another go.
+                         five of the eight, and is scored out of 1000.
+                         One try: one run per account. Quitting or closing the page once a run starts uses it
+                         up.
+                         The account: a BITS Pilani Google account. Other accounts are refused.
+                         The board: the leaderboard is live, and the referee screenshots it at 4:25 PM. Runs
+                         after that do not count.
 
-                         Can I take the Chimp Test more than once? Yes, on your own laptop until the MC
+
+                         Can I play Eyeball It on my phone? Yes, on a phone or a laptop. Use earphones: the
   Questions
-                         starts counting up. In the final you get one go.
+                         Tempo test needs sound.
+                         My other Google account will not sign in to Eyeball It. What now? Sign in with your
+                         BITS Pilani Google account: Eyeball It refuses other accounts.
+                         I arrive after 4:25 PM. Can I still play Eyeball It? The referee screenshots the board
+                         at 4:25 PM, and runs after that do not count. The next challenge is the CTF, at 6:15
+                         PM.
 
-Back to All four challenges
+
+Back to All six challenges
 
 
 
 
-ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                       31 of 34
+ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                      36 of 39
 CTF, 6:15 PM
   Where and              The CTF site, which you open from your dashboard, with a live leaderboard. 45
   when                   minutes, from 6:15 to 7:00 PM, while the judges review, the same 45 minutes for
@@ -1296,8 +1503,8 @@ ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November
                          laptop and name sticker to the desk, shows the account signed in and explains how
                          they found their flags in a minute or two. If someone is away from the hall or cannot
                          explain their solves, the next person moves up. The referee names the winner by
-                         7:10 PM, before the ten finalists are announced at 7:30 PM. If no part is solved,
-                         there is no CTF winner.
+                         7:10 PM, before the ten finalists are announced at 7:30 PM. A CTF win needs at
+                         least one solved part.
 
                          Points: the parts start at 200, 400 and 800 points. A part is worth less as more
   Rules
@@ -1324,11 +1531,11 @@ ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November
 
 
 
-ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                       32 of 34
+ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                      37 of 39
   Annexure G. Questions builders ask
 Do I need a team?
 Teams have one to four builders, and solo builders are welcome too. To find a team, come to team
-formation at 10:35 AM.
+formation at 10:05 AM.
 
 Do we have to build with Crustdata?
 We’d love you to, and it’s your choice. Every project is judged on the same five criteria either way.
@@ -1342,7 +1549,7 @@ Submit what you have by 6:00 PM. You can submit again until then, and the latest
 My teammates and I: one account or four?
 Four. Each builder signs up with their own BITS Pilani email and gets their own 15,000 credits.
 
-I already have a Crustdata account.
+I already have a Crustdata account. What do I do?
 If it is on your BITS Pilani email, redeem the code on the billing page: here are the steps. If it is on another
 email, sign up again with your BITS Pilani email and the code, and the credits go to that account.
 
@@ -1351,31 +1558,31 @@ If the code didn’t apply, redeem it on the billing page: here are the steps. I
 your spam folder, use the Resend link on the page, and make sure the address ends
 @pilani.bits-pilani.ac.in. If you’re still stuck, find anyone from the Crustdata team on the floor.
 
-How do I check my balance?
+How do I check my credit balance?
 Under Credits in the dashboard sidebar, with crustdata account credits in the CLI, or with GET
 /account/credits, which is free.
 
-What does a call cost?
+What does a Crustdata API call cost?
 See docs.crustdata.com/general/pricing. A company search, for example, is 0.03 credits per result, plus
 any premium field groups you ask for.
 
-What are the rate limits?
+What are the Crustdata API rate limits?
 The Endpoints page in your dashboard shows each endpoint’s limit per minute. A 429 means wait a few
 seconds and retry.
 
 Can I build something outside the themes?
 Yes. Any service people are paid to do is fair game.
 
-Will there be photos?
+Will there be photos on the day?
 Yes, through the day and at the close. If you’d rather not be in them, tell the BITS Pilani team.
 
-ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                    33 of 34
+ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                    38 of 39
 Can I share what I built?
 Please do. Post your demo on LinkedIn or X and tag Crustdata.
 
 Is Crustdata hiring?
-Yes: interns and full-time engineers, from the entire campus, whether or not you build today. Apply on the
-form. Interviews are online and take 10 minutes.
+Yes: interns and full-time engineers, from the entire campus. Apply on the form. Interviews are online and
+take 10 minutes.
 
 Back to Through the day
 
@@ -1413,5 +1620,5 @@ Services, Replaced. Happy building.
 
 
 
-ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                34 of 34
+ContextCon 05: BITS Pilani. Build AI agents on live web data. Sunday 22 November 2026.                39 of 39
 
