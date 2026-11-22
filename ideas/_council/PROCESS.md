@@ -17,3 +17,13 @@ Run through our own client in record mode so every response is cached for free r
 - Sentinel claimed headcount "excludes drivers/contract staff" — an unsourced claim about Crustdata's methodology.
 - All four assumed drl.aero → Delhivery id 5798 without ever calling identify on it.
 - None handled gaps in the weekly series (up to ~5 months) → max-staleness rule added.
+
+## Round 3 — re-score against the Handbook rubric (Sonnet agents)
+The user declared the 39-page Builder Handbook the source of truth. Its rubric (E2E 25 · Facts 20 · Robustness 20 · Customer value and idea 20 · Demo 15) replaced the problem statement's (ethics 25, finance 25, ...), and the 3PL-client framing became optional.
+Three judges scored seven ideas (the six finalists plus Raise, reconsidered) on their criteria, 1–5, weighted to 100:
+- E2E and robustness: [reviews/R3-e2e-robustness.md](reviews/R3-e2e-robustness.md)
+- Facts and verification, with a fixture spot-check: [reviews/R3-facts-verification.md](reviews/R3-facts-verification.md)
+- Customer value and demo: [reviews/R3-value-demo.md](reviews/R3-value-demo.md)
+
+Result: AsOf 88 · Golden Record 73 · Second Opinion 71 · FactGate 68 · Sentinel 60 · Raise 56 · Same Hands 55.
+Fixture spot-check: all of AsOf's case numbers were confirmed. Still unverified: the drl.aero identify call and the web-fetch cost. Minor error: the revenue bounds for Shree Balaji are null in the fixture, not 0.

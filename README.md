@@ -7,36 +7,76 @@ Every idea has its own document in [`ideas/`](ideas/) with all the spec, data an
 
 **Why we re-ideated:** the event judges told us the standard track examples (hiring screeners, vendor checks, investor scouts, invoice matchers, ...) are what most teams build. We need a unique, out-of-the-box use of Crustdata's APIs, watchers and MCP. We also want to cover as much of Crustdata's API as is genuinely useful.
 
-**What we're judged on:** one fictional Indian 3PL client for all teams. Every fact needs a source, with the exact passage and the record date. "Cannot verify" beats a wrong answer. Irreversible actions wait for a person. Each run has a cost ledger and limits. There are hidden test cases (duplicates, lookalike names, unsettleable questions). A judge kills the process on stage and each action must still happen exactly once. Finals: live run 20 · robustness 15 · design / live fix 15 · **ethics 25** · **finance 25**. Source: `ContextCon05_BITS_Problem_Statement.pdf`.
+**Source of truth: the Builder Handbook, 39-page edition, [`docs/builder-handbook.pdf`](docs/builder-handbook.pdf)** ([text version](docs/builder-handbook.txt)). The older 34-page edition is in `docs/old/`.
+
+**What we're judged on (Handbook, "How winners are picked").** Each criterion is scored 1–5, for 100 points in total. Ties go to end-to-end execution, then facts and verification.
+
+| Criterion | Points | What the judges look for |
+|---|---|---|
+| End-to-end execution | **25** | A real request goes in and a finished result comes out (an offer drafted, a claim settled, an invoice paid, a case file written), with no one stepping in. The product asks a person only when the answer changes the result. |
+| Facts and verification | **20** | Every person, company, number and date is right, **and right for the day it is used**. Each decision has reasons and sources. **One person or company under two names stays one record.** "I can't verify" beats a wrong fact. |
+| Robustness and edge cases | **20** | It handles messy text, missing fields, unusual cases, and tools that time out or return nonsense. After a crash or retry it continues and never sends or pays twice. A person approves anything that can't be undone, and it uses only the personal data the job needs. |
+| Customer value and idea | **20** | A job businesses pay people or firms to do today, with **an approach that isn't obvious**. The product does the work itself, not a chat interface on top of a model. |
+| Demo and understanding | **15** | A clear demo, plus the approaches weighed, what worked and what didn't, the hardest case, who the product could get wrong, and what comes next. |
+
+**What every service must do (Handbook, "What every service does"):**
+- Decisions rest on live data.
+- Every claim has a source that links to the exact passage or field, with the record's date.
+- A person approves anything that can't be undone. Payments run in test mode.
+- Every run has a time limit and a credit limit, and a ledger records every call, model calls included.
+- It survives a crash or timeout and continues where it stopped, with each action happening exactly once.
+
+**Test cases:** we gather our own before coding. They must include a duplicate record, a lookalike name, and a case where the right answer is "I can't verify", and be dated after 1 Sep 2026.
+
+**What a strong idea also needs to show (Handbook, "What we want to hear" and "How the finals run"):**
+- The business case: who buys it, the price in rupees, and what one job costs to run.
+- An answer to the scale question: "100 times the volume, or a second client?"
+- Handling beyond the prepared request: a duplicate record, a changed fact, a failed call, or a restart mid-run.
+- The approaches weighed, the hardest case, and who the product could get wrong and how it guards against that.
+
+**What changed from earlier assumptions.** The ideas below were first scored against the separate `ContextCon05_BITS_Problem_Statement.pdf`, whose rubric was ethics 25, finance 25, live run 20, robustness 15 and design 15. It also framed every idea around a fictional Indian 3PL client. **The Handbook uses the rubric above and doesn't require the 3PL framing.** That framing is now optional, so ideas dropped only for not serving the 3PL client, such as Raise, may deserve another look. The council scores in the leaderboard use the old rubric; see the note under the table.
 
 ---
 
 ## Leaderboard
 
-Round 1 is five judges scoring 1–5 each, maximum 25. Round 2 is three judges, each playing all six head-to-head matchups between the four finalists, so each finalist plays 9.
+**Rank order:** first by the **Round 3 score (/100)**, which uses the Handbook rubric and is the current source of truth. Ideas without a Round 3 score are ordered by Round 2 wins, then by Round 1 score.
+- **Round 3:** three judges score each Handbook criterion 1–5, scaled by its weight: E2E 25 · Facts 20 · Robustness 20 · Value 20 · Demo 15. Reviews are in [`ideas/_council/reviews/`](ideas/_council/reviews/).
+- **Rounds 1 and 2** used the problem statement's older rubric. Round 1 is five judges scoring 1–5, maximum 25. Round 2 is head-to-head matchups between four finalists, nine each.
 
-| Rank | Idea | One line | Round 1 /25 | Round 2 wins /9 | Status | Doc |
-|---|---|---|---|---|---|---|
-| 🥇 1 | **AsOf** | Dated carrier clearance and attestation. It states what the records can prove as of date D, or says CANNOT ATTEST. Delivered as an MCP gateway | **22** | **8** | **Champion (merge)** | [01-asof.md](ideas/01-asof.md) |
-| 🥈 2 | **FactGate** | Verified-facts MCP gateway that every agent must pass facts through: a sourced value or CANNOT_VERIFY | 21 | 7 | Absorbed into AsOf | [02-factgate.md](ideas/02-factgate.md) |
-| 🥉 3 | **Sentinel** | "Evidence that you knew": watchers turn counterparty changes into dated, sourced records | 18 / 16 / 16 | 2 | Watcher design absorbed into AsOf | [03-sentinel.md](ideas/03-sentinel.md) |
-| 4 | Second Opinion | Audits another party's deliverable line by line (agree / contradict / cannot verify) | 18 | 1 | Light version absorbed | [04-second-opinion.md](ideas/04-second-opinion.md) |
-| 5 | Golden Record | Master-data dedupe desk: merge / no-merge / cannot verify for each pair | 19 | — | Its entity resolution is in AsOf | [05-golden-record.md](ideas/05-golden-record.md) |
-| 6 | Carrier Pulse | Carrier distress watchlist (red / amber / green) | 16 | — | Merged into Sentinel | [06-carrier-pulse.md](ideas/06-carrier-pulse.md) |
-| 7 | LaneWatch | Dated hold / continue verdict on carrier health | 16 | — | Merged into Sentinel | [07-lanewatch.md](ideas/07-lanewatch.md) |
-| 8 | Same Hands | Related-party graph across tender bidders | 15 | — | Dropped (defamation risk) | [08-same-hands.md](ideas/08-same-hands.md) |
-| 9 | BudgetBroker | Budget-governed data buyer (a proxy with a spending cap) | 15 | — | Possible AsOf feature | [09-budgetbroker.md](ideas/09-budgetbroker.md) |
-| 10 | Bid Intel | Rival dossier before a tender | 14 | — | Dropped (track example) | [10-bid-intel.md](ideas/10-bid-intel.md) |
-| 11 | Expansion Site Scout | Hiring as a warehouse-demand signal | 13 | — | Dropped (job-search coverage) | [11-expansion-site-scout.md](ideas/11-expansion-site-scout.md) |
-| 12 | ProvenanceAudit | Claim-by-claim auditor for agent memos | 13 | — | Dropped (track example) | [12-provenance-audit.md](ideas/12-provenance-audit.md) |
-| 13 | Account Watch | Customer churn and expansion watch | 11 | — | Dropped (surveillance) | [13-account-watch.md](ideas/13-account-watch.md) |
-| 14 | Notice-Period Alert | Flags when a named contact at a counterparty has left | 11 | — | Dropped (tracks individuals) | [14-notice-period-alert.md](ideas/14-notice-period-alert.md) |
-| 15 | Conflict-of-Interest Desk | Screens bidders' directors for conflicts | 11 | — | Dropped (personal data, namesakes) | [15-conflict-of-interest.md](ideas/15-conflict-of-interest.md) |
-| 16 | Sourced | Hiring desk with CV-claim verification | not scored — dropped on hard constraint (RULES §1: must be unique; hiring screeners are named as overdone) | — | **Dropped** | [16-sourced.md](ideas/16-sourced.md) |
-| 17 | Raise | Fundraising agent for founders | not scored — dropped on hard constraint (RULES §1: must serve the one 3PL client; Raise serves founders) | — | **Dropped** | [17-raise.md](ideas/17-raise.md) |
-| 18 | LaneBook | Kalshi-shaped event-contract desk settling only against pre-committed, sourced dated records | 12 | — | **Dropped** (no external buyer; unresolved gambling/defamation framing risk) | [18-lanebook.md](ideas/18-lanebook.md) |
+| Rank | Idea | One line | **Round 3 /100** (E2E·Facts·Rob·Value·Demo) | Round 2 wins /9 | Round 1 /25 | Status | Doc |
+|---|---|---|---|---|---|---|---|
+| 🥇 1 | **AsOf** | Dated attestation. It states what the records can prove as of date D, or says CANNOT ATTEST. Delivered as an MCP gateway | **88** (4·5·5·4·4) | **8** | **22** | **Champion (merge) · being built in [`AsOf/`](AsOf/)** | [01-asof.md](ideas/01-asof.md) |
+| 🥈 2 | **Golden Record** | Entity resolution: merge / no-merge / cannot verify for each pair; one company under two names stays one record | **73** (4·4·4·3·3) | — | 19 | AsOf's resolution step | [05-golden-record.md](ideas/05-golden-record.md) |
+| 🥉 3 | **Second Opinion** | Audits a deliverable someone else produced, line by line (agree / contradict / cannot verify) | **71** (4·2·3·4·5) | 1 | 18 | Candidate front door for AsOf | [04-second-opinion.md](ideas/04-second-opinion.md) |
+| 4 | FactGate | Verified-facts MCP gateway: a sourced value or CANNOT_VERIFY | 68 (3·4·4·3·3) | 7 | 21 | Absorbed into AsOf | [02-factgate.md](ideas/02-factgate.md) |
+| 5 | Sentinel | "Evidence that you knew": watchers turn counterparty changes into dated records | 60 (3·3·3·3·3) | 2 | 18 / 16 / 16 | Watcher design absorbed | [03-sentinel.md](ideas/03-sentinel.md) |
+| 6 | Raise | Fundraising agent for founders (re-scored now that the 3PL framing is optional) | 56 (3·2·3·3·3) | — | not scored | Dropped (a ranking has no checkable answer) | [17-raise.md](ideas/17-raise.md) |
+| 7 | Same Hands | Related-party graph across tender bidders | 55 (3·2·2·3·4) | — | 15 | Dropped (defamation risk) | [08-same-hands.md](ideas/08-same-hands.md) |
+| 8 | Carrier Pulse | Carrier distress watchlist (red / amber / green) | — | — | 16 | Merged into Sentinel | [06-carrier-pulse.md](ideas/06-carrier-pulse.md) |
+| 9 | LaneWatch | Dated hold / continue verdict on carrier health | — | — | 16 | Merged into Sentinel | [07-lanewatch.md](ideas/07-lanewatch.md) |
+| 10 | BudgetBroker | Budget-governed data buyer (a proxy with a spending cap) | — | — | 15 | Possible AsOf feature | [09-budgetbroker.md](ideas/09-budgetbroker.md) |
+| 11 | Bid Intel | Rival dossier before a tender | — | — | 14 | Dropped (track example) | [10-bid-intel.md](ideas/10-bid-intel.md) |
+| 12 | Expansion Site Scout | Hiring as a warehouse-demand signal | — | — | 13 | Dropped (job-search coverage) | [11-expansion-site-scout.md](ideas/11-expansion-site-scout.md) |
+| 13 | ProvenanceAudit | Claim-by-claim auditor for agent memos | — | — | 13 | Dropped (track example) | [12-provenance-audit.md](ideas/12-provenance-audit.md) |
+| 14 | LaneBook | Kalshi-shaped event-contract desk settling only against pre-committed, sourced dated records | — | — | 12 | Dropped (no external buyer; unresolved gambling/defamation framing risk) | [19-lanebook.md](ideas/19-lanebook.md) |
+| 15 | Account Watch | Customer churn and expansion watch | — | — | 11 | Dropped (surveillance) | [13-account-watch.md](ideas/13-account-watch.md) |
+| 16 | Notice-Period Alert | Flags when a named contact at a counterparty has left | — | — | 11 | Dropped (tracks individuals) | [14-notice-period-alert.md](ideas/14-notice-period-alert.md) |
+| 17 | Conflict-of-Interest Desk | Screens bidders' directors for conflicts | — | — | 11 | Dropped (personal data, namesakes) | [15-conflict-of-interest.md](ideas/15-conflict-of-interest.md) |
+| 18 | Benefits Desk | Insurance desk for the client's own workforce: the employer side designs the cover; each employee learns what they have, what's missing and what to do | — | — | 10 | Proposed (Round 1 done; below the Round 2 bar) | [18-benefits-desk.md](ideas/18-benefits-desk.md) |
+| 19 | Sourced | Hiring desk with CV-claim verification | — | — | not scored | Dropped (hiring is an overdone track example) | [16-sourced.md](ideas/16-sourced.md) |
 
-The three Round 1 scores in Sentinel's row are Receivables Sentinel, Carrier Pulse and LaneWatch, the three ideas merged into it. All rupee fee figures are agent estimates unless marked as sourced.
+**Notes**
+- The three Round 1 scores in Sentinel's row are Receivables Sentinel, Carrier Pulse and LaneWatch.
+- Document file numbers are permanent IDs, not ranks.
+- All rupee fee figures are agent estimates unless marked as sourced.
+
+> **What Round 3 changed**
+> - AsOf stays far ahead: 88, the only idea scoring 5 on Facts and on Robustness.
+> - Golden Record and Second Opinion move into the top 3, because the Handbook weights a finished, checkable result and the demo, and drops the separate finance score.
+> - Both new top-3 ideas are parts of AsOf: Golden Record is its resolution step, and Second Opinion is a possible way to present it.
+> - Second Opinion's Facts score of 2 is a warning: its pitch marked a growth claim AGREE from two lower-bound counts.
+> - Raise, re-scored without the 3PL constraint, comes 6th, because a ranking has no single correct answer.
 
 ---
 
@@ -94,41 +134,66 @@ Person data is deliberately not used.
 - Mostly refusals could make the demo look thin.
 - The `drl.aero` alias and the web-fetch cost are unverified, about 1.5 credits to check.
 
+**Round 3 findings (Handbook rubric, 88/100):**
+- **Facts 5 and Robustness 5.** The facts judge confirmed every case number against the recorded data, including the 14-day staleness refusal for TCI on 2026-10-15.
+- **Biggest wrong-fact risk:** a 2026 stored copy read as proof of what was true on date D. **Fix:** word every line as *"data point dated P states X; stored copy retrieved T"* and never as "was true on D".
+- **Biggest E2E risk:** requests outside basic info, headcount and revenue fall to web corroboration and may end as a "finished refusal". Mitigation: choose request types the data can actually settle.
+- **Best buyers without the 3PL framing:**
+  - insurers and arbitrators who need "what was knowable on date D"
+  - diligence and credit teams at banks, NBFCs and funds that already pay outside diligence firms
+- **Option the value judge suggests:** use Second Opinion's graded diff as AsOf's front door. The pitch: "We re-check every line of the report you paid for, as of the date you relied on it."
+
 Full spec: **[ideas/01-asof.md](ideas/01-asof.md)**
 
 ---
 
-## 🥈 2. FactGate — runner-up, absorbed into AsOf
+## 🥈 2. Golden Record — entity resolution (AsOf's resolution step)
 
-**What it is:** an MCP gateway in front of the 3PL's agents and staff. Every fact must pass through it and comes back with its field or passage, URL, record date and cost, or as CANNOT_VERIFY naming what's missing. The lead job is "clear a new carrier", about 4.2 credits (≈ ₹110), sold at ₹600 per dossier.
+**What it is:** dedupe and entity resolution for a firm's customer and carrier master data. Every pair of records gets an explicit **merge / no-merge / cannot verify** verdict with cited evidence (identify by domain, `all_domains`, founding year, office addresses), and is never silently merged. Merges into a master record are irreversible, so they wait for approval and are idempotent on a pair hash.
 
-**What it adds to the champion:** MCP-gateway delivery, the carrier-clearance job (an example the problem statement itself gives), per-tenant caps, caches and audit logs, and watcher-driven fact expiry (STALE).
+**Why it scored 73 in Round 3:**
+- E2E 4, Facts 4, Robustness 4: the verdicts have crisp, testable answers.
+- It hits the Handbook line "one person or company under two names stays one record" directly.
+- Our data shows the problem is real: one name returned **25 candidates**, and Delhivery has two domains (`drl.aero`, `delhivery.com`).
+- Value and Demo are only 3: "a real job but a low price; dedupe demo is dry".
 
-**What the judges said**
-- The ethics and finance judge ranked it **#1**, because procurement already pays for KYB checks.
-- The novelty judge scored it 3/5: "5+ teams will build fact-checkers".
-- Flagged weak points: "cannot verify" quietly excludes small carriers, and no firm pays ₹600 for a refusal. The fixes (evidence requests, price per cleared dossier) are in AsOf.
+**Weaknesses:**
+- It fails on its own economics: about ₹53 of enrichment per record against a ₹5–20 price per record.
+- The spec is thin, and the reasons for merging aren't yet sourced.
 
-Full doc: [ideas/02-factgate.md](ideas/02-factgate.md)
+**Role in the champion:** AsOf's `resolve` step (domain or ID, never name).
+
+Full doc: [ideas/05-golden-record.md](ideas/05-golden-record.md)
 
 ---
 
-## 🥉 3. Sentinel — "Evidence that you knew"
+## 🥉 3. Second Opinion — audit someone else's report (possible front door for AsOf)
 
-**What it is:** a merge of Receivables Sentinel (a customer credit-hold desk for the CFO), Carrier Pulse and LaneWatch.
-- Watchers on the 3PL's customers and carriers turn each change into a dated, sourced record, such as "headcount 18,626 on 2022-11-28 → 35,295 on 2026-11-16".
-- There's no risk score. Credit holds and carrier suspensions stay human decisions.
-- "Will X default?" is always cannot verify.
-- About 8 credits (₹208) per alert-driven job.
+**What it is:** it re-verifies a deliverable another party handed you, line by line, and returns **agree / contradict / cannot verify** with exact passages and record dates. The deliverable could be a carrier's capability deck, a vendor's KYB pack, a rival's memo, or another AI agent's output. It audits the auditor.
 
-**What it adds to the champion:** the watcher-centred design, and the alert dedupe key that closes the crash gap between creating a watcher and saving its ID.
+**Why it scored 71 in Round 3:**
+- Demo 5: "a graded diff reads instantly".
+- Value 4: the buyer is a diligence or credit-risk team at a bank, NBFC or fund that already pays a diligence firm and wants an independent check.
+- E2E 4: a finished audit report.
 
-**What the judges said**
-- It had the best finance score in Round 1 (5/5).
-- But CS and ethics objected: a verdict built on a headcount lower bound has no ground truth the organizers can test, and a false positive cuts a real customer's credit.
-- It won 2 of 9 matchups in Round 2.
+**Why it isn't higher:**
+- **Facts 2.** Its pitch marked "TCI grew 4x" AGREE from the ratio of two lower-bound counts. That's a wrong fact.
+- Its CONTRADICT threshold ("~30k vs 35,295") was arbitrary and not matched to the claim's date.
+- Its LLM claim-splitter can split differently after a restart, which breaks exactly-once processing (Robustness 3).
 
-Full doc: [ideas/03-sentinel.md](ideas/03-sentinel.md)
+**Fixes if we use it as AsOf's front door:**
+- Take structured claims, with no live document splitter.
+- Grade each claim with AsOf's `attest`.
+- Show growth claims as two dated values side by side, never as a ratio.
+- Only CONTRADICT when the claim's date matches the data point and the gap is outside the stated tolerance.
+
+**Its 2-minute demo outline (value judge):**
+1. A vendor's 10-line carrier pack goes in: "Check what we paid for."
+2. The diff fills in live, Delhivery's two domains resolve to one record, and "Shree Balaji" comes back cannot verify with 25 candidates.
+3. A judge kills the process mid-run; it restarts with no double charge, and a watcher alert marks a line STALE.
+4. An approval gate sits before the contradiction report goes out, and the ledger shows about 5 credits per pack.
+
+Full doc: [ideas/04-second-opinion.md](ideas/04-second-opinion.md). FactGate (now #4) and Sentinel (#5) keep their full write-ups in [02-factgate.md](ideas/02-factgate.md) and [03-sentinel.md](ideas/03-sentinel.md).
 
 ---
 
@@ -153,11 +218,13 @@ Full doc: [ideas/03-sentinel.md](ideas/03-sentinel.md)
 
 ## Open questions for the team
 1. Do we go with AsOf, and lead with **carrier clearance** (strongest buyer) or the **dated dispute file** (most novel)?
-2. Where are the kickoff kit (client records, input and output formats) and the organizer repo?
+2. Do we keep the 3PL-client framing? It's optional under the Handbook. Without it, AsOf's buyer can be any firm that onboards counterparties, such as procurement, lending or insurance.
 3. Who sources the finance numbers: KYB vendor quotes, the MCA21 fee schedule, and IRDAI surveyor fees?
 4. Is it OK to spend about 1.5 credits verifying `drl.aero` and measuring the web-fetch cost?
+5. Done: Round 3 re-scored the top ideas against the Handbook rubric (see the leaderboard). The new decision is whether AsOf leads with its own clearance or dispute file, or with Second Opinion's "audit the report you paid for" framing.
 
 ## Repo map
+- **`AsOf/`** is the build workspace for the champion. Open a Claude Code session there and follow `AsOf/docs/START_HERE.md`. It contains CLAUDE.md (lead rules), SPEC.md, frozen models, config, the tested Crustdata client, recorded fixtures, 17 hidden-test cases, 4 build subagents and a 5-reviewer council with a gate and a chaos harness.
 - `ideas/` holds one document per idea, plus `_council/` (the process, the Round 1 pool, the Round 2 brief and data check).
 - `docs/` holds:
   - `PREP-NOTES.md` (the old README)

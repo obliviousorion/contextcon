@@ -2,13 +2,19 @@
 
 > **"Crustdata gives you raw data. AsOf decides what it can swear to — and as of when."**
 
-**Status:** champion after 2 council rounds (not being built yet; team discussion first).
+**Status:** champion (Rounds 1–3). **Build workspace: [`../AsOf/`](../AsOf/)**. Start with `AsOf/docs/START_HERE.md`.
 **Scores:** Round 1 (5 judges, max 25): **22** — CS 4 · Novelty 5 · Ethics 5 · Builder 4 · Finance 4 (highest of 15 ideas).
 Round 2 head-to-head (3 Opus judges × 3 matchups each): **8 of 9 matchups won** (lost only AsOf-vs-FactGate on the ethics+finance judge's card).
 **What it is:** a merge. AsOf's engine and name + FactGate's MCP-gateway delivery and "carrier cleared" lead job + Sentinel's watcher design and alert dedupe + a light, deterministic version of Second Opinion's claim audit.
 Source pitches: [round-2 champion pitch](#appendix-a--round-2-champion-pitch-verbatim) below; competing pitches live in [02-factgate.md](02-factgate.md), [03-sentinel.md](03-sentinel.md), [04-second-opinion.md](04-second-opinion.md).
 
 ---
+
+
+## Round 3 (Handbook rubric) — 88/100
+Scores E2E·Facts·Robustness·Value·Demo = 4·5·5·4·4 (each 1–5, weighted 25·20·20·20·15). Reviews: [_council/reviews/](_council/reviews/).
+
+Facts 5: every case is a pure function of dated points, and all case numbers were confirmed against the fixtures. Robustness 5: outbox, exactly-once, staleness and CANNOT rules. Wrong-fact risk: presenting a stored copy as proof of what was true on D. Fix: word lines as 'data point dated P states X; stored copy retrieved T'. E2E risk: requests outside basic info, headcount and revenue may end as a finished refusal. Best buyers without the 3PL framing: insurers and arbitrators; diligence and credit teams at banks, NBFCs and funds. The value judge suggests Second Opinion's graded diff as the front door.
 
 ## 1. The problem
 A 3PL hands freight to dozens of carriers and sub-contractors, many small, many with near-identical names. Two questions keep coming up:
@@ -149,7 +155,7 @@ Company data only (no person data). Every refusal names what is missing. No auto
 
 ## Discussion
 <!-- Others append below: "- <name>, <date>: <proposal>". The owner merges. -->
-- Claude (agent), 2026-11-22: [#18 LaneBook](18-lanebook.md) (a Kalshi-shaped event-contract idea) was proposed, five-lens reviewed, and dropped (12/25 — see its §0). Three of five lenses (Ethics, Builder, Novelty) independently converged on the same suggestion, worth your call as owner: strip every trade/stake/price/payout mechanic and consider a narrow **"AsOf: Forward Mode"** feature — `attest(entity, field, as_of=D)` already answers "what did we know as of a past D"; the only genuinely new piece LaneBook surfaced is a **pre-committed criterion fixed before the fact is known**, i.e. "we state today, citing record type R, that field F will say X by future date D" — graded automatically into ATTESTED / NOT ATTESTED / EXTENDED (record not there yet, one retry before CANNOT VERIFY) when D arrives. No staking, no trading, no price, no payout, no desk vocabulary — those were exactly what Ethics (2/5) and Novelty (3/5) flagged as unresolved gambling/defamation-optics risk and reskinning risk respectively. Not merging this — your call under RULES.md §4.
+- Claude (agent), 2026-11-22: [#19 LaneBook](19-lanebook.md) (a Kalshi-shaped event-contract idea, numbered #18 at review time, renumbered #19 after a collision with Benefits Desk) was proposed, five-lens reviewed, and dropped (12/25 — see its §0). Three of five lenses (Ethics, Builder, Novelty) independently converged on the same suggestion, worth your call as owner: strip every trade/stake/price/payout mechanic and consider a narrow **"AsOf: Forward Mode"** feature — `attest(entity, field, as_of=D)` already answers "what did we know as of a past D"; the only genuinely new piece LaneBook surfaced is a **pre-committed criterion fixed before the fact is known**, i.e. "we state today, citing record type R, that field F will say X by future date D" — graded automatically into ATTESTED / NOT ATTESTED / EXTENDED (record not there yet, one retry before CANNOT VERIFY) when D arrives. No staking, no trading, no price, no payout, no desk vocabulary — those were exactly what Ethics (2/5) and Novelty (3/5) flagged as unresolved gambling/defamation-optics risk and reskinning risk respectively. Not merging this — your call under RULES.md §4.
 
 
 ## Appendix B — original round-1 pool entry

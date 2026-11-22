@@ -1,4 +1,6 @@
-# #18 — LaneBook
+# #19 — LaneBook
+
+*(Proposed and reviewed as "#18" on 2026-11-22; renumbered to #19 after a merge collision with a teammate's "Benefits Desk", which claimed #18 first upstream. The five review files under `_council/reviews/19-*-20261122-1543.md` are the judges' verbatim, unedited text and still say "#18" — that was this idea's number when they were written.)*
 
 Back to the [leaderboard](../README.md). Follows [RULES.md](RULES.md).
 
