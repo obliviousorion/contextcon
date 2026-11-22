@@ -63,6 +63,7 @@ Every idea has its own document in [`ideas/`](ideas/) with all the spec, data an
 | 15 | Notice-Period Alert | Flags when a named contact at a counterparty has left | — | — | 11 | Dropped (tracks individuals) | [14-notice-period-alert.md](ideas/14-notice-period-alert.md) |
 | 16 | Conflict-of-Interest Desk | Screens bidders' directors for conflicts | — | — | 11 | Dropped (personal data, namesakes) | [15-conflict-of-interest.md](ideas/15-conflict-of-interest.md) |
 | 17 | Sourced | Hiring desk with CV-claim verification | — | — | not scored | Dropped (hiring is an overdone track example) | [16-sourced.md](ideas/16-sourced.md) |
+| 18 | Benefits Desk | Insurance desk for the client's own workforce: the employer side designs the cover; each employee learns what they have, what's missing and what to do | — | — | not scored | Proposed (not yet reviewed) | [18-benefits-desk.md](ideas/18-benefits-desk.md) |
 
 **Notes**
 - The three Round 1 scores in Sentinel's row are Receivables Sentinel, Carrier Pulse and LaneWatch.
