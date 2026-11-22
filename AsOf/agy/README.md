@@ -29,3 +29,4 @@ agy/run_task.sh agy/tasks/docs.md README.md docs/
 
 **Permissions:** headless agy can't prompt, so any unapproved tool is auto-denied (and agy still exits 0). The runner passes a per-session `--settings` that grants `write_file` on the allowed paths only, plus the command prefixes in `AGY_ALLOW_CMDS`. `AGY_SKIP_PERMISSIONS=1 AGY_I_HAVE_USER_OK=yes` (both required) switches to `--dangerously-skip-permissions`; use it only with the user's explicit OK, since agy can then run any command.
 - The runner scans the whole repo and fingerprints `../.env` (hash only); any change to it exits 3 with an alert. Out-of-scope changes are reported, not auto-reverted, because other agents may be writing in parallel.
+- Logs are `--output-format stream-json`, so every tool call shows up live in `agy/logs/` (`tail -f` to watch). Never edit this script while a run is in flight: bash reads it incrementally.

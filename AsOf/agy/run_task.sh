@@ -25,7 +25,7 @@ echo "agy settings: $SETTINGS"
 PERMS=(--settings="$SETTINGS")
 # AGY_SKIP_PERMISSIONS=1 only with the user's explicit OK for this run: auto-approves every tool. The scope check below still runs.
 [ "${AGY_SKIP_PERMISSIONS:-0}" = "1" ] && [ "${AGY_I_HAVE_USER_OK:-}" = "yes" ] && { PERMS=(--dangerously-skip-permissions); echo "agy: ALL PERMISSIONS (user-approved)"; }
-"$AGY" --mode accept-edits --print-timeout "${AGY_TIMEOUT:-1500s}" "${PERMS[@]}" --print="$PROMPT" > "$LOG" 2>&1; RC=$?
+"$AGY" --mode accept-edits --print-timeout "${AGY_TIMEOUT:-1500s}" --output-format stream-json "${PERMS[@]}" --print="$PROMPT" > "$LOG" 2>&1; RC=$?
 AFTER=$(git -C "$REPO" status --porcelain --untracked-files=all | sort)
 [ "$(envsum)" = "$ENV_BEFORE" ] || { echo "ALERT: ../.env changed during the agy run. Inspect it yourself; rotate keys if unsure." >&2; exit 3; }
 CHANGED=$(comm -13 <(echo "$BEFORE") <(echo "$AFTER") | awk '{print $NF}')
