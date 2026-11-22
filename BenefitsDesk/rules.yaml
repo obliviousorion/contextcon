@@ -1,0 +1,120 @@
+# Benefits Desk business rules. EVERY rule outcome comes from this file; code only evaluates it.
+# Live-fix drill: edit a value here and re-run; no code change.
+# These are the broker's rules, not facts. Each output line names the rule id it came from.
+
+version: 2026-11-22.1
+
+people:
+  adult_age_bands: ["18-24", "25-34", "35-44", "45-54", "55-64", "65+"]
+  refuse_age_bands: ["under-18"]          # stop: the service is for adults
+  never_guess: [age_band, dependants, health, family]   # only ever `told`
+
+dates:
+  tolerance_months: 1                     # stored dates are first-of-month: allow one month either side
+  window_start: "2026-09-01"              # default "since" date for changes and job posts
+
+job_change:
+  # A job change is a new employer: compare crustdata_company_id, never the recently_changed_jobs flag.
+  compare_on: crustdata_company_id
+  main_job: is_default                    # several current jobs: the is_default one is the main job
+  sister_groups: []                       # lists of company ids under one group; a move inside one is
+                                          # still two employers, plus a question to the person
+  cover_ends: on_last_day_of_employment   # R-ALARM-1 (broker rule; the policy wording decides)
+  conversion_window_days: 30              # R-ALARM-2 (broker rule; insurer's own window may differ)
+
+peer_benchmark:
+  industry: "Transportation, Logistics, Supply Chain and Storage"
+  country: "India"
+  phrases: ["health insurance", "medical insurance", "mediclaim", "group mediclaim", "accident cover", "ESIC"]
+  roles:                                  # employer view: title words per staff group
+    drivers: "driver"
+    warehouse staff: "warehouse"
+    office staff: "executive"
+  sample_rows: 2                          # rows fetched for quoted passages (0.03 credits each)
+  note: "Job posts understate what employers offer: a post that is silent on benefits counts as 'not mentioned', never as 'no cover'."
+
+beliefs:
+  min_group_size: 5                       # suppress any belief resting on fewer people
+  windows_days: 90
+  versions_at: ["2026-10-01", "2026-11-22"]
+  timeline_months: 6
+
+gaps:
+  # when: every condition must hold. Facts: age_band, dependants, city, cover_held (list), monthly_budget_inr,
+  # role_group (checked or employer-told), employment_ended (alarm).
+  - id: R-GAP-1
+    cover: personal health insurance
+    called_for: a personal or family floater health policy
+    severity: high
+    when: {cover_held_none_of: [employer_group_health, personal_health]}
+    explanation: "No health cover is held at all."
+  - id: R-GAP-2
+    cover: personal health insurance
+    called_for: a personal base policy that stays when the job ends
+    severity: medium
+    when: {cover_held_has: employer_group_health, cover_held_none_of: [personal_health]}
+    explanation: "The only health cover is the employer's group policy, which ends with the job."
+  - id: R-GAP-3
+    cover: personal health insurance
+    called_for: conversion of group cover to a personal policy now
+    severity: high
+    when: {cover_held_has: employer_group_health, employment_ended: true}
+    explanation: "The record shows the job tied to the group cover has ended."
+  - id: R-GAP-4
+    cover: term life insurance
+    called_for: term life cover for dependants
+    severity: high
+    when: {dependants_at_least: 1, cover_held_none_of: [term_life]}
+    explanation: "Someone depends on this person's income and there is no term life cover."
+  - id: R-GAP-5
+    cover: personal accident insurance
+    called_for: personal accident cover
+    severity: high
+    when: {role_group_in: [drivers, warehouse staff], cover_held_none_of: [personal_accident]}
+    explanation: "On-road and warehouse work carry injury risk and there is no accident cover."
+  - id: R-GAP-6
+    cover: budget check
+    called_for: a talk with the broker before any purchase
+    severity: low
+    when: {budget_below: 500}
+    explanation: "The stated monthly budget is below the broker's floor for the cover called for; premiums come only from insurers' quotes."
+
+package:                                  # employer view: what each staff group's cover should include
+  drivers:
+    - {cover: group health insurance, rule_id: R-PKG-1, why: "baseline cover for every staff group"}
+    - {cover: group personal accident, rule_id: R-PKG-2, why: "on-road injury risk"}
+  warehouse staff:
+    - {cover: group health insurance, rule_id: R-PKG-1, why: "baseline cover for every staff group"}
+    - {cover: group personal accident, rule_id: R-PKG-2, why: "manual handling injury risk"}
+  office staff:
+    - {cover: group health insurance, rule_id: R-PKG-1, why: "baseline cover for every staff group"}
+    - {cover: group term life, rule_id: R-PKG-3, why: "income protection for dependants"}
+
+insurers:
+  # Ranked on regulator figures only. Commission plays no part. Weights sum to 1.
+  ranking:
+    claim_settlement_ratio: {weight: 0.6, better: higher}
+    complaints_per_10k_claims: {weight: 0.4, better: lower}
+  min_figures: 2                          # fewer verified figures -> not ranked (shown as cannot verify)
+  max_figure_age_days: 730
+  # The broker's panel. Each figure needs the regulator page (IRDAI annual report / insurer public
+  # disclosure) it is read from, and a regex with a named group `value`. Until a page is set and
+  # fetched, the figure is CANNOT VERIFY and the insurer is not ranked.
+  # Tried 22 Nov 2026: web search returned only news pages and a redirect wrapper, not IRDAI's table.
+  panel:
+    - name: Star Health and Allied Insurance
+      figures:
+        claim_settlement_ratio: {url: null, pattern: "Star Health[^0-9]{0,80}(?P<value>[0-9.]+)", period: "FY 2024-25"}
+        complaints_per_10k_claims: {url: null, pattern: "Star Health[^0-9]{0,80}(?P<value>[0-9.]+)", period: "FY 2024-25"}
+    - name: Niva Bupa Health Insurance
+      figures:
+        claim_settlement_ratio: {url: null, pattern: "Niva Bupa[^0-9]{0,80}(?P<value>[0-9.]+)", period: "FY 2024-25"}
+        complaints_per_10k_claims: {url: null, pattern: "Niva Bupa[^0-9]{0,80}(?P<value>[0-9.]+)", period: "FY 2024-25"}
+    - name: Care Health Insurance
+      figures:
+        claim_settlement_ratio: {url: null, pattern: "Care Health[^0-9]{0,80}(?P<value>[0-9.]+)", period: "FY 2024-25"}
+        complaints_per_10k_claims: {url: null, pattern: "Care Health[^0-9]{0,80}(?P<value>[0-9.]+)", period: "FY 2024-25"}
+
+actions:
+  submit_application: {reversible: false, cost_note: "No charge from us; the premium is quoted by the insurer, not by this service."}
+  conversion_request: {reversible: false, cost_note: "No charge from us; the insurer quotes the personal policy."}

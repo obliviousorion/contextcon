@@ -1,0 +1,7 @@
+{"id": "L1", "type": "employee_review",
+ "said": "What cover do I have, what's missing, and what should I do?",
+ "_consent": "Persona A: team member, opted in for this demo (profile URL given by the person). Answers are the person's own.",
+ "persona": {"profile_url": "https://www.linkedin.com/in/atishayjain2510/", "consent": true,
+             "answers": {"age_band": "18-24", "dependants": 0, "city": "Pilani", "cover_held": ["employer_group_health"],
+                         "monthly_budget_inr": 600, "chosen_insurer": "Niva Bupa Health Insurance"}},
+ "since": "2026-09-01", "as_of": "2026-11-22"}

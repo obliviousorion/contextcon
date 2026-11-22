@@ -1,0 +1,5 @@
+{"id": "T1b", "type": "job_change_check",
+ "said": "I got promoted. Do I need to do anything about my cover?",
+ "_fixture": "TEST FIXTURE: synthetic person record, same crustdata_company_id before and after (a promotion).",
+ "persona": {"profile_url": "https://fixture.test/in/persona-t1b-promotion", "consent": true},
+ "since": "2026-09-01", "as_of": "2026-11-22"}

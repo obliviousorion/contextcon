@@ -1,0 +1,59 @@
+{
+ "endpoint": "/person/enrich",
+ "status": 200,
+ "retrieved_at": "2026-11-22T10:00:00+00:00",
+ "credits": 0,
+ "fixture": "SYNTHETIC TEST FIXTURE: no real person",
+ "data": [
+  {
+   "matched_on": "https://fixture.test/in/persona-t1b-promotion",
+   "match_type": "professional_network_profile_url",
+   "match_status": "matched",
+   "matches": [
+    {
+     "confidence_score": 1,
+     "person_data": {
+      "crustdata_person_id": 0,
+      "basic_profile": {},
+      "experience": {
+       "employment_details": {
+        "current": [
+         {
+          "name": "Delhivery",
+          "crustdata_company_id": 5798,
+          "title": "Senior Line Haul Executive",
+          "start_date": "2026-10-01T00:00:00+00:00",
+          "end_date": null,
+          "is_default": true,
+          "employment_type": "Full-time",
+          "seniority_level": "Entry Level",
+          "location": {
+           "raw": "Gurugram, Haryana, India"
+          },
+          "function_category": "Operations"
+         }
+        ],
+        "past": [
+         {
+          "name": "Delhivery",
+          "crustdata_company_id": 5798,
+          "title": "Line Haul Executive",
+          "start_date": "2023-04-01T00:00:00+00:00",
+          "end_date": "2026-10-01T00:00:00+00:00",
+          "is_default": false,
+          "employment_type": "Full-time",
+          "seniority_level": "Entry Level",
+          "location": {
+           "raw": "Gurugram, Haryana, India"
+          },
+          "function_category": "Operations"
+         }
+        ]
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,6 @@
+{"id": "H1", "type": "employee_review",
+ "said": "Signing up again from my phone.",
+ "persona": {"profile_url": "HTTPS://linkedin.com/in/AtishayJain2510?utm_source=share", "consent": true,
+             "answers": {"age_band": "18-24", "dependants": 0, "city": "Pilani", "cover_held": ["employer_group_health"],
+                         "monthly_budget_inr": 600, "chosen_insurer": "Niva Bupa Health Insurance"}},
+ "since": "2026-09-01", "as_of": "2026-11-22"}

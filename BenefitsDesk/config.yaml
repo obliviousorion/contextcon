@@ -1,0 +1,32 @@
+# Benefits Desk runtime config. Limits, output fields and modes live here, never in code.
+# Requirement-change drill: add a field to output.fields, or lower limits.credit_cap_per_run.
+mode: replay                 # live | record | replay   (env BD_MODE overrides)
+limits:
+  credit_cap_per_run: 15     # hard stop before a call that would cross it
+  credit_cap_total_dev: 60   # across every run in this state dir
+  time_limit_seconds: 300
+  max_retries: 4             # timeouts and 429s; then the step is marked failed
+cost:
+  inr_per_credit: 26.4       # $0.30 x Rs 88 (RULES.md section 2); an estimate, not a quote
+  prices:                    # docs.crustdata.com/general/pricing, read 22 Nov 2026
+    /person/enrich: {per: record, credits: 1}
+    /person/identify: {per: match, credits: 1}
+    /person/search: {per: result, credits: 0.03}
+    /company/identify: {per: match, credits: 0.2}
+    /company/enrich: {per: record, credits: 2}
+    /company/search: {per: result, credits: 0.03}
+    /job/search: {per: result, credits: 0.03}     # count-only (limit 0) returns no rows: 0
+    /web/search/live: {per: call, credits: 1}
+    /web/enrich/live: {per: url, credits: 1}
+    /account/credits: {per: call, credits: 0}
+crustdata:
+  base_url: https://api.crustdata.com
+  api_version: "2025-11-01"
+  timeout_seconds: 40
+sandbox:
+  url: http://127.0.0.1:8765     # our own receiver (bd sandbox). Never a real insurer or person.
+output:
+  # Which sections a case file carries, in order. Add or remove names here only.
+  fields: [request, persona, facts, workplace, peer_benchmark, gaps, shortlist, alarm, actions, questions, cannot_verify, cost]
+chaos:
+  kill_probability: 0.25     # chance of os._exit at each step boundary under --chaos

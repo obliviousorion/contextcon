@@ -1,0 +1,5 @@
+{"id": "T3", "type": "employee_review",
+ "said": "I've just joined. What cover do I have and what's missing?",
+ "persona": {"profile_url": "https://www.linkedin.com/in/bd-test-no-such-profile-7f3k2q/", "consent": true,
+             "answers": {"age_band": "25-34", "dependants": 0, "city": "Jaipur", "cover_held": [], "monthly_budget_inr": 900}},
+ "since": "2026-09-01", "as_of": "2026-11-22"}

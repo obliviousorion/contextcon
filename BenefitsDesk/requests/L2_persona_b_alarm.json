@@ -1,0 +1,5 @@
+{"id": "L2", "type": "job_change_check",
+ "said": "Has anything changed with my employer that affects my cover?",
+ "_consent": "Persona B: team member, opted in for this demo (profile URL given by the team).",
+ "persona": {"profile_url": "https://www.linkedin.com/in/saanvimittal/", "consent": true},
+ "since": "2026-09-01", "as_of": "2026-11-22"}

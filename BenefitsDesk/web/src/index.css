@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-size: 17px;
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    @apply bg-slate-100 text-slate-900 dark:bg-slate-950 dark:text-slate-100;
+  }
+  :focus-visible {
+    outline: 3px solid #6366f1;
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+  .dark :focus-visible {
+    outline-color: #a5b4fc;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 1ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 1ms !important;
+  }
+}
+
+.hatch {
+  background-image: repeating-linear-gradient(45deg, rgba(217, 119, 6, 0.35) 0 6px, transparent 6px 12px);
+}

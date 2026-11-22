@@ -1,0 +1,5 @@
+{"id": "T1", "type": "job_change_check",
+ "said": "My records say I moved jobs. Is my old health cover still on?",
+ "_fixture": "TEST FIXTURE: synthetic person record (structure copied from a real /person/enrich response, all personal data removed). No consenting persona has a job change after 1 Sep 2026.",
+ "persona": {"profile_url": "https://fixture.test/in/persona-t1-job-change", "consent": true},
+ "since": "2026-09-01", "as_of": "2026-11-22"}
