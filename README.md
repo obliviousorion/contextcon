@@ -1,237 +1,144 @@
-# ContextCon 05 — Ideas Leaderboard
+# FreightClose
 
-Team workspace for ContextCon 05 (BITS Pilani × Crustdata × YC, Sun 22 Nov 2026). **We are not building yet: this page is for discussion.**
-> **Adding or reviewing an idea? Give your agent [`ideas/RULES.md`](ideas/RULES.md) first.** New ideas start from [`ideas/_TEMPLATE.md`](ideas/_TEMPLATE.md), and reviews use [`ideas/_council/JUDGE_PROMPTS.md`](ideas/_council/JUDGE_PROMPTS.md).
+A carrier billed $450 for keeping a truck waiting. The signed delivery record supports $150. FreightClose closes that discrepancy, posts the supported payable to a sandbox ledger and creates the carrier's short-pay notice.
 
-Every idea has its own document in [`ideas/`](ideas/) with all the spec, data and council feedback gathered so far. How the ranking was produced is in [ideas/_council/PROCESS.md](ideas/_council/PROCESS.md). The old prep notes that used to be this README are now in [docs/PREP-NOTES.md](docs/PREP-NOTES.md).
+## Why this job
 
-**Why we re-ideated:** the event judges told us the standard track examples (hiring screeners, vendor checks, investor scouts, invoice matchers, ...) are what most teams build. We need a unique, out-of-the-box use of Crustdata's APIs, watchers and MCP. We also want to cover as much of Crustdata's API as is genuinely useful.
+- **Buyer.** A third-party logistics company pays a freight-audit team to reconcile carrier bills before accounts payable releases funds.
+- **Demo.** One disputed line turns into a visible $300 deduction, an accounting entry and a notice that explains the arithmetic.
+- **Scope.** One carrier, one purchase order and two charge types fit a solo build. A missing gate record gives the human reviewer a specific job.
 
-**Source of truth: the Builder Handbook, 39-page edition, [`docs/builder-handbook.pdf`](docs/builder-handbook.pdf)** ([text version](docs/builder-handbook.txt)). The older 34-page edition is in `docs/old/`.
+**Track** — Buying and paying. **Client assumption** — an Indian 3PL audits a USD-denominated overseas carrier bill and measures its delegated spending authority in INR. The bundled carrier, contract and delivery records are fictional test fixtures.
 
-**What we're judged on (Handbook, "How winners are picked").** Each criterion is scored 1–5, for 100 points in total. Ties go to end-to-end execution, then facts and verification.
+## From invoice to receipt
 
-| Criterion | Points | What the judges look for |
+| Input or decision | What FreightClose does | Evidence the operator can inspect |
 |---|---|---|
-| End-to-end execution | **25** | A real request goes in and a finished result comes out (an offer drafted, a claim settled, an invoice paid, a case file written), with no one stepping in. The product asks a person only when the answer changes the result. |
-| Facts and verification | **20** | Every person, company, number and date is right, **and right for the day it is used**. Each decision has reasons and sources. **One person or company under two names stays one record.** "I can't verify" beats a wrong fact. |
-| Robustness and edge cases | **20** | It handles messy text, missing fields, unusual cases, and tools that time out or return nonsense. After a crash or retry it continues and never sends or pays twice. A person approves anything that can't be undone, and it uses only the personal data the job needs. |
-| Customer value and idea | **20** | A job businesses pay people or firms to do today, with **an approach that isn't obvious**. The product does the work itself, not a chat interface on top of a model. |
-| Demo and understanding | **15** | A clear demo, plus the approaches weighed, what worked and what didn't, the hardest case, who the product could get wrong, and what comes next. |
+| Carrier invoice text | Extract invoice ID, purchase order, line haul, detention and total in integer cents. Check the quoted lines. | Verbatim lines and the original invoice |
+| Contract | Match the purchase order, reconcile the sum and cap line haul at the lower of billed and contracted amounts. | Invoice and purchase order references |
+| Dwell time | Subtract free minutes, round down to completed hours, multiply by the contracted rate and cap at the billed detention. | Delivery record, contract and calculation |
+| Local spending authority | Convert the approved USD amount into INR at a dated USD/INR reference rate. Hold the case if the conversion cannot be verified or the cap is exceeded. | Rate, reference date, source and cap |
+| Close | Persist the supported payable and a short-pay or remittance notice in the local sandbox. A retry must never create a second payable for the same invoice. | Case history, action amounts and downloadable JSON receipt |
+| Missing delivery evidence | Hold the bill with zero postings. The reviewer attaches verified minutes and a record reference. The service reruns its checks. | Original exception, supplied evidence and new decision |
 
-**What every service must do (Handbook, "What every service does"):**
-- Decisions rest on live data.
-- Every claim has a source that links to the exact passage or field, with the record's date.
-- A person approves anything that can't be undone. Payments run in test mode.
-- Every run has a time limit and a credit limit, and a ledger records every call, model calls included.
-- It survives a crash or timeout and continues where it stopped, with each action happening exactly once.
+The completed job ends at **audit and internal posting**. A deduction records a charge withheld before payment. Cash recovery, external remittance and delivery of notices to a carrier are outside this prototype.
 
-**Test cases:** we gather our own before coding. They must include a duplicate record, a lookalike name, and a case where the right answer is "I can't verify", and be dated after 1 Sep 2026.
+## Run from the project directory
 
-**What a strong idea also needs to show (Handbook, "What we want to hear" and "How the finals run"):**
-- The business case: who buys it, the price in rupees, and what one job costs to run.
-- An answer to the scale question: "100 times the volume, or a second client?"
-- Handling beyond the prepared request: a duplicate record, a changed fact, a failed call, or a restart mid-run.
-- The approaches weighed, the hardest case, and who the product could get wrong and how it guards against that.
+**Fastest rehearsal** — With Python 3.11+ installed, set the mode to mock (the default), run the command below from the project directory and open [the settlement desk](http://127.0.0.1:8000). This bundled HTTP adapter uses the same service code and plain HTML as FastAPI and needs no package installation.
 
-**What changed from earlier assumptions.** The ideas below were first scored against the separate `ContextCon05_BITS_Problem_Statement.pdf`, whose rubric was ethics 25, finance 25, live run 20, robustness 15 and design 15. It also framed every idea around a fictional Indian 3PL client. **The Handbook uses the rubric above and doesn't require the 3PL framing.** That framing is now optional, so ideas dropped only for not serving the 3PL client, such as Raise, may deserve another look. The council scores in the leaderboard use the old rubric; see the note under the table.
+```bash
+python offline_server.py --port 8000
+```
 
----
+**FastAPI serving option** — On Windows PowerShell:
 
-## Leaderboard
+```powershell
+py -3.11 -m venv .venv
+.\.venv\Scripts\python -m pip install -r requirements.txt
+Copy-Item .env.example .env
+.\.venv\Scripts\python -m uvicorn app:app --port 8000
+```
 
-**Rank order:** first by the **Round 3 score (/100)**, which uses the Handbook rubric and is the current source of truth. Ideas without a Round 3 score are ordered by Round 2 wins, then by Round 1 score.
-- **Round 3:** three judges score each Handbook criterion 1–5, scaled by its weight: E2E 25 · Facts 20 · Robustness 20 · Value 20 · Demo 15. Reviews are in [`ideas/_council/reviews/`](ideas/_council/reviews/).
-- **Rounds 1 and 2** used the problem statement's older rubric. Round 1 is five judges scoring 1–5, maximum 25. Round 2 is head-to-head matchups between four finalists, nine each.
+On macOS or Linux:
 
-| Rank | Idea | One line | **Round 3 /100** (E2E·Facts·Rob·Value·Demo) | Round 2 wins /9 | Round 1 /25 | Status | Doc |
-|---|---|---|---|---|---|---|---|
-| 🥇 1 | **AsOf** | Dated attestation. It states what the records can prove as of date D, or says CANNOT ATTEST. Delivered as an MCP gateway | **88** (4·5·5·4·4) | **8** | **22** | **Champion (merge) · being built in [`AsOf/`](AsOf/)** | [01-asof.md](ideas/01-asof.md) |
-| 🥈 2 | **Golden Record** | Entity resolution: merge / no-merge / cannot verify for each pair; one company under two names stays one record | **73** (4·4·4·3·3) | — | 19 | AsOf's resolution step | [05-golden-record.md](ideas/05-golden-record.md) |
-| 🥉 3 | **Second Opinion** | Audits a deliverable someone else produced, line by line (agree / contradict / cannot verify) | **71** (4·2·3·4·5) | 1 | 18 | Candidate front door for AsOf | [04-second-opinion.md](ideas/04-second-opinion.md) |
-| 4 | FactGate | Verified-facts MCP gateway: a sourced value or CANNOT_VERIFY | 68 (3·4·4·3·3) | 7 | 21 | Absorbed into AsOf | [02-factgate.md](ideas/02-factgate.md) |
-| 5 | Sentinel | "Evidence that you knew": watchers turn counterparty changes into dated records | 60 (3·3·3·3·3) | 2 | 18 / 16 / 16 | Watcher design absorbed | [03-sentinel.md](ideas/03-sentinel.md) |
-| 6 | Raise | Fundraising agent for founders (re-scored now that the 3PL framing is optional) | 56 (3·2·3·3·3) | — | not scored | Dropped (a ranking has no checkable answer) | [17-raise.md](ideas/17-raise.md) |
-| 7 | Same Hands | Related-party graph across tender bidders | 55 (3·2·2·3·4) | — | 15 | Dropped (defamation risk) | [08-same-hands.md](ideas/08-same-hands.md) |
-| 8 | Carrier Pulse | Carrier distress watchlist (red / amber / green) | — | — | 16 | Merged into Sentinel | [06-carrier-pulse.md](ideas/06-carrier-pulse.md) |
-| 9 | LaneWatch | Dated hold / continue verdict on carrier health | — | — | 16 | Merged into Sentinel | [07-lanewatch.md](ideas/07-lanewatch.md) |
-| 10 | BudgetBroker | Budget-governed data buyer (a proxy with a spending cap) | — | — | 15 | Possible AsOf feature | [09-budgetbroker.md](ideas/09-budgetbroker.md) |
-| 11 | Bid Intel | Rival dossier before a tender | — | — | 14 | Dropped (track example) | [10-bid-intel.md](ideas/10-bid-intel.md) |
-| 12 | Expansion Site Scout | Hiring as a warehouse-demand signal | — | — | 13 | Dropped (job-search coverage) | [11-expansion-site-scout.md](ideas/11-expansion-site-scout.md) |
-| 13 | ProvenanceAudit | Claim-by-claim auditor for agent memos | — | — | 13 | Dropped (track example) | [12-provenance-audit.md](ideas/12-provenance-audit.md) |
-| 14 | LaneBook | Kalshi-shaped event-contract desk settling only against pre-committed, sourced dated records | — | — | 12 | Dropped (no external buyer; unresolved gambling/defamation framing risk) | [19-lanebook.md](ideas/19-lanebook.md) |
-| 15 | Account Watch | Customer churn and expansion watch | — | — | 11 | Dropped (surveillance) | [13-account-watch.md](ideas/13-account-watch.md) |
-| 16 | Notice-Period Alert | Flags when a named contact at a counterparty has left | — | — | 11 | Dropped (tracks individuals) | [14-notice-period-alert.md](ideas/14-notice-period-alert.md) |
-| 17 | Conflict-of-Interest Desk | Screens bidders' directors for conflicts | — | — | 11 | Dropped (personal data, namesakes) | [15-conflict-of-interest.md](ideas/15-conflict-of-interest.md) |
-| 18 | Benefits Desk | Insurance desk for the client's own workforce: the employer side designs the cover; each employee learns what they have, what's missing and what to do | — | — | 10 | Proposed (Round 1 done; below the Round 2 bar) | [18-benefits-desk.md](ideas/18-benefits-desk.md) |
-| 19 | Sourced | Hiring desk with CV-claim verification | — | — | not scored | Dropped (hiring is an overdone track example) | [16-sourced.md](ideas/16-sourced.md) |
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+cp .env.example .env
+python -m uvicorn app:app --port 8000
+```
 
-**Notes**
-- The three Round 1 scores in Sentinel's row are Receivables Sentinel, Carrier Pulse and LaneWatch.
-- Document file numbers are permanent IDs, not ranks.
-- All rupee fee figures are agent estimates unless marked as sourced.
+Open [the settlement desk](http://127.0.0.1:8000). Select **Detention overcharge** and click **Audit and settle**. For the tests run `python -m unittest discover -v` with the same environment's Python.
 
-> **What Round 3 changed**
-> - AsOf stays far ahead: 88, the only idea scoring 5 on Facts and on Robustness.
-> - Golden Record and Second Opinion move into the top 3, because the Handbook weights a finished, checkable result and the demo, and drops the separate finance score.
-> - Both new top-3 ideas are parts of AsOf: Golden Record is its resolution step, and Second Opinion is a possible way to present it.
-> - Second Opinion's Facts score of 2 is a warning: its pitch marked a growth claim AGREE from two lower-bound counts.
-> - Raise, re-scored without the 3PL constraint, comes 6th, because a ranking has no single correct answer.
+**Rehearsal** — Set `FREIGHT_MODE=mock` in `.env`. The invoice parser and the 85.00 INR/USD fixture run locally with no model key.
 
----
+**Live** — Set `FREIGHT_MODE=live` and `OPENAI_API_KEY` in `.env`, then restart the server. OpenAI extracts invoice fields and Frankfurter provides the dated rate used in the spending decision. Live mode needs working network access to both services. The OpenAI call sends the supplied invoice text to the provider. Use approved event data.
 
-## 🥇 1. AsOf — the champion
+## Architecture
 
-> **"Crustdata gives you raw data. AsOf decides what it can swear to, and as of when."**
+```mermaid
+flowchart TD
+    A["Browser or API"] --> B["Case intake and replay check"]
+    B -->|Existing receipt| R["Receipt and case history"]
+    B -->|New packet| C["Invoice extraction and source checks"]
+    C --> D["Contract and delivery audit"]
+    D --> E["Dated USD to INR rate and authority check"]
+    E -->|Within cap| F["SQLite settlement and local outbox"]
+    F --> R
+    C -->|Unverified| H["Hold with evidence request"]
+    D -->|Missing or inconsistent| H
+    E -->|Timeout or cap exceeded| H
+    H -->|Correct evidence and retry| B
+    C --> L["External call ledger"]
+    E --> L
+    L --> R
+```
 
-**The problem**
-A 3PL hands freight to many carriers, often small ones with near-identical names. Procurement has to know whether a carrier is real. After a cargo loss or SLA dispute, an insurer asks what the 3PL could have known about that carrier *on the date it picked it*.
-- Raw data answers too eagerly. In our live check, the name "Shree Balaji Logistics" returned **25 candidate companies**, the top one at confidence 1.0.
-- AsOf is the layer that refuses to guess.
+The model interprets invoice language. Python owns contract arithmetic and authority checks, so each figure can be recalculated from the receipt. The call ledger records external work separately from freight charges.
 
-**The service.** Each request is an MCP tool, a CLI command and a UI action.
-- `resolve`: free autocomplete, then company search, then identify **by domain only**. Several candidates and no domain gives CANNOT RESOLVE.
-- **`clear_carrier`**, the lead paid job: a clearance file showing existence, founding year, listing status, a profile-derived headcount point, a revenue band (labelled as an estimate), and corroborating dated web passages. Issuing the clearance waits for a person.
-- `attest(entity, field, as_of=D)`: the core. It uses only the latest data point on or before D, which must be no more than 14 days old (configurable). Otherwise it answers CANNOT ATTEST and names what's missing.
-- `observe(D1, D2)`: both dated values side by side. It never draws a growth verdict from lower-bound counts.
-- `audit_claims`: grades structured claims, deterministically.
-- `watch`: a Crustdata watcher. Each alert re-attests today, stores a hashed snapshot, and marks facts STALE.
-- **Second product:** a dated dispute file for an insurer or arbitrator.
+### Code map
 
-**Hidden-test cases.** Numbers are checked against our recorded data.
-- Delhivery as of 2024-07-15: **26,656**.
-- Delhivery headcount as of 2022-06-01: **CANNOT ATTEST**, because its series starts 2022-11-28.
-- TCI Express as of 2020-01-01: **418**. As of 2026-09-01: **1,715**.
-- Shree Balaji without a domain: **CANNOT RESOLVE**, 25 candidates.
-- Any field outside the known record types: "CANNOT ATTEST: no record type".
+| File | Responsibility |
+|---|---|
+| `app.py` / `offline_server.py` | FastAPI adapter and dependency-free HTTP adapter |
+| `service.py` | Workflow, run budget, duplicate protection, SQLite transaction, case version history |
+| `intake.py` / `samples.py` | Invoice evidence extraction and reproducible source fixtures |
+| `engine.py` / `fx.py` | Freight contract arithmetic and dated INR authorization |
+| `index.html` | Shipment intake, receipts, source inspection and exception handling |
+| `test_service.py` | Regression checks for supported charges and hold paths |
 
-**Crustdata used:**
-- autocomplete, company search, identify and enrich (headcount series, revenue-estimate series, public markets)
-- web search and fetch
-- watchers (create, `/test`, runs)
-- account credits and endpoints
-- Crustdata's own MCP, as the demo contrast
+## What counts as a pass
 
-Person data is deliberately not used.
+| Test | Expected result |
+|---|---|
+| $2,400 line haul plus $450 detention, 120 minutes recorded, first 60 free, $150 per completed hour | One $2,550 sandbox payable and one $300 short-pay notice if the INR cap permits it |
+| Same bill submitted again | Prior settlement remains the sole payable |
+| Detention claimed, delivery record missing | Review, with an explanation and no postings |
+| Reviewer supplies 120 verified minutes and a gate-log reference | Re-audit settles the supported amount if the other checks pass |
+| Sum mismatch, PO mismatch, unsupported evidence or unavailable live rate | No settlement |
+| Rate-converted payable exceeds the INR authority cap | Review, with the amount and authority decision available for inspection |
 
-**Ethics**
-- Company data only.
-- Refusals always name what's missing.
-- Small carriers get a held "evidence request", labelled *not a negative finding*.
-- No auto-rejection, and STALE never suspends a carrier.
+## Data and limits
 
-**Finance**
-- **Buyer:** the procurement head. **Price:** ₹600 per *cleared* carrier; refusals at cost or free.
-- **Measured cost:** about ₹85–110 per file, so about 80% margin. Our ledger matched the Crustdata balance exactly.
-- **Sources still needed:** published KYB vendor quotes (IDfy, Signzy, Perfios/Karza) and the MCA21 fee schedule.
+The model and live rate are the only external services. Frankfurter supplies a reference exchange rate for the authority check. Contract terms, delivered dwell time and the authority limit come from the input packet. Their authenticity depends on the caller. The review form captures a reference and the verified value. It does not authenticate a signature, read an attached gate-log image or independently validate delivery. The demo assumes USD, one PO, whole completed detention hours and exactly two positive-or-zero charge types. Taxes, partial loads, currencies beyond this pair and negotiated dispute outcomes need separate policies.
 
-**Robustness.** An outbox writes each action's intent before its effect, with an idempotency key, so actions run exactly once after a kill. Watcher alerts are deduped by `sha(watch_id, company_id, field, signal_date)`. Per-tenant keys answer the "second client" question.
+The competition requires real-world data in a decision, exact source references and an organizer-provided client format. Use live mode and the kickoff records for screening. This package uses its own packet schema because the kickoff kit was unavailable. The FX check supplies a live dependency even when Crustdata is unused. The offline run is a rehearsal. A real payment integration would require the event's test-mode provider plus human approval before the payment instruction. The local sandbox cannot demonstrate bank reconciliation.
 
-**Demo moment.** The raw Crustdata MCP confidently picks the wrong Shree Balaji, and AsOf refuses. Then moving the date flips an answer to CANNOT ATTEST. Then a judge kills the process mid-send, and on restart it sends exactly once.
+## 150-minute solo build and honest commit sequence
 
-**Open risks**
-- The kickoff kit's request format is unknown.
-- Mostly refusals could make the demo look thin.
-- The `drl.aero` alias and the web-fetch cost are unverified, about 1.5 credits to check.
+Use the organizer-provided repo. Commit each working slice when it actually runs and preserve the original timestamps.
 
-**Round 3 findings (Handbook rubric, 88/100):**
-- **Facts 5 and Robustness 5.** The facts judge confirmed every case number against the recorded data, including the 14-day staleness refusal for TCI on 2026-10-15.
-- **Biggest wrong-fact risk:** a 2026 stored copy read as proof of what was true on date D. **Fix:** word every line as *"data point dated P states X; stored copy retrieved T"* and never as "was true on D".
-- **Biggest E2E risk:** requests outside basic info, headcount and revenue fall to web corroboration and may end as a "finished refusal". Mitigation: choose request types the data can actually settle.
-- **Best buyers without the 3PL framing:**
-  - insurers and arbitrators who need "what was knowable on date D"
-  - diligence and credit teams at banks, NBFCs and funds that already pay outside diligence firms
-- **Option the value judge suggests:** use Second Opinion's graded diff as AsOf's front door. The pitch: "We re-check every line of the report you paid for, as of the date you relied on it."
+| Minutes | Commit subject | Check before committing |
+|---|---|---|
+| 0–15 | `chore: scaffold freight audit service and dated sample packet` | Inputs and expected receipt agree |
+| 15–40 | `feat: extract and verify carrier invoice fields` | Each amount maps to invoice text |
+| 40–65 | `feat: price freight and hold unsupported detention` | $2,550 payable and missing-proof hold |
+| 65–90 | `feat: enforce INR authority with dated FX evidence` | Test both approval and a source failure |
+| 90–115 | `feat: persist settlement receipts and deduplicate postings` | Resubmit one invoice twice |
+| 115–135 | `feat: add settlement desk and evidence review` | Correct the missing record from the browser |
+| 135–150 | `test: verify hard cases and document the demo` | Run the suite and rehearse the two-minute walkthrough |
 
-Full spec: **[ideas/01-asof.md](ideas/01-asof.md)**
+[Demo script and recording cues](DEMO.md)
 
----
+### Build checks
 
-## 🥈 2. Golden Record — entity resolution (AsOf's resolution step)
+The service tests submit four concurrent copies, interrupt the receipt write, retry after an FX outage, and hold extra charges or ambiguous totals. The live extractor accepts descriptive charge labels when the model cites the exact invoice line and its accounting category is verifiable. The fixture reader uses a fixed label vocabulary. The cap example below can be repeated from a fresh database during judging.
 
-**What it is:** dedupe and entity resolution for a firm's customer and carrier master data. Every pair of records gets an explicit **merge / no-merge / cannot verify** verdict with cited evidence (identify by domain, `all_domains`, founding year, office addresses), and is never silently merged. Merges into a master record are irreversible, so they wait for approval and are idempotent on a pair hash.
+## Reproduce a changed policy
 
-**Why it scored 73 in Round 3:**
-- E2E 4, Facts 4, Robustness 4: the verdicts have crisp, testable answers.
-- It hits the Handbook line "one person or company under two names stays one record" directly.
-- Our data shows the problem is real: one name returned **25 candidates**, and Delhivery has two domains (`drl.aero`, `delhivery.com`).
-- Value and Demo are only 3: "a real job but a low price; dedupe demo is dry".
+The sample packet uses 16 October 2026 and a ₹300,000 authority cap. In mock mode, $2,550 × 85.00 = ₹216,750. To prove the rate affects the decision, use the [FastAPI interactive docs](http://127.0.0.1:8000/docs) when running the FastAPI adapter, or run the following PowerShell on a **fresh mock database before settling the original sample**. Lower the authority to ₹200,000 (20,000,000 paise). The same freight calculation now produces a held case and zero postings.
 
-**Weaknesses:**
-- It fails on its own economics: about ₹53 of enrichment per record against a ₹5–20 price per record.
-- The spec is thin, and the reasons for merging aren't yet sourced.
+```powershell
+$desk = 'http://127.0.0.1:8000'
+$packet = Invoke-RestMethod "$desk/api/sample"
+$packet.case_id = 'CAP-200K'
+$packet.cap_paise = 20000000
+$body = @{packet = $packet} | ConvertTo-Json -Depth 6
+$result = Invoke-RestMethod "$desk/api/run" -Method Post -ContentType 'application/json' -Body $body
+$result | Select-Object status, actions, fx
+```
 
-**Role in the champion:** AsOf's `resolve` step (domain or ID, never name).
+A fresh instance uses a local SQLite file per mode. Set `FREIGHT_DB` to a new file path for a clean rehearsal. Each downloadable receipt includes prior attempts, elapsed time, call estimates and the packet behind the decision. The service records the estimate available for each call. An unavailable provider can leave its actual charge unknown. FX retrieval allows at most five seconds of network inactivity, and the posting gate checks a 25-second processing budget. An operator can retry a held case with `POST /api/cases/{id}/retry`. This single-operator localhost prototype trusts input records and uses a single invoice-ID namespace.
 
-Full doc: [ideas/05-golden-record.md](ideas/05-golden-record.md)
-
----
-
-## 🥉 3. Second Opinion — audit someone else's report (possible front door for AsOf)
-
-**What it is:** it re-verifies a deliverable another party handed you, line by line, and returns **agree / contradict / cannot verify** with exact passages and record dates. The deliverable could be a carrier's capability deck, a vendor's KYB pack, a rival's memo, or another AI agent's output. It audits the auditor.
-
-**Why it scored 71 in Round 3:**
-- Demo 5: "a graded diff reads instantly".
-- Value 4: the buyer is a diligence or credit-risk team at a bank, NBFC or fund that already pays a diligence firm and wants an independent check.
-- E2E 4: a finished audit report.
-
-**Why it isn't higher:**
-- **Facts 2.** Its pitch marked "TCI grew 4x" AGREE from the ratio of two lower-bound counts. That's a wrong fact.
-- Its CONTRADICT threshold ("~30k vs 35,295") was arbitrary and not matched to the claim's date.
-- Its LLM claim-splitter can split differently after a restart, which breaks exactly-once processing (Robustness 3).
-
-**Fixes if we use it as AsOf's front door:**
-- Take structured claims, with no live document splitter.
-- Grade each claim with AsOf's `attest`.
-- Show growth claims as two dated values side by side, never as a ratio.
-- Only CONTRADICT when the claim's date matches the data point and the gap is outside the stated tolerance.
-
-**Its 2-minute demo outline (value judge):**
-1. A vendor's 10-line carrier pack goes in: "Check what we paid for."
-2. The diff fills in live, Delhivery's two domains resolve to one record, and "Shree Balaji" comes back cannot verify with 25 candidates.
-3. A judge kills the process mid-run; it restarts with no double charge, and a watcher alert marks a line STALE.
-4. An approval gate sits before the contradiction report goes out, and the ledger shows about 5 credits per pack.
-
-Full doc: [ideas/04-second-opinion.md](ideas/04-second-opinion.md). FactGate (now #4) and Sentinel (#5) keep their full write-ups in [02-factgate.md](ideas/02-factgate.md) and [03-sentinel.md](ideas/03-sentinel.md).
-
----
-
-## Live data check (14:00, 6.6 credits). Full detail in [round2-brief-and-data-check.md](ideas/_council/round2-brief-and-data-check.md)
-
-**Resolution and history**
-- Delhivery and TCI Express each resolve by domain to exactly one match.
-- **"Shree Balaji Logistics" by name returns 25 candidates.**
-- Delhivery has 204 weekly headcount points from Nov 2022.
-- **TCI Express goes back to Oct 2019** (338 points).
-- The small Shree Balaji has one point and no founding year.
-- The weekly series have **gaps of up to about 5 months**, so AsOf needs its maximum-staleness rule.
-
-**Endpoints**
-- `job/search` returned a 400 because our request body was wrong. It cost 0.
-- Autocomplete works and is free.
-- 23 endpoints are disabled on our key: all batch endpoints, contact enrich, employee reviews, social posts, and the live professional-network searches.
-
-**Ledger**
-- The ledger total matched the account balance drop exactly.
-- Recorded responses are cached in the local build repo (`sourced/fixtures/live_check/`) for free replay.
-
-## Open questions for the team
-1. Do we go with AsOf, and lead with **carrier clearance** (strongest buyer) or the **dated dispute file** (most novel)?
-2. Do we keep the 3PL-client framing? It's optional under the Handbook. Without it, AsOf's buyer can be any firm that onboards counterparties, such as procurement, lending or insurance.
-3. Who sources the finance numbers: KYB vendor quotes, the MCA21 fee schedule, and IRDAI surveyor fees?
-4. Is it OK to spend about 1.5 credits verifying `drl.aero` and measuring the web-fetch cost?
-5. Done: Round 3 re-scored the top ideas against the Handbook rubric (see the leaderboard). The new decision is whether AsOf leads with its own clearance or dispute file, or with Second Opinion's "audit the report you paid for" framing.
-
-## Repo map
-- **`AsOf/`** is the build workspace for the champion. Open a Claude Code session there and follow `AsOf/docs/START_HERE.md`. It contains CLAUDE.md (lead rules), SPEC.md, frozen models, config, the tested Crustdata client, recorded fixtures, 17 hidden-test cases, 4 build subagents and a 5-reviewer council with a gate and a chaos harness.
-- `ideas/` holds one document per idea, plus `_council/` (the process, the Round 1 pool, the Round 2 brief and data check).
-- `docs/` holds:
-  - `PREP-NOTES.md` (the old README)
-  - the builder handbook
-  - `sourced-spec/` (teammates' Sourced spec and addendum)
-  - `archive-raise/`
-  - `prompts/` (agent prompts)
-  - `council/` (council reviewers, chaos harness, gate)
-- `check-key.sh` checks the Crustdata key.
-- The local build repo `sourced/` is not pushed.

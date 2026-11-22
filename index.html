@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#132f29"><title>FreightClose | Settlement desk</title>
+  <style>
+    :root{--ink:#172a25;--green:#144b3e;--lime:#dbf285;--paper:#f4f5ef;--line:#d8dfd4;--muted:#53645b;--white:#fff;--mono:"IBM Plex Mono",Consolas,monospace}
+    *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.5 "Inter","Segoe UI",Arial,sans-serif}
+    header{background:#132f29;color:white}nav,.shell{max-width:1260px;margin:auto;padding:0 clamp(18px,4vw,56px)}nav{height:70px;display:flex;align-items:center;justify-content:space-between}
+    .brand{display:inline-flex;align-items:center;gap:10px;font-size:22px;font-weight:750;letter-spacing:-1px}.mark{display:inline-grid;grid-template-columns:repeat(2,8px);gap:2px;transform:skew(-12deg);padding:4px}.mark i{height:8px;background:var(--lime)}.mark i:nth-child(2){opacity:.55}
+    .env{font:12px var(--mono);color:#e4ebdc}.env::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--lime);margin-right:9px}
+    h1,h2,h3,p{margin:0}h1{font-size:clamp(36px,5vw,62px);line-height:1.02;letter-spacing:-.065em}h2{font-size:22px;letter-spacing:-.045em}h3{font-size:16px;letter-spacing:-.02em}
+    .pagehead{padding:40px 0 26px;display:flex;align-items:end;justify-content:space-between;gap:16px}.pagehead p,.sub{color:var(--muted);font-size:14px;margin-top:7px}
+    .columns{display:grid;grid-template-columns:minmax(280px,.87fr) minmax(320px,1.13fr);gap:20px;align-items:start}.panel{background:var(--white);border:1px solid var(--line);border-radius:15px;padding:clamp(16px,2vw,28px)}
+    .label,label{display:block;font-size:13px;font-weight:650;color:#395348}.margin{margin-top:20px}select,input,textarea,button{font:inherit}select,input,textarea{border:1px solid #bdcbbf;border-radius:7px;width:100%;padding:10px 12px;background:#fff;color:var(--ink)}select{margin-top:6px}textarea{font:13px/1.65 var(--mono);resize:vertical;min-height:174px;margin-top:6px;background:#fbfcf9}
+    :focus-visible{outline:3px solid #539d82;outline-offset:3px}button,.button{border:1px solid transparent;display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:650;font-size:14px;cursor:pointer;text-decoration:none;padding:10px 17px;border-radius:7px}button:disabled{opacity:.5;cursor:progress}
+    .primary{background:var(--green);color:white}.primary:hover{background:#0f392e}.wide{width:100%;margin-top:18px}.outline{background:#fff;border-color:var(--line);color:var(--ink)}.outline:hover{background:#f1f5ee}
+    .facts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}.fact{background:#f3f6f0;padding:9px 12px;border-radius:6px}.fact span,.metric span{display:block;font-size:12px;color:var(--muted)}.fact strong{font:600 14px/1.6 var(--mono);overflow-wrap:anywhere}
+    .result-head{display:flex;justify-content:space-between;align-items:center;gap:12px}.pill{font:600 11px/1.2 var(--mono);text-transform:uppercase;border-radius:20px;padding:7px 11px;background:#eaf1e7;color:var(--green);letter-spacing:.02em}.pill.review{background:#fff0d1;color:#814300}
+    .placeholder{border:1px dashed #c6d3c6;border-radius:9px;margin-top:22px;padding:35px 20px;text-align:center;color:var(--muted)}.placeholder strong{display:block;color:var(--ink);margin-bottom:5px}
+    .metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:20px 0}.metric{padding:15px;border-radius:8px;background:#eef3ed}.metric:nth-child(2){background:#edf6c9}.metric strong{display:block;font-size:clamp(22px,3vw,34px);letter-spacing:-.055em;font-variant-numeric:tabular-nums}
+    .trace{margin-top:10px}details{border-top:1px solid var(--line);padding:10px 0}summary{cursor:pointer;font-weight:650;font-size:14px}details p{font-size:14px;margin:7px 0 6px}.tag{display:inline-block;background:#eff3ee;color:#3b5547;border:1px solid var(--line);padding:2px 6px;margin:3px 5px 0 0;font:12px/1.5 var(--mono);border-radius:4px;overflow-wrap:anywhere;max-width:100%}
+    .actions{margin:8px 0 0;padding-left:19px}.actions li{margin:6px 0;font-size:14px;overflow-wrap:anywhere}.reviewbox{padding:14px;background:#fff5df;border:1px solid #e6d3a5;border-radius:8px;margin:16px 0}.reviewbox input{margin:4px 0 9px}.errors{color:#8b3528;margin-top:10px;font-size:14px}.history{margin:20px 0 40px}.histrow{padding:10px 0;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px}.histrow button{font-family:var(--mono);overflow-wrap:anywhere;text-align:left}.histrow:last-child{border:0}[hidden]{display:none!important}
+    @media(max-width:840px){.columns{grid-template-columns:1fr}.pagehead{padding-top:25px}.panel{border-radius:10px}}@media(max-width:420px){.facts{grid-template-columns:1fr}.metric{padding:9px}.pagehead{display:block}.env{font-size:10px}}
+  </style>
+</head>
+<body>
+  <header><nav><div class="brand"><span class="mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>FreightClose</div><span class="env">Sandbox ledger</span></nav></header>
+  <main class="shell">
+    <section class="pagehead"><div><h1>Settlement desk</h1><p>Audit carrier charges, settle the supported amount, and document every deduction.</p></div></section>
+    <div class="columns">
+      <section class="panel"><h2>Shipment packet</h2>
+        <label class="margin" for="scenario">Demo shipment</label><select id="scenario"><option value="false">Detention overcharge</option><option value="true">Missing delivery record</option></select>
+        <label class="margin" for="caseKey">Case ID</label><input id="caseKey" required maxlength="80" pattern="[a-zA-Z0-9_\-]{1,80}">
+        <label class="margin" for="invoice">Carrier invoice</label><textarea id="invoice" spellcheck="false"></textarea>
+        <h3 class="margin">Contract &amp; delivery evidence</h3><div id="facts" class="facts"></div>
+        <div class="facts margin">
+          <label for="invoiceDate">Invoice date<input id="invoiceDate" type="date" required></label>
+          <label for="cap">Approval cap (INR paise)<input id="cap" type="number" min="0" step="1" required><output id="rupees" for="cap" class="sub"></output></label>
+        </div>
+        <button id="run" class="primary wide" disabled>Audit and settle →</button><p id="error" role="alert" class="errors"></p>
+      </section>
+      <section class="panel" id="result" aria-live="polite"><div class="result-head"><h2>Settlement receipt</h2><span id="status" class="pill">Ready</span></div>
+        <div id="empty" class="placeholder"><strong>Awaiting shipment audit</strong>Run the packet to see the settlement and supporting evidence.</div>
+        <div id="output" hidden>
+          <p id="meta" class="sub"></p><div id="metrics" class="metrics"></div>
+          <h3>Decision trail</h3><div id="trace" class="trace"></div>
+          <details><summary>Case evidence</summary><pre id="evidence" style="font:12px/1.6 var(--mono);white-space:pre-wrap;overflow-wrap:anywhere"></pre></details>
+          <button type="button" id="retry" class="outline margin" hidden>Retry held case</button>
+          <form id="resolve" class="reviewbox" hidden><h3>Add verified delivery evidence</h3>
+            <label class="margin" for="minutes">Verified dwell time (minutes)</label><input type="number" id="minutes" min="0" step="1" required placeholder="120">
+            <label for="ref">Delivery record reference</label><input id="ref" maxlength="160" required placeholder="Signed gate log GL-018">
+            <button class="primary" type="submit">Attach evidence and re-audit</button></form>
+          <div id="actionbox"><h3 class="margin">Sandbox postings</h3><ul id="actions" class="actions"></ul></div>
+          <p id="explain" class="sub"></p><a class="button outline margin" id="receipt" download>Download receipt ↓</a>
+        </div>
+      </section>
+    </div>
+    <section class="panel history"><h2>Case history</h2><div id="history"></div></section>
+  </main>
+<script>
+  const byId = id => document.getElementById(id);
+  const money = value => value == null ? '—' : new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(value/100);
+  const element = (tag,text,className) => {const el=document.createElement(tag);if(text!=null)el.textContent=String(text);if(className)el.className=className;return el};
+  const title = value => String(value).replace(/_/g,' ').replace(/^./,c=>c.toUpperCase());
+  let packet,active,busy=false;
+  async function api(url,payload){
+    const response=await fetch(url,payload===undefined?{}:{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    if(!response.ok){let msg='Request failed ('+response.status+')';try{const body=await response.json();if(typeof body.detail==='string')msg=body.detail}catch{}throw Error(msg)}
+    return response.json();
+  }
+  function pair(parent,label,value,style){const cell=element('div',null,style);cell.append(element('span',label),element('strong',value));parent.append(cell)}
+  function showPacket(p){
+    packet=p;byId('caseKey').value=p.case_id;byId('invoice').value=p.invoice_text;byId('invoiceDate').value=p.invoice_date||'';byId('cap').value=p.cap_paise??'';showRupees();byId('scenario').value=String(p.pod_minutes==null);const facts=byId('facts');facts.replaceChildren();
+    for(const [name,value] of [['Purchase order',p.po_id],['Contract base',money(p.contracted_base_cents)],['Detention rate',money(p.detention_cents_per_hour)+'/hr'],['Free time',p.free_minutes+' min'],['Delivery dwell',p.pod_minutes==null?'Evidence missing':p.pod_minutes+' min']])pair(facts,name,value,'fact');
+  }
+  function resetResult(){active=null;byId('output').hidden=true;byId('empty').hidden=false;byId('status').textContent='Ready';byId('status').className='pill'}
+  function showRupees(){const amount=byId('cap').valueAsNumber;byId('rupees').textContent=Number.isFinite(amount)?new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR'}).format(amount/100):''}
+  function sourceTag(source){const value=String(source);try{const url=new URL(value);if(url.protocol==='https:'&&!url.username&&!url.password){const link=element('a',value,'tag');link.href=url.href;link.target='_blank';link.rel='noopener noreferrer';return link}}catch{}return element('span',value,'tag')}
+  function showRecord(r){
+    active=r;showPacket(r.packet);byId('output').hidden=false;byId('empty').hidden=true;const held=r.status==='REVIEW';
+    byId('status').textContent=r.status;byId('status').className='pill'+(held?' review':'');byId('meta').textContent=(r.mode==='live'?'Live sources':'Offline fixtures')+' · Case '+r.packet.case_id;
+    const metrics=byId('metrics');metrics.replaceChildren();pair(metrics,'Payable',held?'On hold':money(r.payable_cents),'metric');pair(metrics,'Deduction',held?'Pending':money(r.recovered_cents),'metric');
+    const trail=byId('trace');trail.replaceChildren();(r.trace||[]).forEach((item,i,list)=>{const detail=element('details');detail.open=i===list.length-1||i===0;detail.append(element('summary',title(item.step)),element('p',item.reason));(item.sources||[]).forEach(source=>detail.append(sourceTag(source)));trail.append(detail)});
+    byId('evidence').textContent=JSON.stringify({mode:r.mode,elapsed_ms:r.elapsed_ms,calls:r.calls,packet:r.packet,extraction:r.extraction,fx:r.fx},null,2);byId('retry').hidden=!held;
+    byId('resolve').hidden=!(held&&r.packet.pod_minutes==null);byId('resolve').reset();
+    const actions=byId('actions');actions.replaceChildren();for(const action of r.actions||[]){
+      const labels={LEDGER_POST:'Ledger posting',SHORT_PAY_NOTICE:'Deduction notice',REMITTANCE_NOTICE:'Remittance notice'};
+      const item=element('li');item.append(element('strong',(labels[action.type]||title(action.type))+' · '+money(action.amount_cents)));
+      item.append(element('p',action.notice_text||action.reason,'sub'));
+      if(action.entry_ref)item.append(element('span',action.entry_ref,'tag'));
+      actions.append(item);
+    }
+    byId('actionbox').hidden=!actions.children.length;byId('explain').textContent=r.error||(!actions.children.length&&held?'Settlement is on hold until the exception is resolved.':'');
+    byId('receipt').href='/api/cases/'+encodeURIComponent(r.id)+'/receipt';
+  }
+  async function historyList(){
+    const records=await api('/api/cases');const history=byId('history');history.replaceChildren();
+    if(!records.length)history.append(element('p','Settled and held cases will appear here.','sub'));
+    for(const record of records){const row=element('div',null,'histrow'),btn=element('button',record.packet.case_id+' · '+record.id,'outline');btn.addEventListener('click',()=>{if(!busy){byId('error').textContent='';showRecord(record);byId('result').scrollIntoView({block:'nearest'})}});row.append(btn,element('span',record.status,'pill'+(record.status==='REVIEW'?' review':'')));history.append(row)}
+  }
+  async function withLock(fn){
+    if(busy)return;busy=true;byId('error').textContent='';const submit=byId('resolve').querySelector('button');byId('run').disabled=byId('scenario').disabled=submit.disabled=byId('invoice').disabled=true;byId('run').textContent='Working…';
+    try{await fn()}catch(e){byId('error').textContent=e.message}finally{busy=false;byId('run').disabled=!packet;byId('scenario').disabled=submit.disabled=byId('invoice').disabled=false;byId('run').textContent='Audit and settle →'}
+  }
+  async function loadSample(){resetResult();packet=null;showPacket(await api('/api/sample?missing='+byId('scenario').value))}
+  byId('scenario').addEventListener('change',()=>withLock(loadSample));
+  for(const id of ['invoice','invoiceDate','cap','caseKey'])byId(id).addEventListener('input',()=>{showRupees();if(active)resetResult()});
+  byId('run').addEventListener('click',()=>withLock(async()=>{
+    const dateInput=byId('invoiceDate'),capInput=byId('cap');
+    if(!byId('caseKey').reportValidity()||!dateInput.reportValidity()||!capInput.reportValidity())return;
+    if(!Number.isSafeInteger(capInput.valueAsNumber))throw Error('Enter a whole-number INR cap in paise.');
+    const submission={...packet,case_id:byId('caseKey').value,invoice_text:byId('invoice').value,invoice_date:dateInput.value,cap_paise:capInput.valueAsNumber};
+    showRecord(await api('/api/run',{packet:submission}));await historyList()
+  }));
+  byId('retry').addEventListener('click',()=>withLock(async()=>{showRecord(await api('/api/cases/'+encodeURIComponent(active.id)+'/retry',{}));await historyList()}));
+  byId('resolve').addEventListener('submit',event=>{event.preventDefault();withLock(async()=>{const ref=byId('ref').value.trim();if(!ref)throw Error('Enter the verified record reference.');showRecord(await api('/api/cases/'+encodeURIComponent(active.id)+'/resolve',{pod_minutes:Number(byId('minutes').value),evidence_ref:ref}));await historyList()})});
+  withLock(async()=>{await loadSample();await historyList()});
+</script>
+</body>
+</html>
