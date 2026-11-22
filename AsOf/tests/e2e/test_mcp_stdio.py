@@ -9,7 +9,7 @@ from mcp.client.stdio import StdioServerParameters, stdio_client
 
 ROOT = Path(__file__).resolve().parents[2]
 EXPECTED_TOOLS = {"resolve", "attest", "clear_counterparty", "dispute_file", "observe",
-                  "audit_claims", "request_evidence", "watch", "approve"}
+                  "audit_claims", "request_evidence", "watch", "issue", "cost"}
 
 
 def _payload(result) -> dict:
@@ -38,3 +38,15 @@ async def test_mcp_stdio_lists_tools_and_answers_c01(tmp_path):
             assert line["label"] == "profile-derived count"
             assert "was true on" not in json.dumps(out)
             assert "cost" in out
+
+
+async def test_mcp_has_no_approve_tool(tmp_path):
+    """Approval is human-only (CLI). An agent connected over MCP must not be able to approve its own sends."""
+    env = {**os.environ, "MODE": "replay", "ASOF_STATE_DIR": str(tmp_path)}
+    params = StdioServerParameters(command=sys.executable, args=["-m", "backend.platform.mcp_server"],
+                                   cwd=str(ROOT), env=env)
+    async with stdio_client(params) as (r, w):
+        async with ClientSession(r, w) as s:
+            await s.initialize()
+            names = {t.name for t in (await s.list_tools()).tools}
+            assert "approve" not in names

@@ -9,7 +9,11 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"; cd "$ROOT"
 export PATH="$HOME/.local/bin:$PATH"
 AGY=${AGY_BIN:-agy}; command -v "$AGY" >/dev/null || { echo "agy not installed: fall back to the Claude subagent for this task" >&2; exit 2; }
 mkdir -p agy/logs; NAME=$(basename "$TASK" .md); TS=$(date +%H%M%S); LOG="agy/logs/$TS-$NAME.log"
-BEFORE=$(git status --porcelain --untracked-files=all . | sort)
+# Scan the whole repo (not just AsOf/) and fingerprint ../.env (hash only, never printed) to catch writes outside the allowed paths.
+REPO=$(git rev-parse --show-toplevel)
+envsum(){ [ -f "$ROOT/../.env" ] && sha256sum "$ROOT/../.env" | cut -d" " -f1 || echo none; }
+ENV_BEFORE=$(envsum)
+BEFORE=$(git -C "$REPO" status --porcelain --untracked-files=all | sort)
 PROMPT="$(cat agy/RULES_FOR_AGY.md)
 
 ALLOWED PATHS FOR THIS TASK (create/edit files ONLY under these, relative to $ROOT): ${ALLOWED[*]}
@@ -20,9 +24,10 @@ SETTINGS=$(ROOT="$ROOT" AGY_ALLOW_CMDS="${AGY_ALLOW_CMDS:-}" python3 -c 'import 
 echo "agy settings: $SETTINGS"
 PERMS=(--settings="$SETTINGS")
 # AGY_SKIP_PERMISSIONS=1 only with the user's explicit OK for this run: auto-approves every tool. The scope check below still runs.
-[ "${AGY_SKIP_PERMISSIONS:-0}" = "1" ] && { PERMS=(--dangerously-skip-permissions); echo "agy: ALL PERMISSIONS (user-approved)"; }
+[ "${AGY_SKIP_PERMISSIONS:-0}" = "1" ] && [ "${AGY_I_HAVE_USER_OK:-}" = "yes" ] && { PERMS=(--dangerously-skip-permissions); echo "agy: ALL PERMISSIONS (user-approved)"; }
 "$AGY" --mode accept-edits --print-timeout "${AGY_TIMEOUT:-1500s}" "${PERMS[@]}" --print="$PROMPT" > "$LOG" 2>&1; RC=$?
-AFTER=$(git status --porcelain --untracked-files=all . | sort)
+AFTER=$(git -C "$REPO" status --porcelain --untracked-files=all | sort)
+[ "$(envsum)" = "$ENV_BEFORE" ] || { echo "ALERT: ../.env changed during the agy run. Inspect it yourself; rotate keys if unsure." >&2; exit 3; }
 CHANGED=$(comm -13 <(echo "$BEFORE") <(echo "$AFTER") | awk '{print $NF}')
 OUTSIDE=""
 for f in $CHANGED; do f=${f#AsOf/}; ok=0; for a in "${ALLOWED[@]}"; do [[ "$f" == "$a"* ]] && ok=1; done; [ $ok -eq 1 ] || OUTSIDE="$OUTSIDE $f"; done
