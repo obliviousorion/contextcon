@@ -40,6 +40,7 @@ def main(argv: list[str] | None = None) -> int:
     f = sub.add_parser("forget"); f.add_argument("profile_url")
     sub.add_parser("sandbox"); sv = sub.add_parser("serve"); sv.add_argument("--port", type=int, default=8787)
     sm = sub.add_parser("smoke"); sm.add_argument("--mode", default="live")
+    ie = sub.add_parser("irdai-extract"); ie.add_argument("pdf"); ie.add_argument("--url", required=True)
     wc = sub.add_parser("watch-create"); wc.add_argument("profile_url"); wc.add_argument("--mode", default="live")
     wr = sub.add_parser("watch-register"); wr.add_argument("watch_id"); wr.add_argument("profile_url")
     wp = sub.add_parser("watch-pull"); wp.add_argument("watch_id"); wp.add_argument("--mode", default="live")
@@ -105,6 +106,10 @@ def main(argv: list[str] | None = None) -> int:
             print(json.dumps(watch.create(store, c, args.profile_url), indent=1)); return 0
         out = watch.pull(store, c, args.watch_id, args.since, args.as_of, f"watch-{args.watch_id}")
         print(json.dumps(out, indent=1, default=str)); return 0 if "error" not in out else 1
+    if args.cmd == "irdai-extract":
+        from . import irdai
+        data = irdai.extract(args.pdf, args.url)
+        print(irdai.save(data), len(data["rows"]), "rows from page", data["source"]["page"]); return 0
     if args.cmd == "smoke":
         from .crust import Crust
         from .peers import base_filter, count, phrase_cond

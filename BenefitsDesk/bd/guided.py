@@ -159,7 +159,9 @@ def run_guided(run, case: dict, as_of: str, since: str) -> None:
                                                  "selection rules in rules.yaml", "Crustdata /company/search, /company/enrich",
                                                  c.calls, res["status"] == "found", ptr, records=len(res["items"]),
                                                  note=res.get("missing", ""))}
-    ii = run.step("g_insurers", [load_rules()["insurers"]], ins, scope=shared)
+    from .irdai import load as irdai_load
+    reg = (irdai_load() or {}).get("source")
+    ii = run.step("g_insurers", [load_rules()["insurers"], reg], ins, scope=shared)
     add("g_insurers", ii["trail"])
     case["insurers"] = ii["res"]
 
@@ -299,8 +301,10 @@ def diary(store: Store, uid: str) -> list[dict]:
     prev: dict[str, Any] = {}
     for r in rows:
         g, n = changed(r["valid_from"])
+        why = {"told": "you told us or confirmed it", "checked": "your public work record",
+               "guessed": "worked out from your record"}.get(r["label"], "lookup")
         out.append({"date": r["valid_from"][:10], "subject": "You", "subject_kind": "you", "new": r["statement"],
-                    "previous": prev.get(r["belief_key"]), "trigger": f"run {r['trigger']}",
+                    "previous": prev.get(r["belief_key"]), "trigger": f"{why} (lookup {r['trigger']})",
                     "source": json.loads(r["source"]) if r["source"] else None, "label": r["label"],
                     "gap_changed": g, "next_step_changed": n})
         prev[r["belief_key"]] = r["statement"]
@@ -312,6 +316,8 @@ def diary(store: Store, uid: str) -> list[dict]:
         for b in gp:
             if b["value"] is None or b["n"] < minimum:
                 continue  # group too small: never shown
+            if last is not None and int(b["value"]) == int(last):
+                continue  # no change, no diary entry
             out.append({"date": b["valid_from"], "subject": b["statement"].replace("Staff profiles at ", "Staff at ") + " (group)",
                         "subject_kind": "group", "new": f"{int(b['value']):,} staff profiles",
                         "previous": f"{int(last):,} staff profiles" if last is not None else None,
@@ -374,7 +380,9 @@ def choose(store: Store, uid: str, company_id: int) -> dict:
         raise U.LoginError(400, "Nothing is missing, so there is no application to prepare.")
     g = gaps[0]
     conf = st.get("confirmed") or {}
-    payload = {"insurer": item["name"], "insurer_record": company_id, "insurer_basis": "chosen by you (told)",
+    acct = (store.q("SELECT created_at FROM users WHERE user_id=?", uid) or [{"created_at": None}])[0]["created_at"]
+    payload = {"account_since": acct,   # a new sign-up after Forget me is a new action; within one account, one key
+               "insurer": item["name"], "insurer_record": company_id, "insurer_basis": "chosen by you (told)",
                "cover": g["called_for"], "rule_id": g["rule_id"], "premium": "to be quoted by the insurer",
                "applicant": {k: (conf.get(k) or {}).get("value") for k in ("age_band", "city")},
                "answers": st.get("answers")}

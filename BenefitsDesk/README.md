@@ -38,34 +38,55 @@ uv run python -m bd run requests/T1_job_change.json
 uv run python -m bd approve <key printed under Actions> --by person
 uv run python -m bd sandbox &                                  # our own receiver; never a real insurer
 uv run python -m bd act <run_id>                               # sends approved actions exactly once
-uv run pytest -q                                               # 30 tests incl. the 20-trial kill test
+uv run pytest -q                                               # 52 tests incl. the 20-trial kill test and a real server restart
 # UI: cd web && npm install && npm run build && cd .. && uv run python -m bd serve
-#   http://127.0.0.1:8787/          guided flow: chat -> profile -> 3D neighbourhood -> gaps -> approve
-#   http://127.0.0.1:8787/console   operator console: run stream, ledger, kill and resume (also 'Behind the scenes')
+#   http://127.0.0.1:8787/          guided flow: sign in -> confirm card -> two questions -> bento dashboard
+#   http://127.0.0.1:8787/console   operator console: run stream, ledger, kill and resume
 ```
 Modes: `--mode replay` (default, `config.yaml`), `record` (calls Crustdata, caches every response), `live`. `--chaos` kills the process at random step boundaries.
+
+## The guided flow (person-facing)
+1. **Sign in.** A LinkedIn link (or name + company), a 4-digit PIN and a consent tick. Only profiles on `config.yaml consenting_personas` are ever looked up; any other link gets "this demo only works for people who have agreed" and **no call is made**. **This is demo sign-in, not identity proof**: anyone who knows an allowlisted link could create the account first. A production version would use *Sign in with LinkedIn* (OAuth). The PIN is stored as a salted PBKDF2 hash; 5 wrong PINs lock the account for 10 minutes; a wrong PIN and an unknown account get the same message. The session is an HttpOnly cookie, so a refresh keeps you signed in.
+2. **Confirm card.** One person lookup pre-fills where you work, your job, when you started and your city as **Checked** facts with source pointers. If the record has education end years, an age band is estimated as *end year minus 22* and shown as **Guessed**, with the education field as its basis. You confirm or change each item; a confirmed or changed age becomes **Told**. The adults-only check runs on the **confirmed** age only, never on the estimate. No match, a removed (redacted) record, a name that matches more than one person, or no education dates: that item is asked as a plain question instead.
+3. **Two questions:** who depends on you, and whether you have any insurance now (with "not sure"; "not sure" is never turned into a guess).
+4. **Dashboard** (bento grid): 3D neighbourhood (group nodes only), profile with "checked on" dates, the **lookup trail** (You -> Your employer -> People like you -> Insurers -> Gaps: what was searched, source, records, credits, found / searched, cannot verify / skipped, live or replay with the recorded date, and the pointers behind each step; a step that made no call is never shown as found), insurers, gaps, next step (choose an insurer, approve, "sent once"), and the **diary**.
+5. **Diary and date slider.** Built only from the versioned belief store (`persona_beliefs`, and group beliefs for your employer with at least the minimum group size); no new calls and no model-written text. The slider re-renders the profile and graph as believed on that date.
+6. **Memory.** Everything above is kept in `state/desk.sqlite` (gitignored), keyed by a user id derived from the profile link. After a full server stop and start, link + PIN lands you on the same dashboard with **zero Crustdata calls** (tested). "Check for changes" re-runs the lookups; on the same day with unchanged inputs every step is reused from the step store at no cost, and any change becomes a diary entry. **Log out** ends the session; **Forget me** deletes every row about you, deletes the cached copy of your record, and unlinks your ledger rows (the cost stays, the link to you goes).
+7. **Live / Replay switch** sets the mode for your next run: Live calls Crustdata (and records the response); Replay uses recorded responses and says so, with their date, in the trail.
+
+**Insurers come from data, not a list.** A Crustdata company search finds Indian companies with a health-insurer legal name; `rules.yaml insurers` holds only selection rules (company type, a founding year and own web domain, no agent/branch/TPA names, one record per web domain), and up to 3 are enriched. On 22 Nov 2026 the search returned 13 records, and the rules kept 3 (Aditya Birla Health, Cigna TTK Health, Star Health and Allied); the other 10 were branch offices, agents, or records without a founding year or domain, each listed with its reason. Insurers are listed by name, never ranked by size; company facts (founded, staff-profile counts as two dated values side by side, head office) are labelled as company facts, not a measure of claim quality.
+
+**Regulator figures, extracted from IRDAI's PDF.** `bd irdai-extract <pdf> --url <address>` reads the IRDAI Annual Report 2024-25 with `pypdf`, finds Statement 10 ("Incurred claims ratio of general and health insurers", page 374) and stores each standalone health insurer's row with the PDF address, page and the quoted row (`fixtures/irdai/statement10_health_icr.json`). A figure is attached only when the company name matches the regulator's row exactly (after normalising Co./Company, Ltd/Limited) and the number appears in the quoted row; otherwise it stays CANNOT VERIFY (for example Cigna TTK, which has no row under that name). The incurred claims ratio is claims incurred as a share of premium earned; **it is not a claim settlement ratio**, and the UI says so. The report has no insurer-wise complaints table, so complaints stay CANNOT VERIFY.
 
 ## How it's built
 ```mermaid
 flowchart LR
-  REQ["Request JSON<br/>CLI / HTTP / UI"] --> RUN["Run: fixed step list per request type<br/>steps keyed by hash(run, step, inputs)"]
+  subgraph UI["Guided UI (React)"]
+    LOGIN["Sign in: link + PIN + consent"] --> CONF["Confirm card"] --> QS["Two questions"] --> DASH["Bento dashboard<br/>graph · profile · trail · insurers · gaps · next step · diary · date slider"]
+  end
+  LOGIN -->|"HTTP + HttpOnly cookie"| API["bd serve (stdlib HTTP)"]
+  API --> ALLOW{"on consenting_personas?"}
+  ALLOW -->|"no: no call"| NOPE["'only people who agreed'"]
+  ALLOW -->|"yes"| USERS[("users: PBKDF2 PIN hash · sessions · user_state")]
+  API --> RUN["Run (child process): fixed steps<br/>You → Employer → People like you → Insurers → Gaps<br/>steps keyed by hash(scope, step, inputs)"]
   RUN <--> SS[("SQLite step store<br/>finished steps skipped on restart")]
-  RUN --> CL["Crustdata client<br/>cache by request hash · record/replay<br/>cap + time limit · backoff with jitter on 429/timeout"]
-  CL -->|"hit: 0 credits"| CA[("response cache + committed fixtures")]
-  CL -->|"/person/enrich · /job/search (count-only) · /person/search · /web/*"| CD[("Crustdata API")]
-  CL --> LED[("Cost ledger: one row per call<br/>endpoint · credits · ₹ · cache hit · request hash, no personal data")]
-  RUN --> FACTS["Facts = pointers (record, field path / char range)<br/>code copies the value; unresolved = CANNOT VERIFY"]
-  RULES[["rules.yaml<br/>gaps · job change · package · ranking · phrases · group minimum"]] --> ENG
-  FACTS --> ENG["Rules engine (pure)<br/>gaps · job-change alarm · package · insurer ranking"]
-  BEL["Workplace beliefs (group only)<br/>versioned valid_from / valid_to"] --> CASE
-  ENG --> CASE["Case file + report<br/>sections from config.yaml"]
-  ENG --> INT["Intent log (idempotency key)"]
-  INT -->|"person approves (CLI / UI)"| APP{"approved?"}
-  APP -->|"sending → ask sandbox first on restart → done"| SB[("Sandbox receiver<br/>records every delivery")]
+  RUN --> CL["Crustdata client<br/>cache · record/replay · cap + time limit · backoff with jitter"]
+  CL -->|"replay: 0 credits"| CA[("response cache + committed fixtures")]
+  CL -->|"/person/enrich · /company/search · /company/enrich · /job/search · /person/search"| CD[("Crustdata API")]
+  CL --> LED[("Cost ledger: one row per call, no personal data")]
+  PDF[("IRDAI Annual Report PDF<br/>Statement 10, page 374")] -->|"bd irdai-extract (pypdf)"| REG[("quoted rows + page + URL")]
+  REG --> INS["Insurers: company facts + quoted regulator rows<br/>never ranked"]
+  RUN --> INS
+  RUN --> TRAIL["Lookup trail<br/>searched · source · records · credits · status · live/replay"]
+  RULES[["rules.yaml<br/>gaps · insurer selection · group minimum · phrases"]] --> ENG["Rules engine (pure)"]
+  RUN --> ENG --> BEL[("persona_beliefs + group beliefs<br/>valid_from / valid_to")]
+  BEL --> DIARY["Diary + date slider<br/>no new calls"]
+  ENG --> INT["Intent log (idempotency key per account)"]
+  INT -->|"person approves"| SB[("Sandbox receiver<br/>records every delivery")]
   LED -->|"cap or time reached"| HOLD["clean stop: settled vs missing"]
 ```
 - **No language model in the core.** It is rules and lookups and gives the same answer every time, which is what the restart test needs, and it removes the main way a wrong fact gets in.
-- **State:** `state/desk.sqlite` (steps, ledger, intents, personas, facts, beliefs, events) and `state/sandbox.sqlite`. Stdlib HTTP server; React + Vite + Tailwind UI in `web/`.
+- **State:** `state/desk.sqlite` (steps, ledger, intents, personas, facts, beliefs, events, users, sessions, user_state, persona_beliefs, persona_snapshots) and `state/sandbox.sqlite`, both gitignored and never committed. Stdlib HTTP server; React + Vite + Tailwind UI in `web/`.
 - **Every rule** lives in [`rules.yaml`](rules.yaml); **every limit and output field** in [`config.yaml`](config.yaml).
 
 ## Sources and checks
@@ -74,7 +95,10 @@ flowchart LR
 | Employer, title, job dates | Crustdata `/person/enrich` (stored copy) | field path, entry date, retrieved time. The record has no refresh date, so "no change since" is always CANNOT VERIFY |
 | Peer job posts | Crustdata `/job/search` | filter JSON, `total_count`, retrieved time; sample passages by `content.description[a:b]` and the post URL |
 | Workplace beliefs | Crustdata `/person/search` | filter JSON per belief, `total_count`, window dates; leavers confirmed per row at that employer |
-| Insurer figures | regulator page via `/web/enrich/live` (configured per figure) | quoted passage + URL + date, or CANNOT VERIFY |
+| Insurers | Crustdata `/company/search` then `/company/enrich` | field path per fact (`basic_info.year_founded`, `headcount.timeseries[i].employee_count`, `locations.headquarters`) with the point date and retrieved time |
+| Insurer claims figures | IRDAI Annual Report 2024-25 PDF, Statement 10, page 374 (extracted with pypdf) | PDF address, page, quoted row; CANNOT VERIFY without an exact row |
+| Employer staff counts (diary, group level) | Crustdata `/company/enrich` | `headcount.timeseries` point dates |
+| Your profile (guided flow) | Crustdata `/person/enrich` with education | field path per item; age estimate's basis `education.schools[i].end_year` |
 | Age band, dependants, city, cover held, budget, insurer choice | the person | labelled **Told** |
 
 **Approvals:** `submit_application` and `conversion_request` are irreversible, so they wait for `bd approve` (or the UI button). A double click is one action. Sends go only to our sandbox receiver.
@@ -110,7 +134,7 @@ Same-company role change (compares `crustdata_company_id`, not `recently_changed
 - The 429 retry path was exercised by a real 429.
 
 **What didn't:**
-- Insurer regulator figures. Web search returned news pages and a redirect wrapper, not IRDAI's table, so every figure is CANNOT VERIFY and no insurer is ranked; the application goes to the person's own (Told) choice.
+- Insurer regulator figures through Crustdata's web fetch: it does not read PDFs. Downloading IRDAI's PDF directly and extracting Statement 10 with pypdf worked (see above).
 - `past.end_date` is not a filterable field, so leavers needed per-row checks.
 
 **Hardest case:** a person whose record shows no change. Their record has no refresh date, so "nothing changed" cannot be verified. We say exactly that instead of "no alarm".
@@ -121,7 +145,8 @@ Same-company role change (compares `crustdata_company_id`, not `recently_changed
 
 ## Not done (cut for time), and why not now
 - **Live watch creation.** Crustdata needs a public notification URL and ours is local. `bd watch-create` refuses until `config.yaml watch.webhook_url` is set. The **pull path is built and tested**: `bd watch-pull <id>` reads finished runs after the last one processed, runs the same rule, prepares the same action key, and saves the run id. Direct and watch paths give the same alarm and one action (`tests/test_watch.py`).
-- Insurer figures. IRDAI publishes company-wise claims figures only in its Annual Report 2024-25 PDF, and Crustdata's web fetch does not read PDFs ("no enabled plugin supports this MIME type", 22 Nov 2026). Next step: a PDF-to-text step, then a URL and pattern per figure in `rules.yaml insurers.panel`.
+- Insurer complaints figures: IRDAI's annual report has no insurer-wise complaints table. Claim settlement ratios are not in it either; only incurred claims ratios are.
+- Real identity: the PIN sign-in is not identity proof; production needs Sign in with LinkedIn.
 - Monthly leavers on the timeline.
 - Sourced broker commission for the price.
 

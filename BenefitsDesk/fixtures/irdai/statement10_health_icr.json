@@ -1,0 +1,63 @@
+{
+ "source": {
+  "document": "IRDAI Annual Report 2024-25",
+  "url": "https://irdai.gov.in/documents/37343/366637/%E0%A4%86%E0%A4%88%E0%A4%86%E0%A4%B0%E0%A4%A1%E0%A5%80%E0%A4%8F%E0%A4%86%E0%A4%88+%E0%A4%B5%E0%A4%BE%E0%A4%B0%E0%A5%8D%E0%A4%B7%E0%A4%BF%E0%A4%95+%E0%A4%B0%E0%A4%BF%E0%A4%AA%E0%A5%8B%E0%A4%B0%E0%A5%8D%E0%A4%9F+_+IRDAI+Annual+Report+2024-25.pdf/06f02832-66a3-6308-a16f-f46a6640fc93?version=2.0&t=1767598639163",
+  "page": 374,
+  "statement": "Statement 10",
+  "table": "Incurred Claims Ratio Of General And Health Insurers",
+  "section": "Standalone Health Insurers",
+  "columns": "Health 2023-24, Health 2024-25",
+  "extracted_at": "2026-11-22T12:46:17+00:00",
+  "extractor": "pypdf text extraction, bd/irdai.py"
+ },
+ "rows": [
+  {
+   "insurer": "Aditya Birla Health Insurance Co. Ltd.",
+   "quoted_row": "Aditya Birla Health Insurance Co. Ltd. NA NA NA NA NA NA 68.31 71.50 NA NA 68.31 71.50",
+   "health_2023_24": "68.31",
+   "health_2024_25": "71.50"
+  },
+  {
+   "insurer": "Care Health Insurance Ltd.",
+   "quoted_row": "Care Health Insurance Ltd. NA NA NA NA NA NA 57.69 64.53 NA NA 57.69 64.53",
+   "health_2023_24": "57.69",
+   "health_2024_25": "64.53"
+  },
+  {
+   "insurer": "Galaxy Health and Allied Insurance Co. Ltd.",
+   "quoted_row": "Galaxy Health and Allied Insurance Co. Ltd. NA NA NA NA NA NA NA - NA NA NA -",
+   "health_2023_24": "NA",
+   "health_2024_25": "-"
+  },
+  {
+   "insurer": "ManipalCigna Health Insurance Co. Ltd.",
+   "quoted_row": "ManipalCigna Health Insurance Co. Ltd. NA NA NA NA NA NA 63.78 74.81 NA NA 63.78 74.81",
+   "health_2023_24": "63.78",
+   "health_2024_25": "74.81"
+  },
+  {
+   "insurer": "Narayana Health Insurance Ltd.",
+   "quoted_row": "Narayana Health Insurance Ltd. NA NA NA NA NA NA NA - NA NA NA -",
+   "health_2023_24": "NA",
+   "health_2024_25": "-"
+  },
+  {
+   "insurer": "Niva Bupa Health Insurance Co. Ltd",
+   "quoted_row": "Niva Bupa Health Insurance Co. Ltd NA NA NA NA NA NA 59.02 61.22 NA NA 59.02 61.22",
+   "health_2023_24": "59.02",
+   "health_2024_25": "61.22"
+  },
+  {
+   "insurer": "Reliance Health Insurance Ltd.",
+   "quoted_row": "Reliance Health Insurance Ltd. NA NA NA NA NA NA NA 0 NA NA NA 0",
+   "health_2023_24": "NA",
+   "health_2024_25": "0"
+  },
+  {
+   "insurer": "Star Health and Allied Insurance Co. Ltd.",
+   "quoted_row": "Star Health and Allied Insurance Co. Ltd. NA NA NA NA NA NA 66.47 70.30 NA NA 66.47 70.30",
+   "health_2023_24": "66.47",
+   "health_2024_25": "70.30"
+  }
+ ]
+}

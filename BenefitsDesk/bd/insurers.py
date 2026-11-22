@@ -14,9 +14,15 @@ from .crust import Crust, Result
 from .peers import HeldRun
 
 NOTE = ("These are company facts from the record (when it was founded, how many staff profiles it has, where its "
-        "offices are). They say nothing about how well an insurer pays claims, so the list is not ranked.")
+        "offices are). They say nothing about how well an insurer pays claims, so the list is not ranked. Where the "
+        "regulator's table names the same company, its incurred claims ratio is quoted from the PDF row.")
 CLAIMS_MISSING = ("claim and complaint figures: the regulator (IRDAI) publishes them only inside a PDF annual report, "
                   "and no quotable row has been extracted, so they are not shown")
+
+
+def irdai_loaded() -> bool:
+    from .irdai import load
+    return load() is not None
 
 
 def search_body(rules: dict) -> dict:
@@ -117,8 +123,13 @@ def find(c_search: Crust, c_enrich: Crust) -> dict:
         cd = by.get(cid)
         facts = company_facts(cd, e) if cd else [
             {"label": "Founded", "value": (k.get("basic_info") or {}).get("year_founded"), "source": _src("basic_info.year_founded", r, None, cid)}]
-        out["items"].append({"company_id": cid, "name": (k.get("basic_info") or {}).get("name"), "facts": facts,
-                             "claims": {"cannot_verify": True, "missing": CLAIMS_MISSING},
+        nm = (k.get("basic_info") or {}).get("name") or ""
+        from .irdai import figures_for
+        figs = figures_for(nm)
+        claims = figs if figs else {"cannot_verify": True, "missing": CLAIMS_MISSING if not irdai_loaded() else
+                                    f"no row in IRDAI Statement 10 matches the name '{nm}' exactly, so no figure is attached"}
+        out["items"].append({"company_id": cid, "name": nm, "facts": facts, "claims": claims,
+                             "complaints": {"cannot_verify": True, "missing": "the IRDAI annual report has no insurer-wise complaints table"},
                              **({} if cd else {"enrich_missing": f"company enrich not settled: {e.reason or 'no match'}"})})
     out["status"] = "found"
     return out

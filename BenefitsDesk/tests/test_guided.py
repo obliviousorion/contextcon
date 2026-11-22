@@ -192,7 +192,10 @@ def test_insurers_come_from_data_and_are_not_ranked(state):
     case = full_run(s, uid)
     items = case["insurers"]["items"]
     assert [i["name"] for i in items] == sorted((i["name"] for i in items), key=str.lower)   # by name, never by size
-    assert all(i["claims"]["cannot_verify"] for i in items)
+    for i in items:   # either quoted from the regulator's row, or cannot verify; complaints always cannot verify
+        assert (isinstance(i["claims"], list) and all(c["source"]["passage"] for c in i["claims"])) or i["claims"]["cannot_verify"]
+        assert i["complaints"]["cannot_verify"]
+    assert any(isinstance(i["claims"], dict) for i in items)   # the name with no exact regulator row
     assert all(f["source"]["field_path"] and f["source"]["retrieved_at"] for i in items for f in i["facts"])
     assert "not a measure" in case["insurers"]["note"] or "say nothing about how well" in case["insurers"]["note"]
 
@@ -257,3 +260,48 @@ def test_slider_returns_the_belief_held_on_a_past_date(state, monkeypatch):
     assert G.facts_as_of(s, "p1", "2026-09-01") == []
     entry = [e for e in G.diary(s, "p1") if e["new"] == "Your city: Jaipur"][0]
     assert entry["previous"] == "Your city: Pilani" and entry["gap_changed"] is True
+
+
+# ---- regulator figures (IRDAI PDF) -------------------------------------------------------
+def test_every_regulator_figure_is_tied_to_its_quoted_row():
+    from bd import irdai
+    data = irdai.load()
+    assert data and data["source"]["page"] and data["source"]["url"].startswith("https://irdai.gov.in/")
+    for r in data["rows"]:
+        assert r["insurer"] in r["quoted_row"]
+        for col in ("health_2023_24", "health_2024_25"):
+            assert r[col] in r["quoted_row"].split()          # extracted from the row, never typed
+    for row in data["rows"]:
+        for f in irdai.figures_for(row["insurer"]) or []:
+            assert f["value"].rstrip("%") in f["source"]["passage"] and "page" in f["source"]["field_path"]
+
+
+def test_name_without_an_exact_regulator_row_stays_cannot_verify():
+    from bd import irdai
+    assert irdai.figures_for("Cigna TTK Health Insurance Company Limited") is None
+    assert irdai.figures_for("Star Health and Allied Insurance Co. Ltd")          # exact after normalising
+
+
+def test_dash_and_na_cells_are_not_figures():
+    from bd import irdai
+    for row in irdai.load()["rows"]:
+        for f in irdai.figures_for(row["insurer"]) or []:
+            assert f["value"] not in ("-%", "NA%")
+
+
+def test_same_application_one_key_per_account_new_key_after_forget(state, monkeypatch):
+    s = Store()
+    uid, _ = signup(s)
+    confirm_all(s, uid)
+    full_run(s, uid)
+    cid = G.dashboard(s, uid)["next_step"]["choices"][0]["company_id"]
+    k1 = G.choose(s, uid, cid)["key"]
+    full_run(s, uid)                                   # Check for changes: a new run, same application
+    assert G.choose(s, uid, cid)["key"] == k1
+    U.forget(s, uid)
+    times = iter(["2026-11-23T08:00:00+00:00"] * 50)
+    monkeypatch.setattr(U, "now", lambda: next(times))
+    uid2, _ = signup(s)
+    confirm_all(s, uid2)
+    full_run(s, uid2)
+    assert G.choose(s, uid2, cid)["key"] != k1         # a new sign-up is a new action, never counted as a resend

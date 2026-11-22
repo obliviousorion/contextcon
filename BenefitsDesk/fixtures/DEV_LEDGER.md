@@ -17,4 +17,8 @@ state file was reset at 16:35, so this table is the record for them. Later runs 
 | 16:49 | E1 rerun: person-search counts + 2 x 10 leaver rows with job history | 5.64 | leavers confirmed row by row |
 | 16:44 | live smoke test (2 count-only queries, cache bypassed) | 0.00 | 3,434 / 114 reproduced |
 | 16:46 | web fetch IRDAI document page + 2 PDF links | 3.00 | page fetched; PDFs not readable by web fetch |
-| | **Total** | **≈ 15.03 (≈ Rs 397)** | per-call rows for everything after 16:35 are in `state/desk.sqlite` (`bd ledger`) |
+| 18:05 | person enrich with education x2 (consenting personas) | 2.00 | guided v2 intake (after code freeze) |
+| 18:07 | company search x2 (two 400s free, 15 then 13 results) | 3.24 | insurers from data |
+| 18:08 | company enrich x3 insurers | 6.00 | headcount history, offices (check total 9.24 <= 10) |
+| 18:10 | company enrich x2 employers | 4.00 | employer staff counts for the diary |
+| | **Total** | **≈ 30.27 (≈ Rs 799)** | per-call rows for everything after 16:35 are in `state/desk.sqlite` (`bd ledger`) |
