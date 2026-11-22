@@ -90,6 +90,8 @@ class CrustClient:
             return 1.0 * (len(b.get("professional_network_profile_urls") or []) or 1)
         if path in ("/company/search", "/person/search"):
             return 0.03 * int(b.get("limit") or 1)
+        if path == "/web/enrich/live":
+            return PRICES[path] * (len(b.get("urls") or []) or 1)
         return PRICES.get(path, 0.0)
 
     @staticmethod

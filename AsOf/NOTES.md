@@ -1,7 +1,13 @@
 # NOTES — change requests and open items
 Agents append requests here; only the lead edits `backend/models.py` and `config.yaml`.
 
-## Open items at handoff (2026-11-22)
+## Phase 4 results (2026-11-22, lead)
+- C17 SETTLED: record-mode identify on drl.aero returned Delhivery (5798) and Delhivery Robotics (15944579), both at confidence 1.0. C17 is now CANNOT_RESOLVE. An `all_domains` alias is no longer proof: each new domain gets its own identify.
+- `/web/fetch` is a 404 (free). The page fetch is `/web/enrich/live` at 1 credit/page (balance -1.0). `web_fetch` now calls it.
+- Per-company recordings are merged into `fixtures/live_check/cache`; the ReplayIndex is deleted.
+- `CREDIT_TO_INR` is config-driven: 0.30 × 94.12 = ₹28.24/credit.
+
+## Open items at handoff (2026-11-22, superseded by Phase 4 above)
 - C17 (drl.aero → Delhivery id 5798) is UNVERIFIED and needs one record-mode `company/identify` call (0.2 credits).
 - The `web/fetch` credit cost hasn't been measured.
 - `job/search` returned HTTP 400 with our guessed request body. It's unused by design; if you want it, fix the body from docs.crustdata.com first.

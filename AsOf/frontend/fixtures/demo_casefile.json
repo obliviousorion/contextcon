@@ -117,7 +117,7 @@
       }
     ],
     "subsequent_events": [],
-    "generated_at": "2026-11-22T16:53:05.102481+05:30"
+    "generated_at": "2026-11-22T16:58:45.916662+05:30"
   },
   "evidence": {
     "E1": {
@@ -126,7 +126,7 @@
       "source_endpoint": "/company/identify",
       "url": null,
       "field_path": "basic_info.all_domains",
-      "excerpt": "domains ['delhivery.com', 'drl.aero'] -> crustdata_company_id 5798",
+      "excerpt": "identify on delhivery.com matched exactly one company: crustdata_company_id 5798; its record lists domains ['delhivery.com', 'drl.aero'] (an alias is resolved by its own identify)",
       "point_date": null,
       "retrieved_at": "2026-11-22T11:13:06.938921Z",
       "cache_key": "4816fddfeeb51c78eb44354a654b04e4612c752ccdaf819c80c5f979a0b07aab"

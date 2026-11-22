@@ -14,7 +14,7 @@ def _credit_to_inr() -> float:
         from backend.platform.config import credit_to_inr
         return credit_to_inr()
     except Exception:
-        return 0.30 * 88  # config.yaml unreadable: same defaults as the shipped config
+        return 0.30 * 94.12  # config.yaml unreadable: same values as the shipped config
 
 
 CREDIT_TO_INR = _credit_to_inr()  # usd_per_credit x inr_per_usd from config.yaml

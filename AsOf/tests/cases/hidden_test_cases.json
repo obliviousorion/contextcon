@@ -1,5 +1,5 @@
 {
-  "_about": "Hidden-test-style cases for AsOf. Every expected answer below was computed from the recorded responses in fixtures/live_check/ (enrich.json, identify_*.json) on 2026-11-22. Staleness window = 14 days (config). 'UNVERIFIED' cases need a live record-mode call before they can be asserted.",
+  "_about": "Hidden-test-style cases for AsOf. Every expected answer below was computed from the recorded responses in fixtures/live_check/ (enrich.json, identify_*.json) on 2026-11-22. Staleness window = 14 days (config). C17 was settled by a live record-mode identify on 2026-11-22 (fixtures/live_check/ledger/phase4-record-2026-11-22.jsonl).",
   "company_ids": {"Delhivery": 5798, "TCI Express Ltd.": 5051, "shree balaji logistics": 73808027},
   "cases": [
     {"id": "C01", "request": {"tool": "attest", "domain": "delhivery.com", "field": "headcount", "as_of": "2024-07-15"},

@@ -91,7 +91,8 @@ async def _by_domain(s: Session, d: str) -> ResolveResult:
         return _cannot(f"a domain listed on the matched record: {d} is not among its domains", cands)
     bi = cd.get("basic_info") or {}
     ev = {"source_endpoint": "/company/identify", "field_path": "basic_info.all_domains",
-          "excerpt": f"domains {sorted(owned - {''})} -> crustdata_company_id {cd['crustdata_company_id']}"[:400],
+          "excerpt": (f"identify on {d} matched exactly one company: crustdata_company_id {cd['crustdata_company_id']}; "
+                      f"its record lists domains {sorted(owned - {''})} (an alias is resolved by its own identify)")[:400],
           "retrieved_at": res.retrieved_at, "cache_key": res.cache_key, "matched_on": d, "name": bi.get("name")}
     return ResolveResult(status="resolved", entity=_register(s, cd, "domain", ev, key=d))
 

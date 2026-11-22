@@ -118,7 +118,7 @@ asof watch_test $W                  # status no_op: duplicate signal date
 Real output of the first test: `alert ['CF-38e15ccbbde1#headcount']`, and the second returns `{"status": "no_op", "reason": "duplicate signal date (or monthly alert cap)"}`. A real alert costs 5 credits (Rs 141.18); `/test` is free.
 
 ## Close
-`asof cost` shows the ledger: 0 spent this run, 2.2 credits (Rs 62.12) measured per clearance file. The Rs 600 price is an estimate.
+`asof cost` (in a state dir where `clear` already ran, e.g. Beat 2's) shows the ledger: 0 spent this run, 2.2 credits (Rs 62.12) measured per clearance file. The Rs 600 price is an estimate.
 
 ## Backup path (no live commands, no kill)
 1. Run the suite: `uv run pytest -q` (183 passed, 0 xfail, about 6 seconds).

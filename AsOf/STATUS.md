@@ -1,6 +1,6 @@
 # AsOf build status
 
-Updated 2026-11-22 15:40. Mode is `MODE=replay` against `fixtures/live_check/`. Live credits spent this session: **0**.
+Updated 2026-11-22 17:05. Mode is `MODE=replay` against `fixtures/live_check/`. Live credits spent: **7.8** (Phase 4 record run, user-approved; ledger `fixtures/live_check/ledger/phase4-record-2026-11-22.jsonl`).
 
 ## Phases
 | Phase | State | Notes |
@@ -8,15 +8,16 @@ Updated 2026-11-22 15:40. Mode is `MODE=replay` against `fixtures/live_check/`. 
 | 0 Check | ✅ done | `uv sync` ran; the crust client's 17 tests pass; `../.env` is present; agy is 1.5.14; `mcp` 2.3 and `pyyaml` 6.0 were added. |
 | 1 Build | ✅ done | The engine, platform and pipeline are built. The UI was built by Antigravity in `frontend/`, `npm run build` passes, and it was reviewed and committed by the lead. |
 | 2 Integrate | ✅ done | The full suite gives 146 passed + 1 xfail (C17). MCP over stdio lists the tools and answers C01. `clear delhivery.com` gives 5 cited lines in about 0.2 s. |
-| 3 Council | ✅ gate PASS (round 1535) | 1519 BLOCKED (4 FAIL) → fixes → 1526 (contracts FAIL: MCP kwargs) → 1531 (attest kwargs) → 1535 all 5 PASS. Full suite 182 passed + 1 xfail. |
-| 4 Live data | ⏸ waits for user approval | About 15 credits in record mode. |
-| 5 Docs and demo | ⏸ not started | Antigravity goes first; asof-docs is the fallback. |
+| 3 Council | ✅ gate PASS (rounds 1535 and 1655) | 1519 BLOCKED (4 FAIL) → fixes → 1526 → 1531 → 1535 all 5 PASS. After Phase 4: 1655 all 5 PASS. |
+| 4 Live data | ✅ done (7.8 credits) | identify drl.aero 0.2; `clear` delhivery.com / tciexpress.in / shreebalajigrp.com 2.2 each; one page fetch 1.0. Recordings merged into `fixtures/live_check/cache`. **C17 settled as CANNOT_RESOLVE**: drl.aero matches Delhivery (5798) and Delhivery Robotics (15944579). Resolver no longer treats an `all_domains` alias as proof; ReplayIndex deleted. `/web/fetch` is a 404; the page fetch is `/web/enrich/live`, 1 credit/page. `inr_per_usd` 94.12 (OFX, dated 2026-10-21) → ₹62.12 per clearance file. Full suite 183 passed, 0 xfail. |
+| 5 Docs and demo | ✅ done | agy is not installed here, so asof-docs (fallback) wrote README.md, docs/architecture.md (mermaid), docs/demo.md. Lead reviewed and rehearsed all 5 beats in replay, including the kill (chaos PASS). Open: Beat 1's raw-Crustdata-MCP contrast must be captured by a person in Claude with the Crustdata MCP added. |
 
 ## Demo beats (SPEC §10), in replay
 | Beat | State |
 |---|---|
 | 1. "Shree Balaji Logistics" → CANNOT_RESOLVE, 25 candidates, needs a domain | ✅ |
-| 2. `clear delhivery.com` → 5 cited lines; cost 0 spent plus a recorded 2.2 credits / ₹58.08 | ✅ cost_note: "₹0.00 spent this run (replay); ₹58.08 measured cost of the stored copies (2.2 credits)" |
+| 1b. `resolve drl.aero` → CANNOT_RESOLVE, 2 candidates (the hardest case) | ✅ |
+| 2. `clear delhivery.com` → 5 cited lines; cost 0 spent plus a recorded 2.2 credits / ₹62.12 | ✅ cost_note: "₹0.00 spent this run (replay); ₹62.12 measured cost of the stored copies (2.2 credits)" |
 | 3. TCI 2020-01-01 → 418 (from the 2019-12-30 point); 2026-10-15 → STALE_DATA (38 days) | ✅ |
 | 4. Approve, kill mid-send, restart → sent exactly once | ✅ The chaos harness passes on the real issue path. |
 | 5. Watcher `/test` fires → a line goes STALE | ✅ watch → approve → issue → watch_test marks the headcount line STALE; a repeat test is a no-op |
@@ -59,4 +60,4 @@ Updated 2026-11-22 15:40. Mode is `MODE=replay` against `fixtures/live_check/`. 
 - `demo_casefile.json` was regenerated from real `clear delhivery.com` CLI output: existence is dated, and cost reads 0 spent + ₹58.08 measured.
 - The cost panel was relabelled from "Total Fee (estimate)" to "Spent this run" and "Measured cost of this file". The ₹600 price is the only figure marked as an estimate.
 - The C02, C07 and C08 refusal fixtures match the hidden cases. No "was true on" wording anywhere.
-- **Pending:** the 4 date-slider timeline case files in `demo_refusals.json` are still hand-made. Regenerate them from CLI `dispute` / `clear` output (they may still carry the old undated existence line and the old cost shape).
+- ✅ Every UI fixture (4 timeline case files, C02/C07/C08, main case file) is now regenerated from replay CLI output by `frontend/fixtures/regen_fixtures.py`. The UI stays fixture-only for the demo (user decision).

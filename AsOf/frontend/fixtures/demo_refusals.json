@@ -207,7 +207,7 @@
               ]
             }
           ],
-          "generated_at": "2026-11-22T16:53:03.327797+05:30"
+          "generated_at": "2026-11-22T16:58:44.280554+05:30"
         },
         "evidence": {
           "E1": {
@@ -216,7 +216,7 @@
             "source_endpoint": "/company/identify",
             "url": null,
             "field_path": "basic_info.all_domains",
-            "excerpt": "domains ['delhivery.com', 'drl.aero'] -> crustdata_company_id 5798",
+            "excerpt": "identify on delhivery.com matched exactly one company: crustdata_company_id 5798; its record lists domains ['delhivery.com', 'drl.aero'] (an alias is resolved by its own identify)",
             "point_date": null,
             "retrieved_at": "2026-11-22T11:13:06.938921Z",
             "cache_key": "4816fddfeeb51c78eb44354a654b04e4612c752ccdaf819c80c5f979a0b07aab"
@@ -533,7 +533,7 @@
               ]
             }
           ],
-          "generated_at": "2026-11-22T16:53:03.585729+05:30"
+          "generated_at": "2026-11-22T16:58:44.528716+05:30"
         },
         "evidence": {
           "E1": {
@@ -542,7 +542,7 @@
             "source_endpoint": "/company/identify",
             "url": null,
             "field_path": "basic_info.all_domains",
-            "excerpt": "domains ['tciexpress.in'] -> crustdata_company_id 5051",
+            "excerpt": "identify on tciexpress.in matched exactly one company: crustdata_company_id 5051; its record lists domains ['tciexpress.in'] (an alias is resolved by its own identify)",
             "point_date": null,
             "retrieved_at": "2026-11-22T11:13:10.800163Z",
             "cache_key": "0780ada975391448c405d6666113c362f59f6dfd1c2ea0b44f2a31fde709a1e2"
@@ -1046,7 +1046,7 @@
               ]
             }
           ],
-          "generated_at": "2026-11-22T16:53:04.087989+05:30"
+          "generated_at": "2026-11-22T16:58:44.997133+05:30"
         },
         "evidence": {
           "E1": {
@@ -1055,7 +1055,7 @@
             "source_endpoint": "/company/identify",
             "url": null,
             "field_path": "basic_info.all_domains",
-            "excerpt": "domains ['tciexpress.in'] -> crustdata_company_id 5051",
+            "excerpt": "identify on tciexpress.in matched exactly one company: crustdata_company_id 5051; its record lists domains ['tciexpress.in'] (an alias is resolved by its own identify)",
             "point_date": null,
             "retrieved_at": "2026-11-22T11:13:10.800163Z",
             "cache_key": "0780ada975391448c405d6666113c362f59f6dfd1c2ea0b44f2a31fde709a1e2"
@@ -1365,7 +1365,7 @@
               ]
             }
           ],
-          "generated_at": "2026-11-22T16:53:04.385713+05:30"
+          "generated_at": "2026-11-22T16:58:45.219339+05:30"
         },
         "evidence": {
           "E1": {
@@ -1374,7 +1374,7 @@
             "source_endpoint": "/company/identify",
             "url": null,
             "field_path": "basic_info.all_domains",
-            "excerpt": "domains ['delhivery.com', 'drl.aero'] -> crustdata_company_id 5798",
+            "excerpt": "identify on delhivery.com matched exactly one company: crustdata_company_id 5798; its record lists domains ['delhivery.com', 'drl.aero'] (an alias is resolved by its own identify)",
             "point_date": null,
             "retrieved_at": "2026-11-22T11:13:06.938921Z",
             "cache_key": "4816fddfeeb51c78eb44354a654b04e4612c752ccdaf819c80c5f979a0b07aab"
@@ -1674,7 +1674,7 @@
               ]
             }
           ],
-          "generated_at": "2026-11-22T16:53:04.626056+05:30"
+          "generated_at": "2026-11-22T16:58:45.442180+05:30"
         },
         "evidence": {
           "E1": {
@@ -1683,7 +1683,7 @@
             "source_endpoint": "/company/identify",
             "url": null,
             "field_path": "basic_info.all_domains",
-            "excerpt": "domains ['tciexpress.in'] -> crustdata_company_id 5051",
+            "excerpt": "identify on tciexpress.in matched exactly one company: crustdata_company_id 5051; its record lists domains ['tciexpress.in'] (an alias is resolved by its own identify)",
             "point_date": null,
             "retrieved_at": "2026-11-22T11:13:10.800163Z",
             "cache_key": "0780ada975391448c405d6666113c362f59f6dfd1c2ea0b44f2a31fde709a1e2"
@@ -1926,7 +1926,7 @@
             }
           ],
           "subsequent_events": [],
-          "generated_at": "2026-11-22T16:53:04.876338+05:30"
+          "generated_at": "2026-11-22T16:58:45.690775+05:30"
         },
         "evidence": {
           "E1": {
@@ -1935,7 +1935,7 @@
             "source_endpoint": "/company/identify",
             "url": null,
             "field_path": "basic_info.all_domains",
-            "excerpt": "domains ['delhivery.com', 'drl.aero'] -> crustdata_company_id 5798",
+            "excerpt": "identify on delhivery.com matched exactly one company: crustdata_company_id 5798; its record lists domains ['delhivery.com', 'drl.aero'] (an alias is resolved by its own identify)",
             "point_date": null,
             "retrieved_at": "2026-11-22T11:13:06.938921Z",
             "cache_key": "4816fddfeeb51c78eb44354a654b04e4612c752ccdaf819c80c5f979a0b07aab"
