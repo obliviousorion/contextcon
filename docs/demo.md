@@ -11,6 +11,24 @@ asof() { uv run python -m backend.cli "$@"; }
 ```
 Do not set `MODE=record` or `MODE=live`.
 
+## UI path (same beats, in the browser)
+The CLI beats below are the reference. The same beats run in the web UI, against the real backend:
+```bash
+uv run python -m backend.http_api            # terminal 1: API on 127.0.0.1:8787; note the approval token it prints
+cd frontend && npm install && npm run dev    # terminal 2: UI on http://127.0.0.1:5173
+```
+| Beat | In the browser |
+|---|---|
+| 1 | Home → "Shree Balaji Logistics" chip → "Cannot resolve: 25 companies match", each with a Check button; nothing is picked. |
+| 1b | Home → `drl.aero` chip → two companies share the domain. |
+| 2 | Check `delhivery.com` → five lines in the date gutter, each with its label. Click E4 → the drawer shows the endpoint, field path and the quoted excerpt. The header reads "₹0.00 spent this run (replay); ₹62.12 measured cost of the stored copies (2.2 credits)". |
+| 3 | Dispute file → presets `2020-01-01` (418, attested) then `2026-10-15` (Cannot attest, "38 d before D", "What would settle it"). The URL changes, so Back works. |
+| 4 | Issue case file → "Held for approval" and the token dialog → paste the token from terminal 1 → Approved by, at → Issued (sandbox), sent exactly once. Click again: nothing new is sent. Show the kill with the CLI chaos run below. |
+| 5 | Watch → request a watcher for `delhivery.com` → approve with the token → issue → fire the test alert → the headcount line is marked STALE, with a link to the file. |
+| Close | Ledger → spent this run vs measured cost per file. |
+
+Live variant (spends credits only after a click): start terminal 1 with `--live --cap 10`. A company that is not stored shows "Live lookup needed: about 2.2 credits (₹62.12)"; only "Spend about 2.2 credits and fetch" calls Crustdata, and the response is cached so it is never paid for twice.
+
 ## Beat 1 (0:00-0:25): the raw Crustdata MCP guesses, AsOf refuses
 1. In Claude, with Crustdata's own MCP added (`claude mcp add --transport http crustdata https://install.crustdata.com/mcp`), ask about "Shree Balaji Logistics". Use a real recorded run of that answer; it is not produced by this repo (TODO(lead): capture it).
 2. Then AsOf:
@@ -121,7 +139,7 @@ Real output of the first test: `alert ['CF-38e15ccbbde1#headcount']`, and the se
 `asof cost` (in a state dir where `clear` already ran, e.g. Beat 2's) shows the ledger: 0 spent this run, 2.2 credits (Rs 62.12) measured per clearance file. The Rs 600 price is an estimate.
 
 ## Backup path (no live commands, no kill)
-1. Run the suite: `uv run pytest -q` (195 passed, 0 xfail, about 6 seconds).
+1. Run the suite: `uv run pytest -q` (212 passed, 0 xfail, about 7 seconds).
 2. Show the recorded ledger: `cat fixtures/live_check/ledger/phase4-record-2026-11-22.jsonl` (7.8 credits across the live record run).
 3. Show the stored answers: `tests/cases/hidden_test_cases.json` (C08 25 candidates, C17 two candidates).
 4. Show the chaos result: `CHAOS: PASS`, exactly one send per key across 5 random kills.
