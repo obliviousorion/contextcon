@@ -1,3 +1,13 @@
+.env.*
+!.env.example
+.venv/
+__pycache__/
+*.pyc
 .env
+state/
+web/node_modules/
+web/dist/
+# other projects and leftovers that live beside this repo on disk
 sourced/
 sourced-*/
+AsOf/

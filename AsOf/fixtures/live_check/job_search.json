@@ -1,9 +1,0 @@
-{
- "ok": false,
- "kind": "unavailable",
- "status": 400,
- "credits": 0.0,
- "retrieved_at": null,
- "reason": "HTTP 400",
- "data": null
-}

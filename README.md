@@ -1,237 +1,158 @@
-# ContextCon 05 — Ideas Leaderboard
+# Benefits Desk
 
-Team workspace for ContextCon 05 (BITS Pilani × Crustdata × YC, Sun 22 Nov 2026). **We are not building yet: this page is for discussion.**
-> **Adding or reviewing an idea? Give your agent [`ideas/RULES.md`](ideas/RULES.md) first.** New ideas start from [`ideas/_TEMPLATE.md`](ideas/_TEMPLATE.md), and reviews use [`ideas/_council/JUDGE_PROMPTS.md`](ideas/_council/JUDGE_PROMPTS.md).
+**An insurance desk for a company's own workforce, used by a licensed broker.** The employer side sees what similar employers promise and gets a cover package per staff group. Each opted-in employee learns what cover they hold, what is missing and what to do. When their records show a new employer, the desk states the date their old group cover ends and prepares the request to convert it. Nothing is bought or sent without the person's approval.
 
-Every idea has its own document in [`ideas/`](ideas/) with all the spec, data and council feedback gathered so far. How the ranking was produced is in [ideas/_council/PROCESS.md](ideas/_council/PROCESS.md). The old prep notes that used to be this README are now in [docs/PREP-NOTES.md](docs/PREP-NOTES.md).
+> This is a tool for a licensed insurance broker or agent. Comparing and advising on insurance for the public is regulated in India; the desk does not issue policies, set premiums or pay claims, and it never contacts anyone who has not opted in.
 
-**Why we re-ideated:** the event judges told us the standard track examples (hiring screeners, vendor checks, investor scouts, invoice matchers, ...) are what most teams build. We need a unique, out-of-the-box use of Crustdata's APIs, watchers and MCP. We also want to cover as much of Crustdata's API as is genuinely useful.
+## The service
+- **Who does this job today:** employee-benefits brokers and insurance advisers. **Who pays:** insurers, through the broker's commission on each policy placed (Builder Handbook, Insurance theme: "Brokers, through a commission on each policy they place"). The commission rate is not sourced here, so no rupee comparison is claimed.
+- **Our price:** ₹150 per employee review and ₹1,500 per employer benchmark *(estimates, not sourced)*.
+- **Measured cost per job** (from the ledger, ₹26.4 per credit; that rate is itself an estimate from RULES.md §2):
 
-**Source of truth: the Builder Handbook, 39-page edition, [`docs/builder-handbook.pdf`](docs/builder-handbook.pdf)** ([text version](docs/builder-handbook.txt)). The older 34-page edition is in `docs/old/`.
+| Job | Credits | ₹ | Time (cold, record mode) |
+|---|---|---|---|
+| Employee review (person record 1.0 + job-post counts 0 + 2 quoted sample posts 0.06) | 1.06 | ≈ 28 | ≈ 6 s |
+| Cover-gap alarm, direct request (person record) | 1.00 | ≈ 26 | < 2 s |
+| Employer view with workplace beliefs (role counts 0, person-search counts + 2 × 10 leaver rows; measured across two runs) | 6.68 | ≈ 176 | ≈ 200 s (rate-limited) |
+| Any repeat or resumed run | 0 | 0 | < 0.1 s |
 
-**What we're judged on (Handbook, "How winners are picked").** Each criterion is scored 1–5, for 100 points in total. Ties go to end-to-end execution, then facts and verification.
+Count-only job searches (`limit: 0`) cost nothing, which makes the employer benchmark almost free.
 
-| Criterion | Points | What the judges look for |
+## What it does end to end (headless)
+| Request | Finished result |
+|---|---|
+| `employee_review` | Fact file (Told / Checked / Guessed, each with its source field and date), cover gaps from `rules.yaml`, insurer shortlist on regulator figures, a pre-filled application **waiting for approval** |
+| `job_change_check` | Cover-gap alarm: job-change date, old cover end date, conversion deadline, a conversion request **waiting for approval** |
+| `peer_benchmark` | Count and share of peer job posts mentioning each cover phrase, with the filter JSON, the as-of time and quoted passages |
+| `employer_package` | Package per staff group (drivers, warehouse, office) with the rule behind each item, peer counts by role, and versioned workplace beliefs |
+
+Where it still needs a person: approving any send; answering the questions it raises (no public record, a told fact that conflicts with a checked one, which insurer when none can be ranked).
+
+## How to run (fresh clone)
+```bash
+cd contextcon
+uv sync
+cp -n .env.example .env         # never overwrites an existing .env; CRUST_KEY only for record/live mode
+uv run python -m bd run requests/T2_peer_share.json          # replay: committed fixtures, 0 credits
+uv run python -m bd run requests/T1_job_change.json
+uv run python -m bd approve <key printed under Actions> --by person
+uv run python -m bd sandbox &                                  # our own receiver; never a real insurer
+uv run python -m bd act <run_id>                               # sends approved actions exactly once
+uv run pytest -q                                               # 52 tests incl. the 20-trial kill test and a real server restart
+# UI: cd web && npm install && npm run build && cd .. && uv run python -m bd serve
+#   http://127.0.0.1:8787/          guided flow: sign in -> confirm card -> two questions -> bento dashboard
+#   http://127.0.0.1:8787/console   operator console: run stream, ledger, kill and resume
+```
+Modes: `--mode replay` (default, `config.yaml`), `record` (calls Crustdata, caches every response), `live`. `--chaos` kills the process at random step boundaries.
+
+## The guided flow (person-facing)
+1. **Sign in.** A LinkedIn link (or name + company), a 4-digit PIN and a consent tick. Only profiles on `config.yaml consenting_personas` are ever looked up; any other link gets "this demo only works for people who have agreed" and **no call is made**. **This is demo sign-in, not identity proof**: anyone who knows an allowlisted link could create the account first. A production version would use *Sign in with LinkedIn* (OAuth). The PIN is stored as a salted PBKDF2 hash; 5 wrong PINs lock the account for 10 minutes; a wrong PIN and an unknown account get the same message. The session is an HttpOnly cookie, so a refresh keeps you signed in.
+2. **Confirm card.** One person lookup pre-fills where you work, your job, when you started and your city as **Checked** facts with source pointers. If the record has education end years, an age band is estimated as *end year minus 22* and shown as **Guessed**, with the education field as its basis. You confirm or change each item; a confirmed or changed age becomes **Told**. The adults-only check runs on the **confirmed** age only, never on the estimate. No match, a removed (redacted) record, a name that matches more than one person, or no education dates: that item is asked as a plain question instead.
+3. **Two questions:** who depends on you, and whether you have any insurance now (with "not sure"; "not sure" is never turned into a guess).
+4. **Dashboard** (bento grid): 3D neighbourhood (group nodes only), profile with "checked on" dates, the **lookup trail** (You -> Your employer -> People like you -> Insurers -> Gaps: what was searched, source, records, credits, found / searched, cannot verify / skipped, live or replay with the recorded date, and the pointers behind each step; a step that made no call is never shown as found), insurers, gaps, next step (choose an insurer, approve, "sent once"), and the **diary**.
+5. **Diary and date slider.** Built only from the versioned belief store (`persona_beliefs`, and group beliefs for your employer with at least the minimum group size); no new calls and no model-written text. The slider re-renders the profile and graph as believed on that date.
+6. **Memory.** Everything above is kept in `state/desk.sqlite` (gitignored), keyed by a user id derived from the profile link. After a full server stop and start, link + PIN lands you on the same dashboard with **zero Crustdata calls** (tested). "Check for changes" re-runs the lookups; on the same day with unchanged inputs every step is reused from the step store at no cost, and any change becomes a diary entry. **Log out** ends the session; **Forget me** deletes every row about you, deletes the cached copy of your record, and unlinks your ledger rows (the cost stays, the link to you goes).
+7. **Live / Replay switch** sets the mode for your next run: Live calls Crustdata (and records the response); Replay uses recorded responses and says so, with their date, in the trail.
+
+**Insurers come from data, not a list.** A Crustdata company search finds Indian companies with a health-insurer legal name; `rules.yaml insurers` holds only selection rules (company type, a founding year and own web domain, no agent/branch/TPA names, one record per web domain), and up to 3 are enriched. On 22 Nov 2026 the search returned 13 records, and the rules kept 3 (Aditya Birla Health, Cigna TTK Health, Star Health and Allied); the other 10 were branch offices, agents, or records without a founding year or domain, each listed with its reason. Insurers are listed by name, never ranked by size; company facts (founded, staff-profile counts as two dated values side by side, head office) are labelled as company facts, not a measure of claim quality.
+
+**Regulator figures, extracted from IRDAI's PDF.** `bd irdai-extract <pdf> --url <address>` reads the IRDAI Annual Report 2024-25 with `pypdf`, finds Statement 10 ("Incurred claims ratio of general and health insurers", page 374) and stores each standalone health insurer's row with the PDF address, page and the quoted row (`fixtures/irdai/statement10_health_icr.json`). A figure is attached only when the company name matches the regulator's row exactly (after normalising Co./Company, Ltd/Limited) and the number appears in the quoted row; otherwise it stays CANNOT VERIFY (for example Cigna TTK, which has no row under that name). The incurred claims ratio is claims incurred as a share of premium earned; **it is not a claim settlement ratio**, and the UI says so. The report has no insurer-wise complaints table, so complaints stay CANNOT VERIFY.
+
+## How it's built
+```mermaid
+flowchart LR
+  subgraph UI["Guided UI (React)"]
+    LOGIN["Sign in: link + PIN + consent"] --> CONF["Confirm card"] --> QS["Two questions"] --> DASH["Bento dashboard<br/>graph · profile · trail · insurers · gaps · next step · diary · date slider"]
+  end
+  LOGIN -->|"HTTP + HttpOnly cookie"| API["bd serve (stdlib HTTP)"]
+  API --> ALLOW{"on consenting_personas?"}
+  ALLOW -->|"no: no call"| NOPE["'only people who agreed'"]
+  ALLOW -->|"yes"| USERS[("users: PBKDF2 PIN hash · sessions · user_state")]
+  API --> RUN["Run (child process): fixed steps<br/>You → Employer → People like you → Insurers → Gaps<br/>steps keyed by hash(scope, step, inputs)"]
+  RUN <--> SS[("SQLite step store<br/>finished steps skipped on restart")]
+  RUN --> CL["Crustdata client<br/>cache · record/replay · cap + time limit · backoff with jitter"]
+  CL -->|"replay: 0 credits"| CA[("response cache + committed fixtures")]
+  CL -->|"/person/enrich · /company/search · /company/enrich · /job/search · /person/search"| CD[("Crustdata API")]
+  CL --> LED[("Cost ledger: one row per call, no personal data")]
+  PDF[("IRDAI Annual Report PDF<br/>Statement 10, page 374")] -->|"bd irdai-extract (pypdf)"| REG[("quoted rows + page + URL")]
+  REG --> INS["Insurers: company facts + quoted regulator rows<br/>never ranked"]
+  RUN --> INS
+  RUN --> TRAIL["Lookup trail<br/>searched · source · records · credits · status · live/replay"]
+  RULES[["rules.yaml<br/>gaps · insurer selection · group minimum · phrases"]] --> ENG["Rules engine (pure)"]
+  RUN --> ENG --> BEL[("persona_beliefs + group beliefs<br/>valid_from / valid_to")]
+  BEL --> DIARY["Diary + date slider<br/>no new calls"]
+  ENG --> INT["Intent log (idempotency key per account)"]
+  INT -->|"person approves"| SB[("Sandbox receiver<br/>records every delivery")]
+  LED -->|"cap or time reached"| HOLD["clean stop: settled vs missing"]
+```
+- **No language model in the core.** It is rules and lookups and gives the same answer every time, which is what the restart test needs, and it removes the main way a wrong fact gets in.
+- **State:** `state/desk.sqlite` (steps, ledger, intents, personas, facts, beliefs, events, users, sessions, user_state, persona_beliefs, persona_snapshots) and `state/sandbox.sqlite`, both gitignored and never committed. Stdlib HTTP server; React + Vite + Tailwind UI in `web/`.
+- **Every rule** lives in [`rules.yaml`](rules.yaml); **every limit and output field** in [`config.yaml`](config.yaml).
+
+## Sources and checks
+| Data | Source | What is cited |
 |---|---|---|
-| End-to-end execution | **25** | A real request goes in and a finished result comes out (an offer drafted, a claim settled, an invoice paid, a case file written), with no one stepping in. The product asks a person only when the answer changes the result. |
-| Facts and verification | **20** | Every person, company, number and date is right, **and right for the day it is used**. Each decision has reasons and sources. **One person or company under two names stays one record.** "I can't verify" beats a wrong fact. |
-| Robustness and edge cases | **20** | It handles messy text, missing fields, unusual cases, and tools that time out or return nonsense. After a crash or retry it continues and never sends or pays twice. A person approves anything that can't be undone, and it uses only the personal data the job needs. |
-| Customer value and idea | **20** | A job businesses pay people or firms to do today, with **an approach that isn't obvious**. The product does the work itself, not a chat interface on top of a model. |
-| Demo and understanding | **15** | A clear demo, plus the approaches weighed, what worked and what didn't, the hardest case, who the product could get wrong, and what comes next. |
+| Employer, title, job dates | Crustdata `/person/enrich` (stored copy) | field path, entry date, retrieved time. The record has no refresh date, so "no change since" is always CANNOT VERIFY |
+| Peer job posts | Crustdata `/job/search` | filter JSON, `total_count`, retrieved time; sample passages by `content.description[a:b]` and the post URL |
+| Workplace beliefs | Crustdata `/person/search` | filter JSON per belief, `total_count`, window dates; leavers confirmed per row at that employer |
+| Insurers | Crustdata `/company/search` then `/company/enrich` | field path per fact (`basic_info.year_founded`, `headcount.timeseries[i].employee_count`, `locations.headquarters`) with the point date and retrieved time |
+| Insurer claims figures | IRDAI Annual Report 2024-25 PDF, Statement 10, page 374 (extracted with pypdf) | PDF address, page, quoted row; CANNOT VERIFY without an exact row |
+| Employer staff counts (diary, group level) | Crustdata `/company/enrich` | `headcount.timeseries` point dates |
+| Your profile (guided flow) | Crustdata `/person/enrich` with education | field path per item; age estimate's basis `education.schools[i].end_year` |
+| Age band, dependants, city, cover held, budget, insurer choice | the person | labelled **Told** |
 
-**What every service must do (Handbook, "What every service does"):**
-- Decisions rest on live data.
-- Every claim has a source that links to the exact passage or field, with the record's date.
-- A person approves anything that can't be undone. Payments run in test mode.
-- Every run has a time limit and a credit limit, and a ledger records every call, model calls included.
-- It survives a crash or timeout and continues where it stopped, with each action happening exactly once.
+**Approvals:** `submit_application` and `conversion_request` are irreversible, so they wait for `bd approve` (or the UI button). A double click is one action. Sends go only to our sandbox receiver.
+**Ledger:** `uv run python -m bd ledger [run_id]`. Dev spend so far is in [`fixtures/DEV_LEDGER.md`](fixtures/DEV_LEDGER.md) (≈ 12 credits).
 
-**Test cases:** we gather our own before coding. They must include a duplicate record, a lookalike name, and a case where the right answer is "I can't verify", and be dated after 1 Sep 2026.
+## Test cases (dated after 1 Sep 2026) and results
+| Case | Correct answer | Result |
+|---|---|---|
+| **T1** opted-in persona, new employer after 1 Sep 2026 *(synthetic fixture: no consenting teammate has a job change)* | job change 2026-10-01 (Delhivery 5798 → TCI Express 5051), old cover ends 2026-09-01, conversion deadline 2026-10-01 already passed, conversion request awaiting approval | pass |
+| **T1b** hard case: promotion in the same company | `same_company`: no alarm, no action | pass |
+| **T2** share of logistics job posts in India since 1 Sep 2026 mentioning cover | 3,434 posts; health insurance 114 (3.3%), medical insurance 119, ESIC 17, mediclaim 3, accident cover 0; any phrase 246 (7.2%); filter + retrieved time | pass (live 22 Nov 2026) |
+| **T3** person with no public record | CANNOT VERIFY employer facts, a question to the person, Told-only facts, 0 credits | pass (live) |
+| **H1** duplicate sign-up (same profile, different URL form) | one persona (2 sign-ups), one action | pass |
+| **H2** lookalike: name only, no profile link | refused: "a name alone can match several people; we never pick one" | pass |
+| **H3** under 18 | stopped | pass |
+| **E1** employer view, Delhivery · Gurugram | roles: drivers 16 posts (1 with cover), warehouse 39 (5), office 437 (29); joiners belief v1 20 (to 1 Oct), v2 9 (to 22 Nov) | pass (live) |
 
-**What a strong idea also needs to show (Handbook, "What we want to hear" and "How the finals run"):**
-- The business case: who buys it, the price in rupees, and what one job costs to run.
-- An answer to the scale question: "100 times the volume, or a second client?"
-- Handling beyond the prepared request: a duplicate record, a changed fact, a failed call, or a restart mid-run.
-- The approaches weighed, the hardest case, and who the product could get wrong and how it guards against that.
+- **Kill test:** 20 trials under `--chaos` (kill probability 0.35 at every step boundary and inside the send), with approve clicked twice each time. Result: **82 kills, 20 deliveries, 0 duplicates.**
+- **Requirement-change drill:** removing an output field and lowering the credit cap in `config.yaml` only (test).
+- **Live-fix drill:** changing `R-GAP-6 budget_below` in `rules.yaml` changes the gaps, with no code change (test).
 
-**What changed from earlier assumptions.** The ideas below were first scored against the separate `ContextCon05_BITS_Problem_Statement.pdf`, whose rubric was ethics 25, finance 25, live run 20, robustness 15 and design 15. It also framed every idea around a fictional Indian 3PL client. **The Handbook uses the rubric above and doesn't require the 3PL framing.** That framing is now optional, so ideas dropped only for not serving the 3PL client, such as Raise, may deserve another look. The council scores in the leaderboard use the old rubric; see the note under the table.
+## Edge cases handled
+Same-company role change (compares `crustdata_company_id`, not `recently_changed_jobs`) · several current jobs (`is_default`, else CANNOT VERIFY) · first-of-month dates (± 1 month) · leavers who left years ago (confirmed per row at that employer) · no refresh date (absence of change is CANNOT VERIFY) · name-only sign-up (refused) · duplicate sign-up (exact identifier only) · removed record (`match_status: redacted` → not processed) · no public record (ask; Told) · told vs checked conflict (show both, ask, no application) · group below the minimum (belief suppressed) · silent job post ("not mentioned") · missing insurer figure (CANNOT VERIFY, not ranked) · 429/timeout (backoff with jitter, then failed and not read as an answer; seen live) · cap/time reached (held before the call) · kill during a send (ask the sandbox before resending) · double approve · consent withdrawn (`bd forget`) · under 18 · personal data kept out of the ledger and logs.
 
----
+## Approaches weighed
+1. **A model that reads records and writes the advice:** fast to build, but it can state a fact that no record holds, and it can answer differently after a restart. Rejected for the core.
+2. **Watches as the only trigger for the alarm:** watches fire at most hourly and a webhook can be missed across a kill. The **direct request** is the main path; the watch path pulls runs and shares the same rule function and action key.
+3. **Rules plus pointers (chosen):** every outcome comes from a rule in one file, and every fact is a pointer that code resolves. Same answer every time, and a five-minute live fix is a YAML edit.
 
-## Leaderboard
+**What worked:**
+- Count-only job search is free and exact.
+- Step store and intent log survive kills.
+- The 429 retry path was exercised by a real 429.
 
-**Rank order:** first by the **Round 3 score (/100)**, which uses the Handbook rubric and is the current source of truth. Ideas without a Round 3 score are ordered by Round 2 wins, then by Round 1 score.
-- **Round 3:** three judges score each Handbook criterion 1–5, scaled by its weight: E2E 25 · Facts 20 · Robustness 20 · Value 20 · Demo 15. Reviews are in [`ideas/_council/reviews/`](ideas/_council/reviews/).
-- **Rounds 1 and 2** used the problem statement's older rubric. Round 1 is five judges scoring 1–5, maximum 25. Round 2 is head-to-head matchups between four finalists, nine each.
+**What didn't:**
+- Insurer regulator figures through Crustdata's web fetch: it does not read PDFs. Downloading IRDAI's PDF directly and extracting Statement 10 with pypdf worked (see above).
+- `past.end_date` is not a filterable field, so leavers needed per-row checks.
 
-| Rank | Idea | One line | **Round 3 /100** (E2E·Facts·Rob·Value·Demo) | Round 2 wins /9 | Round 1 /25 | Status | Doc |
-|---|---|---|---|---|---|---|---|
-| 🥇 1 | **AsOf** | Dated attestation. It states what the records can prove as of date D, or says CANNOT ATTEST. Delivered as an MCP gateway | **88** (4·5·5·4·4) | **8** | **22** | **Champion (merge) · being built in [`AsOf/`](AsOf/)** | [01-asof.md](ideas/01-asof.md) |
-| 🥈 2 | **Golden Record** | Entity resolution: merge / no-merge / cannot verify for each pair; one company under two names stays one record | **73** (4·4·4·3·3) | — | 19 | AsOf's resolution step | [05-golden-record.md](ideas/05-golden-record.md) |
-| 🥉 3 | **Second Opinion** | Audits a deliverable someone else produced, line by line (agree / contradict / cannot verify) | **71** (4·2·3·4·5) | 1 | 18 | Candidate front door for AsOf | [04-second-opinion.md](ideas/04-second-opinion.md) |
-| 4 | FactGate | Verified-facts MCP gateway: a sourced value or CANNOT_VERIFY | 68 (3·4·4·3·3) | 7 | 21 | Absorbed into AsOf | [02-factgate.md](ideas/02-factgate.md) |
-| 5 | Sentinel | "Evidence that you knew": watchers turn counterparty changes into dated records | 60 (3·3·3·3·3) | 2 | 18 / 16 / 16 | Watcher design absorbed | [03-sentinel.md](ideas/03-sentinel.md) |
-| 6 | Raise | Fundraising agent for founders (re-scored now that the 3PL framing is optional) | 56 (3·2·3·3·3) | — | not scored | Dropped (a ranking has no checkable answer) | [17-raise.md](ideas/17-raise.md) |
-| 7 | Same Hands | Related-party graph across tender bidders | 55 (3·2·2·3·4) | — | 15 | Dropped (defamation risk) | [08-same-hands.md](ideas/08-same-hands.md) |
-| 8 | Carrier Pulse | Carrier distress watchlist (red / amber / green) | — | — | 16 | Merged into Sentinel | [06-carrier-pulse.md](ideas/06-carrier-pulse.md) |
-| 9 | LaneWatch | Dated hold / continue verdict on carrier health | — | — | 16 | Merged into Sentinel | [07-lanewatch.md](ideas/07-lanewatch.md) |
-| 10 | BudgetBroker | Budget-governed data buyer (a proxy with a spending cap) | — | — | 15 | Possible AsOf feature | [09-budgetbroker.md](ideas/09-budgetbroker.md) |
-| 11 | Bid Intel | Rival dossier before a tender | — | — | 14 | Dropped (track example) | [10-bid-intel.md](ideas/10-bid-intel.md) |
-| 12 | Expansion Site Scout | Hiring as a warehouse-demand signal | — | — | 13 | Dropped (job-search coverage) | [11-expansion-site-scout.md](ideas/11-expansion-site-scout.md) |
-| 13 | ProvenanceAudit | Claim-by-claim auditor for agent memos | — | — | 13 | Dropped (track example) | [12-provenance-audit.md](ideas/12-provenance-audit.md) |
-| 14 | LaneBook | Kalshi-shaped event-contract desk settling only against pre-committed, sourced dated records | — | — | 12 | Dropped (no external buyer; unresolved gambling/defamation framing risk) | [19-lanebook.md](ideas/19-lanebook.md) |
-| 15 | Account Watch | Customer churn and expansion watch | — | — | 11 | Dropped (surveillance) | [13-account-watch.md](ideas/13-account-watch.md) |
-| 16 | Notice-Period Alert | Flags when a named contact at a counterparty has left | — | — | 11 | Dropped (tracks individuals) | [14-notice-period-alert.md](ideas/14-notice-period-alert.md) |
-| 17 | Conflict-of-Interest Desk | Screens bidders' directors for conflicts | — | — | 11 | Dropped (personal data, namesakes) | [15-conflict-of-interest.md](ideas/15-conflict-of-interest.md) |
-| 18 | Benefits Desk | Insurance desk for the client's own workforce: the employer side designs the cover; each employee learns what they have, what's missing and what to do | — | — | 10 | Proposed (Round 1 done; below the Round 2 bar) | [18-benefits-desk.md](ideas/18-benefits-desk.md) |
-| 19 | Sourced | Hiring desk with CV-claim verification | — | — | not scored | Dropped (hiring is an overdone track example) | [16-sourced.md](ideas/16-sourced.md) |
+**Hardest case:** a person whose record shows no change. Their record has no refresh date, so "nothing changed" cannot be verified. We say exactly that instead of "no alarm".
 
-**Notes**
-- The three Round 1 scores in Sentinel's row are Receivables Sentinel, Carrier Pulse and LaneWatch.
-- Document file numbers are permanent IDs, not ranks.
-- All rupee fee figures are agent estimates unless marked as sourced.
+**Who it could get wrong:**
+- Someone whose record is stale, so a real job change is missed. Guard: every "no change" says CANNOT VERIFY.
+- A lookalike profile. Guard: a profile link is required, never a name.
 
-> **What Round 3 changed**
-> - AsOf stays far ahead: 88, the only idea scoring 5 on Facts and on Robustness.
-> - Golden Record and Second Opinion move into the top 3, because the Handbook weights a finished, checkable result and the demo, and drops the separate finance score.
-> - Both new top-3 ideas are parts of AsOf: Golden Record is its resolution step, and Second Opinion is a possible way to present it.
-> - Second Opinion's Facts score of 2 is a warning: its pitch marked a growth claim AGREE from two lower-bound counts.
-> - Raise, re-scored without the 3PL constraint, comes 6th, because a ranking has no single correct answer.
+## Not done (cut for time), and why not now
+- **Live watch creation.** Crustdata needs a public notification URL and ours is local. `bd watch-create` refuses until `config.yaml watch.webhook_url` is set. The **pull path is built and tested**: `bd watch-pull <id>` reads finished runs after the last one processed, runs the same rule, prepares the same action key, and saves the run id. Direct and watch paths give the same alarm and one action (`tests/test_watch.py`).
+- Insurer complaints figures: IRDAI's annual report has no insurer-wise complaints table. Claim settlement ratios are not in it either; only incurred claims ratios are.
+- Real identity: the PIN sign-in is not identity proof; production needs Sign in with LinkedIn.
+- Monthly leavers on the timeline.
+- Sourced broker commission for the price.
 
----
+**100 times the volume:**
+- Count-only benchmarks are free and shared across employees.
+- Person records cost 1 credit each and are cached.
+- The rate limit (30/min) is the ceiling, so batches queue behind the throttle.
 
-## 🥇 1. AsOf — the champion
-
-> **"Crustdata gives you raw data. AsOf decides what it can swear to, and as of when."**
-
-**The problem**
-A 3PL hands freight to many carriers, often small ones with near-identical names. Procurement has to know whether a carrier is real. After a cargo loss or SLA dispute, an insurer asks what the 3PL could have known about that carrier *on the date it picked it*.
-- Raw data answers too eagerly. In our live check, the name "Shree Balaji Logistics" returned **25 candidate companies**, the top one at confidence 1.0.
-- AsOf is the layer that refuses to guess.
-
-**The service.** Each request is an MCP tool, a CLI command and a UI action.
-- `resolve`: free autocomplete, then company search, then identify **by domain only**. Several candidates and no domain gives CANNOT RESOLVE.
-- **`clear_carrier`**, the lead paid job: a clearance file showing existence, founding year, listing status, a profile-derived headcount point, a revenue band (labelled as an estimate), and corroborating dated web passages. Issuing the clearance waits for a person.
-- `attest(entity, field, as_of=D)`: the core. It uses only the latest data point on or before D, which must be no more than 14 days old (configurable). Otherwise it answers CANNOT ATTEST and names what's missing.
-- `observe(D1, D2)`: both dated values side by side. It never draws a growth verdict from lower-bound counts.
-- `audit_claims`: grades structured claims, deterministically.
-- `watch`: a Crustdata watcher. Each alert re-attests today, stores a hashed snapshot, and marks facts STALE.
-- **Second product:** a dated dispute file for an insurer or arbitrator.
-
-**Hidden-test cases.** Numbers are checked against our recorded data.
-- Delhivery as of 2024-07-15: **26,656**.
-- Delhivery headcount as of 2022-06-01: **CANNOT ATTEST**, because its series starts 2022-11-28.
-- TCI Express as of 2020-01-01: **418**. As of 2026-09-01: **1,715**.
-- Shree Balaji without a domain: **CANNOT RESOLVE**, 25 candidates.
-- Any field outside the known record types: "CANNOT ATTEST: no record type".
-
-**Crustdata used:**
-- autocomplete, company search, identify and enrich (headcount series, revenue-estimate series, public markets)
-- web search and fetch
-- watchers (create, `/test`, runs)
-- account credits and endpoints
-- Crustdata's own MCP, as the demo contrast
-
-Person data is deliberately not used.
-
-**Ethics**
-- Company data only.
-- Refusals always name what's missing.
-- Small carriers get a held "evidence request", labelled *not a negative finding*.
-- No auto-rejection, and STALE never suspends a carrier.
-
-**Finance**
-- **Buyer:** the procurement head. **Price:** ₹600 per *cleared* carrier; refusals at cost or free.
-- **Measured cost:** about ₹85–110 per file, so about 80% margin. Our ledger matched the Crustdata balance exactly.
-- **Sources still needed:** published KYB vendor quotes (IDfy, Signzy, Perfios/Karza) and the MCA21 fee schedule.
-
-**Robustness.** An outbox writes each action's intent before its effect, with an idempotency key, so actions run exactly once after a kill. Watcher alerts are deduped by `sha(watch_id, company_id, field, signal_date)`. Per-tenant keys answer the "second client" question.
-
-**Demo moment.** The raw Crustdata MCP confidently picks the wrong Shree Balaji, and AsOf refuses. Then moving the date flips an answer to CANNOT ATTEST. Then a judge kills the process mid-send, and on restart it sends exactly once.
-
-**Open risks**
-- The kickoff kit's request format is unknown.
-- Mostly refusals could make the demo look thin.
-- The `drl.aero` alias and the web-fetch cost are unverified, about 1.5 credits to check.
-
-**Round 3 findings (Handbook rubric, 88/100):**
-- **Facts 5 and Robustness 5.** The facts judge confirmed every case number against the recorded data, including the 14-day staleness refusal for TCI on 2026-10-15.
-- **Biggest wrong-fact risk:** a 2026 stored copy read as proof of what was true on date D. **Fix:** word every line as *"data point dated P states X; stored copy retrieved T"* and never as "was true on D".
-- **Biggest E2E risk:** requests outside basic info, headcount and revenue fall to web corroboration and may end as a "finished refusal". Mitigation: choose request types the data can actually settle.
-- **Best buyers without the 3PL framing:**
-  - insurers and arbitrators who need "what was knowable on date D"
-  - diligence and credit teams at banks, NBFCs and funds that already pay outside diligence firms
-- **Option the value judge suggests:** use Second Opinion's graded diff as AsOf's front door. The pitch: "We re-check every line of the report you paid for, as of the date you relied on it."
-
-Full spec: **[ideas/01-asof.md](ideas/01-asof.md)**
-
----
-
-## 🥈 2. Golden Record — entity resolution (AsOf's resolution step)
-
-**What it is:** dedupe and entity resolution for a firm's customer and carrier master data. Every pair of records gets an explicit **merge / no-merge / cannot verify** verdict with cited evidence (identify by domain, `all_domains`, founding year, office addresses), and is never silently merged. Merges into a master record are irreversible, so they wait for approval and are idempotent on a pair hash.
-
-**Why it scored 73 in Round 3:**
-- E2E 4, Facts 4, Robustness 4: the verdicts have crisp, testable answers.
-- It hits the Handbook line "one person or company under two names stays one record" directly.
-- Our data shows the problem is real: one name returned **25 candidates**, and Delhivery has two domains (`drl.aero`, `delhivery.com`).
-- Value and Demo are only 3: "a real job but a low price; dedupe demo is dry".
-
-**Weaknesses:**
-- It fails on its own economics: about ₹53 of enrichment per record against a ₹5–20 price per record.
-- The spec is thin, and the reasons for merging aren't yet sourced.
-
-**Role in the champion:** AsOf's `resolve` step (domain or ID, never name).
-
-Full doc: [ideas/05-golden-record.md](ideas/05-golden-record.md)
-
----
-
-## 🥉 3. Second Opinion — audit someone else's report (possible front door for AsOf)
-
-**What it is:** it re-verifies a deliverable another party handed you, line by line, and returns **agree / contradict / cannot verify** with exact passages and record dates. The deliverable could be a carrier's capability deck, a vendor's KYB pack, a rival's memo, or another AI agent's output. It audits the auditor.
-
-**Why it scored 71 in Round 3:**
-- Demo 5: "a graded diff reads instantly".
-- Value 4: the buyer is a diligence or credit-risk team at a bank, NBFC or fund that already pays a diligence firm and wants an independent check.
-- E2E 4: a finished audit report.
-
-**Why it isn't higher:**
-- **Facts 2.** Its pitch marked "TCI grew 4x" AGREE from the ratio of two lower-bound counts. That's a wrong fact.
-- Its CONTRADICT threshold ("~30k vs 35,295") was arbitrary and not matched to the claim's date.
-- Its LLM claim-splitter can split differently after a restart, which breaks exactly-once processing (Robustness 3).
-
-**Fixes if we use it as AsOf's front door:**
-- Take structured claims, with no live document splitter.
-- Grade each claim with AsOf's `attest`.
-- Show growth claims as two dated values side by side, never as a ratio.
-- Only CONTRADICT when the claim's date matches the data point and the gap is outside the stated tolerance.
-
-**Its 2-minute demo outline (value judge):**
-1. A vendor's 10-line carrier pack goes in: "Check what we paid for."
-2. The diff fills in live, Delhivery's two domains resolve to one record, and "Shree Balaji" comes back cannot verify with 25 candidates.
-3. A judge kills the process mid-run; it restarts with no double charge, and a watcher alert marks a line STALE.
-4. An approval gate sits before the contradiction report goes out, and the ledger shows about 5 credits per pack.
-
-Full doc: [ideas/04-second-opinion.md](ideas/04-second-opinion.md). FactGate (now #4) and Sentinel (#5) keep their full write-ups in [02-factgate.md](ideas/02-factgate.md) and [03-sentinel.md](ideas/03-sentinel.md).
-
----
-
-## Live data check (14:00, 6.6 credits). Full detail in [round2-brief-and-data-check.md](ideas/_council/round2-brief-and-data-check.md)
-
-**Resolution and history**
-- Delhivery and TCI Express each resolve by domain to exactly one match.
-- **"Shree Balaji Logistics" by name returns 25 candidates.**
-- Delhivery has 204 weekly headcount points from Nov 2022.
-- **TCI Express goes back to Oct 2019** (338 points).
-- The small Shree Balaji has one point and no founding year.
-- The weekly series have **gaps of up to about 5 months**, so AsOf needs its maximum-staleness rule.
-
-**Endpoints**
-- `job/search` returned a 400 because our request body was wrong. It cost 0.
-- Autocomplete works and is free.
-- 23 endpoints are disabled on our key: all batch endpoints, contact enrich, employee reviews, social posts, and the live professional-network searches.
-
-**Ledger**
-- The ledger total matched the account balance drop exactly.
-- Recorded responses are cached in the local build repo (`sourced/fixtures/live_check/`) for free replay.
-
-## Open questions for the team
-1. Do we go with AsOf, and lead with **carrier clearance** (strongest buyer) or the **dated dispute file** (most novel)?
-2. Do we keep the 3PL-client framing? It's optional under the Handbook. Without it, AsOf's buyer can be any firm that onboards counterparties, such as procurement, lending or insurance.
-3. Who sources the finance numbers: KYB vendor quotes, the MCA21 fee schedule, and IRDAI surveyor fees?
-4. Is it OK to spend about 1.5 credits verifying `drl.aero` and measuring the web-fetch cost?
-5. Done: Round 3 re-scored the top ideas against the Handbook rubric (see the leaderboard). The new decision is whether AsOf leads with its own clearance or dispute file, or with Second Opinion's "audit the report you paid for" framing.
-
-## Repo map
-- **`AsOf/`** is the build workspace for the champion. Open a Claude Code session there and follow `AsOf/docs/START_HERE.md`. It contains CLAUDE.md (lead rules), SPEC.md, frozen models, config, the tested Crustdata client, recorded fixtures, 17 hidden-test cases, 4 build subagents and a 5-reviewer council with a gate and a chaos harness.
-- `ideas/` holds one document per idea, plus `_council/` (the process, the Round 1 pool, the Round 2 brief and data check).
-- `docs/` holds:
-  - `PREP-NOTES.md` (the old README)
-  - the builder handbook
-  - `sourced-spec/` (teammates' Sourced spec and addendum)
-  - `archive-raise/`
-  - `prompts/` (agent prompts)
-  - `council/` (council reviewers, chaos harness, gate)
-- `check-key.sh` checks the Crustdata key.
-- The local build repo `sourced/` is not pushed.
+**A second client:** a separate state dir and `rules.yaml` per broker. The rules file *is* the broker's policy.

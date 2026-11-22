@@ -1,1 +1,0 @@
-Task: replay safety. Confirm MODE=replay makes ZERO network calls (grep for httpx/requests/urllib use outside backend/crust/client.py; run the replay tests), a cache miss yields an error TraceEvent not a network call, non-2xx are never cached, no filter serializes ">=" or "<=", and every Crustdata call goes through backend/crust/client.py.

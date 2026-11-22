@@ -1,12 +1,12 @@
 # #18 — Benefits Desk
 
-Back to the [leaderboard](../README.md). Follows [RULES.md](RULES.md).
+Code: this repository; start with the root `README.md`.
 
 - **Owner:** Atishay6571
 - **Created:** 2026-11-22 15:35
 - **Status:** Proposed
 - **Parents (if a merge):** none
-- **Round 1 score:** 10/25 — CS 1 · Novelty 3 · Ethics 2 · Builder 2 · Finance 2 ([CS](_council/reviews/18-cs-20261122-1541.md) · [Novelty](_council/reviews/18-novelty-20261122-1541.md) · [Ethics](_council/reviews/18-ethics-20261122-1541.md) · [Builder](_council/reviews/18-builder-20261122-1541.md) · [Finance](_council/reviews/18-finance-20261122-1541.md))
+- **Round 1 score:** 10/25 — CS 1 · Novelty 3 · Ethics 2 · Builder 2 · Finance 2 (CS · Novelty · Ethics · Builder · Finance)
 - **Round 2:** not played: 10/25 is below the ≥ 19 bar and does not beat the lowest current finalist (RULES §5.2)
 
 ## 1. One-line pitch
@@ -22,7 +22,7 @@ An insurance desk for the client's workforce: employer side designs the cover; e
   - not the Handbook's insurance example, 4.1 The Underwriting Desk, which insures a *business* from its application; this desk advises the client's *employees* and designs the client's own group cover;
   - not a hiring screener: job posts are read only for the benefits employers promise, never to judge a candidate.
 - **Why other teams won't build it:** UNKNOWN. The owner has not stated this yet.
-- **Nearest existing idea:** [#14 Notice-Period Alert](14-notice-period-alert.md) also watches named people's job changes, and was dropped as surveillance with a weak purpose. Benefits Desk differs in that only people who opt in are watched, and the purpose (their own cover ending) is stated to them. It is not a duplicate of any idea on the leaderboard.
+- **Nearest existing idea:** #14 Notice-Period Alert also watches named people's job changes, and was dropped as surveillance with a weak purpose. Benefits Desk differs in that only people who opt in are watched, and the purpose (their own cover ending) is stated to them. It is not a duplicate of any idea on the leaderboard.
 
 ## 4. The service: request types
 | Request | Input | Output | Irreversible? |
@@ -44,10 +44,10 @@ An insurance desk for the client's workforce: employer side designs the cover; e
 ## 5. Crustdata calls per request
 | Request | Endpoint and fields | Credits | Verified? (fixture link or UNVERIFIED) |
 |---|---|---|---|
-| Benefits benchmark; people-like-you comparison | job search: logistics posts in India since 1 Sep 2026, filtered for benefits mentioned (e.g. "health insurance") | UNKNOWN: job search is not in the RULES §2 price table | UNVERIFIED. The owner reports a live check on 22 Nov 2026 (3,362 posts, 113 mentioning "health insurance"), but no recorded response is committed under `fixtures/`. Our own 14:00 call to `job/search` returned HTTP 400 because of a wrong request body ([data check](_council/round2-brief-and-data-check.md)). |
+| Benefits benchmark; people-like-you comparison | job search: logistics posts in India since 1 Sep 2026, filtered for benefits mentioned (e.g. "health insurance") | UNKNOWN: job search is not in the RULES §2 price table | UNVERIFIED. The owner reports a live check on 22 Nov 2026 (3,362 posts, 113 mentioning "health insurance"), but no recorded response is committed under `fixtures/`. Our own 14:00 call to `job/search` returned HTTP 400 because of a wrong request body (data check). |
 | Fact file (Checked beliefs) | person enrich: employer, role, city, job changes | 1 per person | UNVERIFIED (no recorded person-enrich response) |
-| Similar employers | company search, company enrich: staff history (headcount series) | 0.03 per search result; 2 per enriched company | Enrich: headcount series recorded in the 14:00 check ([data check](_council/round2-brief-and-data-check.md)); search for "similar employers" UNVERIFIED |
-| Cover-gap alarm | watcher on job changes for opted-in people; create, `/test` and run reads free, each alert 5 | 5 per alert | UNVERIFIED: the person-watch path has not been checked (the same gap noted on [#14](14-notice-period-alert.md)) |
+| Similar employers | company search, company enrich: staff history (headcount series) | 0.03 per search result; 2 per enriched company | Enrich: headcount series recorded in the 14:00 check (data check); search for "similar employers" UNVERIFIED |
+| Cover-gap alarm | watcher on job changes for opted-in people; create, `/test` and run reads free, each alert 5 | 5 per alert | UNVERIFIED: the person-watch path has not been checked (the same gap noted on #14) |
 | Insurer shortlist | not Crustdata: regulator reports and insurers' public filings, reached through web search and web fetch | web search 1; web fetch price not measured | UNVERIFIED |
 
 - **Data sources outside Crustdata:** regulator reports and insurers' public filings for insurer figures; the person, for age band, family and existing cover.
@@ -81,7 +81,7 @@ Draft cases: facts, not advice.
 ## 8. Approvals and kill-restart
 - **Irreversible actions:** buying a policy waits for the person's approval; the cover-conversion request is prepared, not sent, until the person acts.
 - **Idempotency keys:** UNKNOWN; not designed yet.
-- **Kill mid-step:** UNKNOWN; not designed yet. The existing Crustdata client's cache, ledger and resume (see [AsOf](01-asof.md) §6) would be the starting point.
+- **Kill mid-step:** UNKNOWN; not designed yet. The existing Crustdata client's cache, ledger and resume (see AsOf §6) would be the starting point.
 
 ## 9. Ethics
 - **Personal data used, and why:**
