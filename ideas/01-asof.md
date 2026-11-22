@@ -2,7 +2,7 @@
 
 > **"Crustdata gives you raw data. AsOf decides what it can swear to — and as of when."**
 
-**Status:** champion after 2 council rounds (not being built yet; team discussion first).
+**Status:** champion (Rounds 1–3). **Build workspace: [`../AsOf/`](../AsOf/)**. Start with `AsOf/docs/START_HERE.md`.
 **Scores:** Round 1 (5 judges, max 25): **22** — CS 4 · Novelty 5 · Ethics 5 · Builder 4 · Finance 4 (highest of 15 ideas).
 Round 2 head-to-head (3 Opus judges × 3 matchups each): **8 of 9 matchups won** (lost only AsOf-vs-FactGate on the ethics+finance judge's card).
 **What it is:** a merge. AsOf's engine and name + FactGate's MCP-gateway delivery and "carrier cleared" lead job + Sentinel's watcher design and alert dedupe + a light, deterministic version of Second Opinion's claim audit.

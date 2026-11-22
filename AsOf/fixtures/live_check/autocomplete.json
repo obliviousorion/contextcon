@@ -1,0 +1,27 @@
+{
+ "ok": true,
+ "kind": "ok",
+ "status": 200,
+ "credits": 0.0,
+ "retrieved_at": "2026-11-22T08:03:44.884539+00:00",
+ "reason": null,
+ "data": {
+  "suggestions": [
+   {
+    "value": "Blue Dart"
+   },
+   {
+    "value": "Blue Dart Aviation Limited"
+   },
+   {
+    "value": "Blue Darter Energy, LLC"
+   },
+   {
+    "value": "Blue Dart Ventures, LLC"
+   },
+   {
+    "value": "Blue Dart Express Courier"
+   }
+  ]
+ }
+}

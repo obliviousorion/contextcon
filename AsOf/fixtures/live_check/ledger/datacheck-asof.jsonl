@@ -1,0 +1,7 @@
+{"run_id": "datacheck-asof", "ts": "2026-11-22T08:03:09.479295+00:00", "endpoint": "/account/credits", "credits": 0.0, "cumulative": 0.0, "cache_hit": false}
+{"run_id": "datacheck-asof", "ts": "2026-11-22T08:03:14.830618+00:00", "endpoint": "/account/endpoints?status=disabled", "credits": 0.0, "cumulative": 0.0, "cache_hit": false}
+{"run_id": "datacheck-asof", "ts": "2026-11-22T08:03:18.913396+00:00", "endpoint": "/company/identify", "credits": 0.4, "cumulative": 0.4, "cache_hit": false}
+{"run_id": "datacheck-asof", "ts": "2026-11-22T08:03:21.875931+00:00", "endpoint": "/company/identify", "credits": 0.2, "cumulative": 0.6, "cache_hit": false}
+{"run_id": "datacheck-asof", "ts": "2026-11-22T08:03:40.534156+00:00", "endpoint": "/company/enrich", "credits": 6.0, "cumulative": 6.6, "cache_hit": false}
+{"run_id": "datacheck-asof", "ts": "2026-11-22T08:03:44.884941+00:00", "endpoint": "/company/search/autocomplete", "credits": 0.0, "cumulative": 6.6, "cache_hit": false}
+{"run_id": "datacheck-asof", "ts": "2026-11-22T08:03:46.048527+00:00", "endpoint": "/account/credits", "credits": 0.0, "cumulative": 6.6, "cache_hit": false}

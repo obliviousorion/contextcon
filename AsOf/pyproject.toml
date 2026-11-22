@@ -1,0 +1,17 @@
+[project]
+name = "asof"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "httpx>=0.28.1",
+    "pydantic>=2.14.4",
+    "pytest>=9.2.0",
+    "pytest-asyncio>=1.5.0",
+    "python-dotenv>=1.2.4",
+    "respx>=0.23.1",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["backend", "tests"]
+pythonpath = ["."]

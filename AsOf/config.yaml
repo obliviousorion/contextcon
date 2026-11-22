@@ -1,0 +1,32 @@
+# AsOf runtime config. Every threshold lives here so a live fix is a config edit, not a code change.
+attest:
+  max_staleness_days: 14          # nearest point on/before D older than this -> STALE_DATA
+  record_types: [existence, listing, headcount, revenue_band, domains]
+  labels:
+    headcount: "profile-derived count"
+    revenue_band: "estimate"
+    domains: "true at retrieval only"
+  statement_template: "Data point dated {point_date} states {value}; stored copy retrieved {retrieved_at}."
+audit:
+  # contradict only when the claim's date matches a data point within this window AND the gap exceeds tolerance
+  contradict_date_window_days: 14
+  contradict_tolerance_pct: 25
+  allow_ratio_verdicts: false     # never derive growth verdicts from two lower-bound counts
+resolve:
+  require_domain_when_candidates_gt: 1
+limits:
+  credit_cap_per_run: 40
+  time_limit_seconds: 300
+cost:
+  usd_per_credit: 0.30
+  inr_per_usd: 88                 # set from a real rate before the demo
+watch:
+  max_alerts_per_entity_per_month: 2
+approvals:                        # actions that wait for a person
+  - issue_case_file
+  - issue_audit_report
+  - send_evidence_request
+  - create_watcher
+  - exceed_budget
+sandbox:
+  webhook_env: SANDBOX_WEBHOOK_URL   # our own channel; never a real outside party

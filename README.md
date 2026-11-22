@@ -46,7 +46,7 @@ Every idea has its own document in [`ideas/`](ideas/) with all the spec, data an
 
 | Rank | Idea | One line | **Round 3 /100** (E2E·Facts·Rob·Value·Demo) | Round 2 wins /9 | Round 1 /25 | Status | Doc |
 |---|---|---|---|---|---|---|---|
-| 🥇 1 | **AsOf** | Dated attestation. It states what the records can prove as of date D, or says CANNOT ATTEST. Delivered as an MCP gateway | **88** (4·5·5·4·4) | **8** | **22** | **Champion (merge)** | [01-asof.md](ideas/01-asof.md) |
+| 🥇 1 | **AsOf** | Dated attestation. It states what the records can prove as of date D, or says CANNOT ATTEST. Delivered as an MCP gateway | **88** (4·5·5·4·4) | **8** | **22** | **Champion (merge) · being built in [`AsOf/`](AsOf/)** | [01-asof.md](ideas/01-asof.md) |
 | 🥈 2 | **Golden Record** | Entity resolution: merge / no-merge / cannot verify for each pair; one company under two names stays one record | **73** (4·4·4·3·3) | — | 19 | AsOf's resolution step | [05-golden-record.md](ideas/05-golden-record.md) |
 | 🥉 3 | **Second Opinion** | Audits a deliverable someone else produced, line by line (agree / contradict / cannot verify) | **71** (4·2·3·4·5) | 1 | 18 | Candidate front door for AsOf | [04-second-opinion.md](ideas/04-second-opinion.md) |
 | 4 | FactGate | Verified-facts MCP gateway: a sourced value or CANNOT_VERIFY | 68 (3·4·4·3·3) | 7 | 21 | Absorbed into AsOf | [02-factgate.md](ideas/02-factgate.md) |
@@ -222,6 +222,7 @@ Full doc: [ideas/04-second-opinion.md](ideas/04-second-opinion.md). FactGate (no
 5. Done: Round 3 re-scored the top ideas against the Handbook rubric (see the leaderboard). The new decision is whether AsOf leads with its own clearance or dispute file, or with Second Opinion's "audit the report you paid for" framing.
 
 ## Repo map
+- **`AsOf/`** is the build workspace for the champion. Open a Claude Code session there and follow `AsOf/docs/START_HERE.md`. It contains CLAUDE.md (lead rules), SPEC.md, frozen models, config, the tested Crustdata client, recorded fixtures, 17 hidden-test cases, 4 build subagents and a 5-reviewer council with a gate and a chaos harness.
 - `ideas/` holds one document per idea, plus `_council/` (the process, the Round 1 pool, the Round 2 brief and data check).
 - `docs/` holds:
   - `PREP-NOTES.md` (the old README)
