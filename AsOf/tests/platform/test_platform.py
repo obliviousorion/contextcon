@@ -203,7 +203,9 @@ def test_mcp_lists_tools_and_costs():
     class R:
         def model_dump_json(self):
             return json.dumps({"x": 1, "cost": CostSummary(credits=2, inr=52.8, calls=1).model_dump()})
-    reg = {n: (lambda **kw: R()) for n in TOOL_NAMES if n != "approve"}
+    async def fake(**kw):
+        return R()
+    reg = {n: fake for n in TOOL_NAMES if n != "approve"}
     srv = build_server(reg)
     tools = asyncio.run(srv.list_tools())
     assert sorted(t.name for t in tools) == sorted(TOOL_NAMES)
@@ -214,6 +216,8 @@ def test_mcp_lists_tools_and_costs():
 
 def test_mcp_missing_pipeline_is_clear_error():
     from backend.platform.mcp_server import build_server
-    srv = build_server({"resolve": lambda **kw: (_ for _ in ()).throw(RuntimeError("no pipeline"))})
+    async def bad(**kw):
+        raise RuntimeError("no pipeline")
+    srv = build_server({"resolve": bad})
     out = asyncio.run(srv.call_tool("resolve", {"domain": "x.com"}))
     assert "no pipeline" in json.dumps(out, default=lambda o: getattr(o, "text", str(o)))
