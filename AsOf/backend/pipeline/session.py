@@ -64,8 +64,11 @@ def recorded_unit_credits(ledger_dir: Path | None = None) -> dict[str, float]:
         for line in f.read_text().splitlines():
             if not line.strip():
                 continue
-            e = json.loads(line)
-            c = float(e.get("credits") or 0)
+            try:
+                e = json.loads(line)
+                c = float(e.get("credits") or 0)
+            except (ValueError, TypeError, AttributeError):
+                continue  # torn or foreign line (e.g. intent/released markers carry no credits)
             if c > 0 and not e.get("cache_hit"):
                 seen[e["endpoint"]] = min(c, seen.get(e["endpoint"], c))
     out = {}
