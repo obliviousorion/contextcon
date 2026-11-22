@@ -5,6 +5,12 @@ Back to the [leaderboard](../README.md). Rupee fee figures are unsourced agent e
 - Pool idea #7: Round 1 (max 25): **21** — CS 5 · Novelty 3 · Ethics 5 · Builder 4 · Finance 4
 - Round 2 head-to-head: **7 of 9** matchups won (lost to AsOf on the CS and novelty cards; beat AsOf on the ethics+finance card).
 
+
+## Round 3 (Handbook rubric) — 68/100
+Scores E2E·Facts·Robustness·Value·Demo = 3·4·4·3·3 (each 1–5, weighted 25·20·20·20·15). Reviews: [_council/reviews/](_council/reviews/).
+
+Output is tool-shaped and less crisp than a finished file; good approvals and idempotency; static fields labelled 'record date unknown' are loose; the gateway reads as plumbing others build (buyer: bank or NBFC KYB onboarding teams).
+
 ## Original idea (round 1 pool entry)
 
 FactGate (MCP/infra): an MCP server any agent calls: verify_fact(subject, field, as_of) returns only {value, exact_passage, url, record_date, cost} or CANNOT_VERIFY{missing}; recheck(fact_id); clear_vendor job (~Rs 600/dossier vs Rs 1,500-4,000 KYB). SQLite ledger, idempotency keys, approvals table. Second client = tenant key. Covers Trust&Compliance + Infrastructure-for-agents tracks. Risk: stored copies often predate question => many cannot verify; MCP tool names unverified.

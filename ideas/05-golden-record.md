@@ -4,6 +4,12 @@ Back to the [leaderboard](../README.md). Rupee fee figures are unsourced agent e
 
 - Pool idea #14: Round 1 (max 25): **19** — CS 5 · Novelty 4 · Ethics 4 · Builder 5 · Finance 1
 
+
+## Round 3 (Handbook rubric) — 73/100
+Scores E2E·Facts·Robustness·Value·Demo = 4·4·4·3·3 (each 1–5, weighted 25·20·20·20·15). Reviews: [_council/reviews/](_council/reviews/).
+
+Crisp, testable merge/no-merge/cannot-verify verdicts with pair-hash idempotency; hits 'one company under two names stays one record'. Weak: thin spec, unsourced merge reasons, dry demo, low price (the best buyer is enterprise data-governance teams).
+
 ## Original idea (round 1 pool entry)
 
 Master-Data Golden Record desk: dedupe/entity-resolution for the 3PL's customer and carrier master data; explicit merge / no-merge / cannot_verify verdict per pair, never silently merged. company/identify (name+domain), company/search + autocomplete, company/enrich (all_domains, year_founded, all_office_addresses), web/fetch tie-break. Est. Rs 5-20 per record or Rs 50k-2L per 10,000-row clean-up. Tests: same-domain name variants => merge; same name different city/founding year => no merge with reason; bare name no domain => cannot_verify. Merges/deletes in client master are irreversible => approval + idempotent on pair-hash. Risk: may read as "vendor check by another name"; thin personal-data story.

@@ -7,6 +7,12 @@ Back to the [leaderboard](../README.md). Rupee fee figures are unsourced agent e
 - Pool idea #2: Round 1 (max 25): **16** — CS 3 · Novelty 3 · Ethics 3 · Builder 3 · Finance 4
 - Round 2 head-to-head: **2 of 9** matchups won (beat Second Opinion on the CS and novelty cards).
 
+
+## Round 3 (Handbook rubric) — 60/100
+Scores E2E·Facts·Robustness·Value·Demo = 3·3·3·3·3 (each 1–5, weighted 25·20·20·20·15). Reviews: [_council/reviews/](_council/reviews/).
+
+The alert-to-held-reply flow is complete and watchers are used well, but the headcount proxy and false-positive harm hurt; the demo is a dashboard (buyer: credit-control heads at trade lenders).
+
 ## Original idea (round 1 pool entry)
 
 Receivables Sentinel: the 3PL CFO/credit-control head's customer credit-distress watch. Headcount decline + hiring freeze + layoff news as leading indicators of non-payment; output "hold / watch / extend credit" (never a default prediction, "risk indicator, not a finding"). company/identify + company/enrich (headcount.timeseries, by_role_absolute, revenue) + job/search + watch webhooks (free /test) + web search/fetch for exact passages. Est. Rs 1,500-5,000 per customer review or Rs 50k-1.5L/month per 100-shipper book vs credit-bureau reports and bad-debt loss. Tests: 30% headcount drop in 90 days => tighten credit with dated field; group firm vs subsidiary kept separate; "will X default?" => cannot verify naming the missing court/insolvency record. Approval gates: cutting credit limit, pausing dispatch, dunning email. Rules in YAML => easy live fix; second client = tenant config. Risk: proxy signal, headcount lower bound.

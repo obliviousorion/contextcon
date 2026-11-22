@@ -10,6 +10,12 @@ Source pitches: [round-2 champion pitch](#appendix-a--round-2-champion-pitch-ver
 
 ---
 
+
+## Round 3 (Handbook rubric) — 88/100
+Scores E2E·Facts·Robustness·Value·Demo = 4·5·5·4·4 (each 1–5, weighted 25·20·20·20·15). Reviews: [_council/reviews/](_council/reviews/).
+
+Facts 5: every case is a pure function of dated points, and all case numbers were confirmed against the fixtures. Robustness 5: outbox, exactly-once, staleness and CANNOT rules. Wrong-fact risk: presenting a stored copy as proof of what was true on D. Fix: word lines as 'data point dated P states X; stored copy retrieved T'. E2E risk: requests outside basic info, headcount and revenue may end as a finished refusal. Best buyers without the 3PL framing: insurers and arbitrators; diligence and credit teams at banks, NBFCs and funds. The value judge suggests Second Opinion's graded diff as the front door.
+
 ## 1. The problem
 A 3PL hands freight to dozens of carriers and sub-contractors, many small, many with near-identical names. Two questions keep coming up:
 1. **Before work starts:** is this carrier real, and what it says it is? (Procurement pays KYB vendors / analysts for this today.)

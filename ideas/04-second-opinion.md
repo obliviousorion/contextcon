@@ -5,6 +5,12 @@ Back to the [leaderboard](../README.md). Rupee fee figures are unsourced agent e
 - Pool idea #10: Round 1 (max 25): **18** — CS 3 · Novelty 4 · Ethics 4 · Builder 3 · Finance 4
 - Round 2 head-to-head: **1 of 9** matchups won (beat Sentinel on the ethics+finance card).
 
+
+## Round 3 (Handbook rubric) — 71/100
+Scores E2E·Facts·Robustness·Value·Demo = 4·2·3·4·5 (each 1–5, weighted 25·20·20·20·15). Reviews: [_council/reviews/](_council/reviews/).
+
+Demo 5 ('a graded diff reads instantly'); Value 4 (buyer: diligence and credit teams that already buy outside reports). Facts 2: AGREE on 'TCI grew 4x' from a ratio of two lower bounds is a wrong fact, and the CONTRADICT thresholds are arbitrary and not date-matched. Robustness 3: the LLM claim-splitter can break exactly-once after a restart. Fix: structured claims graded by AsOf's attest; no ratios.
+
 ## Original idea (round 1 pool entry)
 
 Second Opinion (contrarian): re-verifies every line of ANOTHER firm's carrier-compliance pack: agree/contradict/cannot verify, catches lookalike mix-ups and stale pages (~Rs 1,500-2,500/pack). Risk: close to vendor-check.

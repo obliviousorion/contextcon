@@ -74,7 +74,7 @@ An idea that fails any of these is marked **Dropped** with the reason.
    - Save the outputs to `_council/reviews/`.
 3. **Fact-check:** at least one judge checks the idea's data claims against recorded fixtures and lists any that are contradicted or unverified.
 4. **Leaderboard update:** update the table in `../README.md` with the new scores, wins, status and link.
-   - Reorder by Round 2 wins first, then Round 1 score.
+   - Reorder by the latest Handbook-rubric score (/100) first, then Round 2 wins, then Round 1 score.
    - If the top 3 changes, rewrite the top-3 detail sections from the idea documents.
    - State in the commit message which reviews justify the change.
 
