@@ -1,3 +1,0 @@
-VERDICT: FAIL
-1. backend/platform/mcp_server.py:95-97 — `attest` tool kwargs do not match pipeline.api.attest(domain, field, as_of): domain is optional in MCP but required in api (omitting it gives a TypeError), and company_id is passed through when set (unexpected kwarg, TypeError). The tool returns an error dict, not a crash. — make domain required and drop company_id, or add company_id to api.attest.
-Verified OK: issue now passes artifact_id=id, matching api.issue(artifact_id). cost() takes no args and matches api.cost(). resolve, clear_counterparty, dispute_file, observe, audit_claims, request_evidence and watch match their api signatures. `uv run pytest -q tests/e2e` gives 3 passed.
