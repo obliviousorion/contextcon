@@ -15,7 +15,7 @@ PROMPT="$(cat agy/RULES_FOR_AGY.md)
 ALLOWED PATHS FOR THIS TASK (create/edit files ONLY under these, relative to $ROOT): ${ALLOWED[*]}
 
 $(cat "$TASK")"
-"$AGY" --print --mode accept-edits --print-timeout 1500s "$PROMPT" > "$LOG" 2>&1; RC=$?
+"$AGY" --mode accept-edits --print-timeout 1500s --print="$PROMPT" > "$LOG" 2>&1; RC=$?
 AFTER=$(git status --porcelain --untracked-files=all . | sort)
 CHANGED=$(comm -13 <(echo "$BEFORE") <(echo "$AFTER") | awk '{print $NF}')
 OUTSIDE=""

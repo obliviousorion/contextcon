@@ -18,7 +18,7 @@ agy/run_task.sh agy/tasks/docs.md README.md docs/
 ```
 
 - The script prepends `agy/RULES_FOR_AGY.md` (allowed paths only, never `.env`, no paid calls, no git commits, no invented numbers).
-- It runs `agy --print --mode accept-edits` and writes a log to `agy/logs/`.
+- It runs `agy --mode accept-edits --print=<prompt>` and writes a log to `agy/logs/`.
 - It then **checks that only the allowed paths changed**:
   - exit 0: OK;
   - exit 2: agy missing or failed, so fall back to the Claude subagent (`asof-docs`, or a general one for the UI);
