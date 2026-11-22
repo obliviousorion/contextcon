@@ -28,13 +28,13 @@ Every idea has its own document in [`ideas/`](ideas/) with all the spec, data an
 
 **Test cases:** we gather our own before coding. They must include a duplicate record, a lookalike name, and a case where the right answer is "I can't verify", and be dated after 1 Sep 2026.
 
-**Logistics:**
-- Building runs 10:15–18:00. Code freeze at 18:00 is the one hard deadline.
-- Submit a **public repo whose commit history starts at 10:15 on 22 Nov**, a 2-minute demo video, a public diagram link, and a declaration of "anything written before 10:15".
-- Finals: **2 minutes of demo plus 1 minute of questions**. Be ready for "100 times the volume, or a second client?" and, if you can, show a duplicate record, a changed fact, a failed call or a restart mid-run.
-- Judges want to hear the business case: who buys it, the price in rupees, and what one job costs to run.
+**What a strong idea also needs to show (Handbook, "What we want to hear" and "How the finals run"):**
+- The business case: who buys it, the price in rupees, and what one job costs to run.
+- An answer to the scale question: "100 times the volume, or a second client?"
+- Handling beyond the prepared request: a duplicate record, a changed fact, a failed call, or a restart mid-run.
+- The approaches weighed, the hardest case, and who the product could get wrong and how it guards against that.
 
-**What changed from earlier assumptions.** The ideas below were first scored against the separate `ContextCon05_BITS_Problem_Statement.pdf`. Its rubric was ethics 25, finance 25, live run 20, robustness 15 and design 15, and it also described a fictional Indian 3PL client, a kickoff kit, an organizer repo, an hour-3 requirement change and a judge killing the process on stage. **The Handbook mentions none of these**, so treat them as unconfirmed. The council scores in the leaderboard use the old rubric; see the note under the table.
+**What changed from earlier assumptions.** The ideas below were first scored against the separate `ContextCon05_BITS_Problem_Statement.pdf`, whose rubric was ethics 25, finance 25, live run 20, robustness 15 and design 15. It also framed every idea around a fictional Indian 3PL client. **The Handbook uses the rubric above and doesn't require the 3PL framing.** That framing is now optional, so ideas dropped only for not serving the 3PL client, such as Raise, may deserve another look. The council scores in the leaderboard use the old rubric; see the note under the table.
 
 ---
 
@@ -181,11 +181,10 @@ Full doc: [ideas/03-sentinel.md](ideas/03-sentinel.md)
 
 ## Open questions for the team
 1. Do we go with AsOf, and lead with **carrier clearance** (strongest buyer) or the **dated dispute file** (most novel)?
-2. Do the kickoff kit and organizer repo exist? Only the problem statement mentions them. The Handbook says to submit our own new public repo and to gather our own test cases.
+2. Do we keep the 3PL-client framing? It's optional under the Handbook. Without it, AsOf's buyer can be any firm that onboards counterparties, such as procurement, lending or insurance.
 3. Who sources the finance numbers: KYB vendor quotes, the MCA21 fee schedule, and IRDAI surveyor fees?
 4. Is it OK to spend about 1.5 credits verifying `drl.aero` and measuring the web-fetch cost?
 5. Should we re-run the council against the **Handbook rubric** (E2E 25 · Facts 20 · Robustness 20 · Customer value 20 · Demo 15)? And do we drop the 3PL-client framing, which only the problem statement mentions?
-6. The build code must go in a **new public repo with commits starting after 10:15**. The local `sourced/` repo has commits from 08:27, so it can't be the one we submit.
 
 ## Repo map
 - `ideas/` holds one document per idea, plus `_council/` (the process, the Round 1 pool, the Round 2 brief and data check).
