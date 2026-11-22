@@ -13,7 +13,7 @@ The lead sends **non-sensitive** build tasks to Antigravity (`agy`, a separate q
 **How to run one** (from `AsOf/`, in the background so the lead keeps working):
 
 ```bash
-agy/run_task.sh agy/tasks/ui.md frontend/
+AGY_ALLOW_CMDS="npm,npx,node" agy/run_task.sh agy/tasks/ui.md frontend/
 agy/run_task.sh agy/tasks/docs.md README.md docs/
 ```
 
@@ -26,3 +26,5 @@ agy/run_task.sh agy/tasks/docs.md README.md docs/
 - The lead reviews the diff and commits. Antigravity never commits.
 
 **First-time setup:** run `agy` once interactively to sign in. Check with `agy --version`.
+
+**Permissions:** headless agy can't prompt, so any unapproved tool is auto-denied (and agy still exits 0). The runner passes a per-session `--settings` that grants `write_file` on the allowed paths only, plus the command prefixes in `AGY_ALLOW_CMDS`. Never use `--dangerously-skip-permissions`.
