@@ -34,6 +34,7 @@ Round 1 is five judges scoring 1–5 each, maximum 25. Round 2 is three judges, 
 | 15 | Conflict-of-Interest Desk | Screens bidders' directors for conflicts | 11 | — | Dropped (personal data, namesakes) | [15-conflict-of-interest.md](ideas/15-conflict-of-interest.md) |
 | 16 | Sourced | Hiring desk with CV-claim verification | not scored — dropped on hard constraint (RULES §1: must be unique; hiring screeners are named as overdone) | — | **Dropped** | [16-sourced.md](ideas/16-sourced.md) |
 | 17 | Raise | Fundraising agent for founders | not scored — dropped on hard constraint (RULES §1: must serve the one 3PL client; Raise serves founders) | — | **Dropped** | [17-raise.md](ideas/17-raise.md) |
+| 18 | LaneBook | Kalshi-shaped event-contract desk settling only against pre-committed, sourced dated records | 12 | — | **Dropped** (no external buyer; unresolved gambling/defamation framing risk) | [18-lanebook.md](ideas/18-lanebook.md) |
 
 The three Round 1 scores in Sentinel's row are Receivables Sentinel, Carrier Pulse and LaneWatch, the three ideas merged into it. All rupee fee figures are agent estimates unless marked as sourced.
 

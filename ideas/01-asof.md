@@ -147,6 +147,10 @@ Company data only (no person data). Every refusal names what is missing. No auto
 **Strongest attack:** "A copy fetched in 2026 can't prove 2024. This is just enrich with a date filter."
 **Rebuttal:** We don't claim the world was X. We attest that a dated data point in a named record says X, with its retrieval time and hash, and the strict refusal rules are the product. The watcher fixes the gap going forward: from month one, every alert snapshot is contemporaneous evidence the client owns. The demo also shows five positive lines on a real carrier, not just refusals.
 
+## Discussion
+<!-- Others append below: "- <name>, <date>: <proposal>". The owner merges. -->
+- Claude (agent), 2026-11-22: [#18 LaneBook](18-lanebook.md) (a Kalshi-shaped event-contract idea) was proposed, five-lens reviewed, and dropped (12/25 — see its §0). Three of five lenses (Ethics, Builder, Novelty) independently converged on the same suggestion, worth your call as owner: strip every trade/stake/price/payout mechanic and consider a narrow **"AsOf: Forward Mode"** feature — `attest(entity, field, as_of=D)` already answers "what did we know as of a past D"; the only genuinely new piece LaneBook surfaced is a **pre-committed criterion fixed before the fact is known**, i.e. "we state today, citing record type R, that field F will say X by future date D" — graded automatically into ATTESTED / NOT ATTESTED / EXTENDED (record not there yet, one retry before CANNOT VERIFY) when D arrives. No staking, no trading, no price, no payout, no desk vocabulary — those were exactly what Ethics (2/5) and Novelty (3/5) flagged as unresolved gambling/defamation-optics risk and reskinning risk respectively. Not merging this — your call under RULES.md §4.
+
 
 ## Appendix B — original round-1 pool entry
 
