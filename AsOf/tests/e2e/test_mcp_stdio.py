@@ -70,3 +70,27 @@ async def test_mcp_issue_and_cost_use_the_real_pipeline(tmp_path):
             cost = _payload(await s.call_tool("cost", {}))
             assert "error" not in cost, cost
             assert "58.08" in json.dumps(cost)
+
+
+def test_every_mcp_tool_matches_pipeline_api_signature():
+    """Each MCP tool's parameters must bind to backend.pipeline.api's function of the same name."""
+    import asyncio
+    import inspect
+
+    from backend.pipeline import api
+    from backend.platform.mcp_server import build_server
+
+    server = build_server()
+    tools = asyncio.run(server.list_tools())
+    for t in tools:
+        fn = getattr(api, t.name, None)
+        assert fn is not None, f"pipeline.api has no {t.name}"
+        params = set((getattr(t, "input_schema", None) or getattr(t, "inputSchema", None) or {}).get("properties", {}))
+        sig = inspect.signature(fn)
+        accepted = {n for n, p in sig.parameters.items() if p.kind in (p.POSITIONAL_OR_KEYWORD, p.KEYWORD_ONLY)}
+        renamed = {"issue": {"id": "artifact_id"}}.get(t.name, {})
+        sent = {renamed.get(p, p) for p in params}
+        assert sent <= accepted, f"{t.name}: MCP sends {sent - accepted} that api does not accept"
+        required = {n for n, p in sig.parameters.items() if p.default is p.empty and p.kind != p.VAR_KEYWORD}
+        mcp_required = {renamed.get(p, p) for p in (getattr(t, "input_schema", None) or getattr(t, "inputSchema", None) or {}).get("required", [])}
+        assert required <= mcp_required, f"{t.name}: api requires {required - mcp_required} but MCP makes it optional"

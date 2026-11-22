@@ -92,9 +92,9 @@ def build_server(registry: dict[str, Callable] | None = None) -> FastMCP:
         return await call("resolve", name=name, domain=domain)
 
     @mcp.tool()
-    async def attest(field: str, as_of: str, domain: str | None = None, company_id: int | None = None) -> dict:
+    async def attest(domain: str, field: str, as_of: str) -> dict:
         """Attest one field as of a date (YYYY-MM-DD) with a dated source, or refuse with a code."""
-        return await call("attest", field=field, as_of=as_of, domain=domain, company_id=company_id)
+        return await call("attest", domain=domain, field=field, as_of=as_of)
 
     @mcp.tool()
     async def clear_counterparty(domain: str) -> dict:
