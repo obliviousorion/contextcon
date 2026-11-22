@@ -1,0 +1,1 @@
+Task: contract check. Verify backend/agent, backend/crust, backend/watch, backend/eval and frontend all conform to the FROZEN backend/models.py and frontend/lib/types.ts. Flag any field renamed/added/removed, any dict shaped differently from the models, any edit to the frozen files (git diff against baseline commit), and any module touching files outside its own directory.
