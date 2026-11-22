@@ -8,7 +8,7 @@ Updated 2026-11-22 15:25. Mode is `MODE=replay` against `fixtures/live_check/`. 
 | 0 Check | ✅ done | `uv sync` ran; the crust client's 17 tests pass; `../.env` is present; agy is 1.5.14; `mcp` 2.3 and `pyyaml` 6.0 were added. |
 | 1 Build | ✅ done, except the UI | engine, platform and pipeline are built and committed. The UI is in progress on Antigravity. |
 | 2 Integrate | ✅ done | The full suite gives 146 passed + 1 xfail (C17). MCP over stdio lists the tools and answers C01. `clear delhivery.com` gives 5 cited lines in about 0.2 s. |
-| 3 Council | 🔄 round 1519 BLOCKED, fixes in progress | contracts PASS; facts, safety, e2e and robustness FAIL. The fix lists are routed to their owners. |
+| 3 Council | ✅ gate PASS (round 1535) | 1519 BLOCKED (4 FAIL) → fixes → 1526 (contracts FAIL: MCP kwargs) → 1531 (attest kwargs) → 1535 all 5 PASS. Full suite 182 passed + 1 xfail. |
 | 4 Live data | ⏸ waits for user approval | About 15 credits in record mode. |
 | 5 Docs and demo | ⏸ not started | Antigravity goes first; asof-docs is the fallback. |
 

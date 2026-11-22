@@ -7,7 +7,7 @@ Ordered by what unblocks "done". See `STATUS.md` for where each item stands.
 - [x] pipeline: beat 5 (watch → STALE), approval record, ledger view and ₹ label, stable run_id, `resolve` with a positional name (33 tests)
 - [x] engine: existence dated, exact template, whole-token ratio check
 - [x] lead: agy runner guards; MCP e2e test updated
-- [ ] lead: full suite, commit, re-run the 4 failed reviewers (facts, safety, e2e, robustness), gate until PASS
+- [x] lead: full suite, commit, re-run the reviewers; gate 1535 PASS
 
 ## UI (Antigravity)
 - [ ] agy finishes `frontend/src` and `npm run build` passes
