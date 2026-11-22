@@ -15,3 +15,10 @@ Agents append requests here; only the lead edits `backend/models.py` and `config
 - **Ledger dir:** the pipeline writes `$ASOF_STATE_DIR/ledger`, while the crust default is `backend/crust/ledger`. Unify in Phase 2.
 - **Guarded yaml import.** `session.py` falls back to built-in config defaults when yaml is missing. That fallback duplicates thresholds and must be removed once pyyaml is installed (council-contracts: thresholds come only from config.yaml).
 - **Skipped company/search.** Autocomplete + identify-by-name lists candidates, so the paid search step is skipped (deviation from SPEC §4 step 1; saves credits, and C08 still gives 25).
+
+## From asof-platform (Phase 1, 2026-11-22), lead triage
+- `tests/platform/` has no `__init__.py`, because a package named `platform` would shadow the stdlib module. Other test dirs must not reuse test-file basenames.
+- mcp 2.3 is installed and exposes `MCPServer`; the server handles both that and 1.x `FastMCP`. No pin.
+- Phase 2 wiring: the pipeline must use `actions.execute_approved` for every irreversible step, `watchers.create`/`activate`, `runstate.run(cost_fn=client.get_run_cost)` and `ledger.cost_summary(run_id)` for `CaseFile.cost`.
+- Known window: a kill after `fn()` returns but before the effects line is appended could re-run `fn` on restart. Every `sandbox_send` payload must carry its idempotency key so the receiver dedupes.
+- The stdio protocol path is still unverified (only tested in-process); Phase 2 runs C01 through a real MCP client.
