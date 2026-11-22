@@ -1,6 +1,6 @@
 ---
 name: asof-docs
-description: Writes AsOf's README, mermaid architecture diagram, business case and 2-minute demo script in README.md and docs/. Use near the end, after the build passes the council gate.
+description: FALLBACK writer for AsOf's README, mermaid architecture diagram, business case and 2-minute demo script (README.md, docs/). The Antigravity lane (agy/tasks/docs.md) does this first; use this agent only if agy/run_task.sh exits 2.
 tools: Read, Write, Edit, Bash, Glob, Grep
 model: sonnet
 ---

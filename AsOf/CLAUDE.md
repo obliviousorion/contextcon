@@ -18,6 +18,21 @@ You are the **lead** for building AsOf. Read `SPEC.md` (the build spec), `backen
 
 Council reviewers, all read-only: `council-facts`, `council-robustness`, `council-contracts`, `council-e2e`, `council-safety`. Each writes **one** report to `council/reports/` and nothing else.
 
+## Antigravity lane for non-sensitive builds (see `agy/README.md`)
+**Send non-sensitive build work to Antigravity first.** It has a separate quota and saves Claude tokens.
+- **Non-sensitive (goes to Antigravity):**
+  - the web UI, `agy/tasks/ui.md` → `frontend/`
+  - the README, architecture diagram and demo script, `agy/tasks/docs.md` → `README.md` and `docs/`
+  - future visual or copy work
+- **Sensitive (stays with Claude):** the engine, platform and pipeline; anything touching `.env`, credits, live API calls, `models.py` or `config.yaml`; every council review and the gate.
+
+How to run it:
+- Run `agy/run_task.sh <task> <allowed paths...>` with Bash **in the background** (`run_in_background`), so you keep working. You're notified when it finishes.
+- Exit 0: review the diff, then commit it yourself. Antigravity never commits.
+- Exit 2: agy is unavailable or failed, so do the task with the Claude fallback (`asof-docs` for docs, or a general subagent for the UI).
+- Exit 3: Antigravity touched files outside its allowed paths. Inspect them and revert anything wrong.
+- When the docs task needs real numbers, append the test and ledger output to a copy of the task file before running it.
+
 ## Phases
 0. **Check** (you):
    - run `uv sync` and `uv run pytest -q`; the crust client's 17 tests must pass;
@@ -27,6 +42,7 @@ Council reviewers, all read-only: `council-facts`, `council-robustness`, `counci
    - `asof-engine` (makes the hidden cases pass against the fixtures);
    - `asof-platform` (MCP server skeleton, outbox, config-driven cost);
    - `asof-pipeline` (resolver and case-file assembly, against the engine's interface with a fake until the engine lands).
+   - **Antigravity, in the background:** `agy/run_task.sh agy/tasks/ui.md frontend/`. The UI builds against fixtures, so it doesn't wait on the backend.
 2. **Integrate** (you): wire pipeline → engine → platform, run the full test suite, run `clear_counterparty delhivery.com` in replay mode end to end.
 3. **Council:** start all 5 reviewers in parallel. Each writes `council/reports/<TS>-<name>.md` beginning with `VERDICT: PASS|FAIL|BLOCKED`. Then run `python council/gate.py council/reports <TS>`. On FAIL, send each owner agent its fix list from the gate file, re-run the affected reviewers, and repeat until the gate passes.
 4. **Live data (approval needed):** ask the user before spending credits. The planned spend is about 15 credits, all in `MODE=record` so responses are cached:
@@ -34,7 +50,7 @@ Council reviewers, all read-only: `council-facts`, `council-robustness`, `counci
    - one `web/fetch`, to measure its cost;
    - a recorded run per demo company.
    Commit the recorded fixtures.
-5. **Docs and demo:** `asof-docs` writes the README (job, who pays, input, finished result, pass mark, every data source, approvals, ledger), a mermaid architecture diagram and the 2-minute demo script. You rehearse the demo in replay mode, including a kill mid-send.
+5. **Docs and demo:** **Antigravity first** (`agy/run_task.sh <docs task with numbers appended> README.md docs/`). If it exits 2, `asof-docs` writes the README instead. Either way, the deliverables are a README (job, who pays, input, finished result, pass mark, every data source, approvals, ledger), a mermaid architecture diagram and the 2-minute demo script. You rehearse the demo in replay mode, including a kill mid-send.
 
 ## Hard rules
 - **Contracts are frozen:** only you may edit `backend/models.py` and `config.yaml` keys. Agents propose changes in `NOTES.md`.

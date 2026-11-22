@@ -6,3 +6,4 @@ state/
 backend/crust/cache/
 backend/crust/ledger/
 node_modules/
+agy/logs/
