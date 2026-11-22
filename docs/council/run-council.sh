@@ -4,7 +4,7 @@ set -u
 REPO=${1:?repo dir}; HERE="$(cd "$(dirname "$0")" && pwd)"; TS=$(date +%H%M)
 export PATH="$HOME/.local/bin:$PATH" MODE=replay COUNCIL_DIR="$HERE" COUNCIL_SCRATCH="$(mktemp -d)"
 cd "$REPO" || exit 1
-for r in r1-contracts r2-replay r3-frontend r4-correctness r5-e2e r6-chaos; do
+for r in r1-contracts r2-replay r3-frontend r4-correctness r5-e2e r6-chaos r7-ethics r8-cost; do
   ( agy --print --mode plan --print-timeout 900s "$(cat "$HERE/common.txt" "$HERE/$r.txt")" \
       > "$HERE/reports/$TS-$r.md" 2>&1 ) &
 done

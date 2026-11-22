@@ -1,7 +1,9 @@
 # ContextCon 05 — prep folder (NOT the hackathon repo)
 
-Sunday 2026-11-22, 9:00–21:00, Pilani Campus. Crustdata (YC F24) x YC x BITS Pilani. Solo.
-**Build lives in `contextcon/raise/` (git repo, branches agent-a/b/c as worktrees `raise-A/B/C` beside it).** Superseded the old "git init after 10:45" note: follow the web-chat project plan. Keep `.env` here in the parent (has CRUSTDATA_API_KEY + CRUST_KEY, ANTHROPIC_API_KEY, SLACK_WEBHOOK_URL, PUBLIC_URL); every worktree loads it via `../.env`.
+> UPDATE 2026-11-22: project switched from Raise to **Sourced** (hiring desk, Career Check core). Local build repo is `sourced/` (worktrees sourced-A/B/C/D, never pushed). Raise docs archived in `docs/archive-raise/`. Real rules: `ContextCon05_BITS_Problem_Statement.pdf`. Agent prompts: `docs/prompts/`. Council: `docs/council/`.
+
+Sunday 2026-11-22, 9:00–21:00, Pilani Campus. Crustdata (YC F24) x YC x BITS Pilani. Team of up to 4 (problem statement).
+**Build lives in `contextcon/sourced/` (local git repo; branches agent-a/b/c/d as worktrees `sourced-A/B/C/D` beside it; never pushed).** Keep `.env` here in the parent (CRUSTDATA_API_KEY, CRUST_KEY, ANTHROPIC_API_KEY, SLACK_WEBHOOK_URL, PUBLIC_URL); worktrees load it via `../.env`. Final code must go in the organizer repo from kickoff.
 
 ## Files
 - `docs/builder-handbook.pdf` / `.txt` — official Builder Handbook (34 pp), downloaded 2026-11-20
