@@ -147,22 +147,22 @@ async def test_ledger_totals_and_cache_hits_free(tmp_path):
 
 @respx.mock
 async def test_header_credits_override(tmp_path):
-    respx.post(f"{BASE}/person/search").mock(return_value=httpx.Response(200, json={"profiles": [1, 2]},
-                                                                         headers={"x-credits-used": "5"}))
-    r = await mk(tmp_path).person_search({"q": 1})
+    respx.post(f"{BASE}/company/search").mock(return_value=httpx.Response(200, json={"results": [1, 2]},
+                                                                          headers={"x-credits-used": "5"}))
+    r = await mk(tmp_path).company_search({"q": 1})
     assert r.credits == 5.0
 
 
 @respx.mock
 async def test_resume_after_crash_zero_network(tmp_path):
-    route = respx.post(f"{BASE}/person/enrich").mock(return_value=httpx.Response(200, json=[{"a": 1}, {"a": 2}]))
+    data = json.loads(FIXTURE.read_text())["data"][:1]
+    route = respx.post(f"{BASE}/company/enrich").mock(return_value=httpx.Response(200, json=data))
     c1 = mk(tmp_path)
-    body = {"professional_network_profile_urls": ["u1", "u2"]}
-    await c1.person_enrich(body)
+    await c1.company_enrich(ENRICH)
     cost = c1.get_run_cost()
-    assert cost == 2.0 and route.call_count == 1
+    assert cost == 2.0 * len(data[0]["matches"]) and route.call_count == 1
     c2 = mk(tmp_path)  # simulated restart, same run_id
-    r = await c2.person_enrich(body)
+    r = await c2.company_enrich(ENRICH)
     assert r.cache_hit and route.call_count == 1 and c2.network_calls == 0
     assert c2.get_run_cost() == cost
 

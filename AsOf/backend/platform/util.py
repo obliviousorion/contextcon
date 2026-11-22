@@ -40,8 +40,11 @@ def append_jsonl(path: Path | str, obj: Any) -> None:
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     line = json.dumps(obj, default=str) + "\n"
-    fd = os.open(path, os.O_WRONLY | os.O_APPEND | os.O_CREAT, 0o644)
+    fd = os.open(path, os.O_RDWR | os.O_APPEND | os.O_CREAT, 0o644)
     try:
+        size = os.fstat(fd).st_size
+        if size and os.pread(fd, 1, size - 1) != b"\n":
+            line = "\n" + line  # heal a torn tail so this record starts on its own line
         os.write(fd, line.encode())  # single write: O_APPEND keeps lines whole
         os.fsync(fd)
     finally:

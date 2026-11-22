@@ -14,7 +14,7 @@ import httpx
 from .cache import DiskCache, cache_key, now_iso
 from .ledger import DEFAULT_CREDIT_CAP, PRICES, Ledger
 from .limiter import RateLimiter
-from .results import CrustResult, EndpointDisabled, first_list, unavailable
+from .results import CrustResult, EndpointDisabled, first_list, parse_company_enrich, unavailable
 
 log = logging.getLogger("crust")
 BASE_URL = "https://api.crustdata.com"
@@ -113,6 +113,9 @@ class CrustClient:
         if path == "/company/enrich":
             n = sum(len((i or {}).get("matches") or []) for i in first_list(data) if isinstance(i, dict))
             return price * (n or (len(first_list(data)) if first_list(data) else 0))
+        if path == "/company/identify":
+            n = sum(len((i or {}).get("matches") or []) for i in first_list(data) if isinstance(i, dict))
+            return price * n
         if path == "/person/enrich":
             return price * len(first_list(data))
         return price * len(first_list(data))
@@ -214,6 +217,9 @@ class CrustClient:
                             data = r.json()
                         except ValueError:
                             return unavailable(path, "malformed response: not JSON", s, key=key)
+                        if path == "/company/enrich" and not parse_company_enrich(data):
+                            return unavailable(path, "malformed response: no parseable company record "
+                                               "(not cached, not billed)", s, key=key)
                         return CrustResult(ok=True, status=s, data=data, retrieved_at=now_iso(), endpoint=path,
                                            credits=self._credits(path, r.headers, data, body), cache_key=key)
                     else:
@@ -245,10 +251,12 @@ class CrustClient:
         return await self.request("POST", "/company/search", body, group="search", **kw)
 
     async def person_search(self, body, **kw):
-        return await self.request("POST", "/person/search", body, group="person", **kw)
+        return EndpointDisabled(ok=False, kind="endpoint_disabled", endpoint="/person/search",
+                                reason="personal data not used by AsOf")  # no network, ever
 
     async def person_enrich(self, body, **kw):
-        return await self.request("POST", "/person/enrich", body, group="person", **kw)
+        return EndpointDisabled(ok=False, kind="endpoint_disabled", endpoint="/person/enrich",
+                                reason="personal data not used by AsOf")  # no network, ever
 
     async def job_search(self, body, **kw):
         return await self.request("POST", "/job/search", body, group="job", **kw)

@@ -8,6 +8,7 @@ from typing import Any, Callable
 
 from backend.models import TraceEvent
 
+from . import actions
 from .config import limits, state_dir
 from .util import atomic_write_json, read_json
 
@@ -41,7 +42,11 @@ def load_state(run_id: str) -> tuple[dict, bool]:
     if not p.exists():
         return {"steps": {}, "elapsed": 0.0}, False
     d = read_json(p)
-    if not isinstance(d, dict) or not isinstance(d.get("steps"), dict):
+    def _num(v):
+        return isinstance(v, (int, float)) and not isinstance(v, bool)
+    if (not isinstance(d, dict) or not isinstance(d.get("steps"), dict)
+            or not _num(d.get("elapsed", 0.0)) or not isinstance(d.get("holds", 0), int)
+            or isinstance(d.get("holds", 0), bool) or not isinstance(d.get("held", ""), str)):
         try:
             p.rename(p.with_suffix(".torn"))
         except OSError:
@@ -74,6 +79,7 @@ def run(run_id: str, steps: list[Step], *, cost_fn: Callable[[], float] | None =
     t0 = clock()
     base_elapsed = float(state.get("elapsed", 0.0))
     state.pop("held", None)
+    bypass = False
     for name, fn in steps:
         if name in state["steps"]:
             res.results[name] = state["steps"][name]
@@ -82,18 +88,29 @@ def run(run_id: str, steps: list[Step], *, cost_fn: Callable[[], float] | None =
         cap, tlimit = limits()  # re-read each step
         spent, elapsed = cost_fn(), base_elapsed + (clock() - t0)
         reason = None
-        if spent >= cap:
+        hold_key = f"exceed_budget:{run_id}:{state.get('holds', 0)}"
+        if bypass:
+            pass
+        elif (spent >= cap or elapsed >= tlimit) and actions.is_approved(hold_key):
+            bypass = True  # one approved overrun; consumed now
+            state["holds"] = state.get("holds", 0) + 1
+            actions._save(hold_key, "exceed_budget", run_id, "done")
+            emit(name, "progress", f"exceed_budget approved ({hold_key}); continuing past limit once")
+        elif spent >= cap:
             reason = f"credit cap reached: spent {spent:.2f} >= cap {cap:g}"
         elif elapsed >= tlimit:
             reason = f"time limit reached: {elapsed:.1f}s >= {tlimit:g}s"
         if reason:
             state["held"] = reason
+            state["hold_key"] = hold_key
+            if actions.get_record(hold_key) is None:
+                actions._save(hold_key, "exceed_budget", run_id, "pending")
             state["elapsed"] = elapsed
             atomic_write_json(_path(run_id), state)
             res.status, res.held_reason = "BUDGET_HELD", reason
             res.results = dict(state["steps"])
             emit(name, "held_for_approval", f"BUDGET_HELD: {reason}; resumable",
-                 {"refusal_code": "BUDGET_HELD", "spent": spent, "cap": cap})
+                 {"refusal_code": "BUDGET_HELD", "spent": spent, "cap": cap, "approval_key": hold_key})
             return res
         emit(name, "start", "running")
         out = fn(dict(state["steps"]))

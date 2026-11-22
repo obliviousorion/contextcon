@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import os
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
@@ -22,6 +23,7 @@ DEFAULT_CREDIT_CAP = 400.0
 # credits per unit; unit counted from response (or request) by Client._units
 PRICES = {
     "/company/enrich": 2.0,   # per record
+    "/company/identify": 0.2,  # per match (unmatched is free)
     "/person/enrich": 1.0,    # per profile
     "/company/search": 0.03,  # per result
     "/person/search": 0.03,   # per result
@@ -45,11 +47,16 @@ class Ledger:
         self.path = Path(directory or DEFAULT_LEDGER_DIR) / f"{run_id}.jsonl"
         self.entries: list[LedgerEntry] = []
         try:
-            for line in self.path.read_text().splitlines():
-                if line.strip():
-                    self.entries.append(LedgerEntry(**json.loads(line)))
-        except (OSError, ValueError, TypeError):
-            pass
+            lines = self.path.read_text().splitlines()
+        except OSError:
+            lines = []
+        for line in lines:
+            if not line.strip():
+                continue
+            try:
+                self.entries.append(LedgerEntry(**json.loads(line)))
+            except (ValueError, TypeError):
+                continue  # torn/garbage line: skip it, keep the true total from the rest
 
     @property
     def total(self) -> float:
@@ -60,8 +67,16 @@ class Ledger:
         e = LedgerEntry(self.run_id, now_iso(), endpoint, credits, round(self.total + credits, 6), cache_hit)
         self.entries.append(e)
         self.path.parent.mkdir(parents=True, exist_ok=True)
-        with self.path.open("a") as f:
-            f.write(json.dumps(asdict(e)) + "\n")
+        line = json.dumps(asdict(e)) + "\n"
+        fd = os.open(self.path, os.O_RDWR | os.O_APPEND | os.O_CREAT, 0o644)
+        try:
+            size = os.fstat(fd).st_size
+            if size and os.pread(fd, 1, size - 1) != b"\n":
+                line = "\n" + line  # heal torn tail
+            os.write(fd, line.encode())
+            os.fsync(fd)
+        finally:
+            os.close(fd)
         return e
 
 

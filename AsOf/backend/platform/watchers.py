@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 from datetime import date
 from typing import Any
 
@@ -46,14 +47,41 @@ def create(domain: str, company_id: int | None = None, field: str = "headcount")
     return ent
 
 
-def activate(key: str, create_fn) -> dict:
-    """After approve(key): run create_fn() -> watch_id exactly once and save it under the key."""
+def _replay() -> bool:
+    return (os.environ.get("MODE") or "").lower() == "replay"
+
+
+def fake_watch_id(key: str) -> str:
+    return f"w-{key[:12]}"
+
+
+def _live_create(domain: str) -> str:
+    import asyncio
+
+    from backend.crust.client import CrustClient
+    res = asyncio.run(CrustClient(run_id="watch-create").watch_create({"domain": domain}))
+    if not res.ok:
+        raise RuntimeError(f"watch_create failed: {res.reason}")
+    d = res.data if isinstance(res.data, dict) else {}
+    wid = d.get("id") or d.get("watch_id") or d.get("watcher_id")
+    if not wid:
+        raise RuntimeError("watch_create returned no id")
+    return str(wid)
+
+
+def activate(key: str, create_fn=None) -> dict:
+    """After approve(key): create the watcher exactly once and save its id under the key.
+    create_fn() -> id overrides; default: replay -> deterministic fake id `w-<key[:12]>` (no network),
+    live -> client.watch_create. Returns the registry entry (status 'held_for_approval' | 'created')."""
     reg = _registry()
     ent = reg.get(key)
     if ent is None:
         raise KeyError(key)
     if ent["status"] == "created":
         return ent
+    if create_fn is None:
+        create_fn = (lambda: fake_watch_id(key)) if _replay() else (lambda: _live_create(ent["domain"]))
+
     def _create():
         wid = str(create_fn())
         r = _registry()
@@ -70,9 +98,13 @@ def activate(key: str, create_fn) -> dict:
     return ent
 
 
-def test(watch_id: str) -> dict:
-    """/test is free: synthesises nothing external; returns a well-formed dry-run alert."""
-    return {"watch_id": watch_id, "cost_credits": 0.0, "ok": True}
+def test(watch_id: str, company_id: int = 0, field: str = "headcount",
+         signal_date: date | None = None) -> tuple[WatchSnapshot, bool]:
+    """Free, no network. Deterministic test alert (signal_date default today, hash from watch id),
+    routed through on_alert so dedupe applies: a second test the same day is a no-op (is_new False)."""
+    sd = signal_date or date.today()
+    h = hashlib.sha256(f"test|{watch_id}".encode()).hexdigest()[:16]
+    return on_alert(watch_id, company_id, field, sd, h)
 
 
 def on_alert(watch_id: str, company_id: int, field: str, signal_date: date, snapshot_hash: str,

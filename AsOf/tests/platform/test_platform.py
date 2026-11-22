@@ -39,6 +39,7 @@ def test_replay_zero_network_calls(tmp_path):
 
 def test_execute_once_and_reconcile(state):
     n = []
+    actions.approve("k1")
     actions.execute("k1", "send_evidence_request", "t", lambda: n.append(1))
     actions.execute("k1", "send_evidence_request", "t", lambda: n.append(1))
     assert n == [1]
@@ -51,10 +52,12 @@ def test_pending_written_before_effect_and_reconciled(state):
     def boom():
         seen["status"] = actions.get_record("k2").status
         raise RuntimeError("crash")
+    actions.approve("k2")
     with pytest.raises(RuntimeError):
         actions.execute("k2", "issue_case_file", "t", boom)
     assert seen["status"] == "pending"
     # simulate: effect landed in the log but the process died before marking done
+    actions.approve("k3")
     actions._save("k3", "issue_case_file", "t", "pending")
     from backend.platform.util import append_jsonl
     append_jsonl(actions.effects_path(), {"key": "k3"})
@@ -81,7 +84,7 @@ def test_chaos_kill_restart(state):
     env_state = str(state)
     cmd = f"{sys.executable} {ROOT}/tests/platform/demo_actions.py"
     import os
-    env = {**os.environ, "ASOF_STATE_DIR": env_state, "PYTHONPATH": str(ROOT)}
+    env = {**os.environ, "ASOF_STATE_DIR": env_state}
     r = subprocess.run([sys.executable, str(ROOT / "council/chaos_kill.py"), "--cmd", cmd, "--effects",
                         str(state / "effects.jsonl"), "--rounds", "5", "--expect-keys", "3", "--seed", "7",
                         "--max-delay", "0.8"], env=env, capture_output=True, text=True, cwd=ROOT, timeout=200)
@@ -172,7 +175,17 @@ def test_watch_create_held_then_once(state):
     for _ in range(2):
         out = watchers.activate(e["key"], lambda: n.append(1) or "wid")
     assert n == [1] and out["status"] == "created" and out["watch_id"] == "wid"
-    assert watchers.test("wid")["cost_credits"] == 0
+    e2 = watchers.create("beta.com")
+    actions.approve(e2["key"])
+    import os
+    os.environ["MODE"] = "replay"
+    try:
+        assert watchers.activate(e2["key"])["watch_id"] == "w-" + e2["key"][:12]
+    finally:
+        del os.environ["MODE"]
+    snap, new = watchers.test("wid")
+    snap2, new2 = watchers.test("wid")
+    assert new and not new2 and snap.dedupe_key == snap2.dedupe_key and snap.signal_date == date.today()
 
 
 def test_poll_dedupes(state):
@@ -205,7 +218,7 @@ def test_mcp_lists_tools_and_costs():
             return json.dumps({"x": 1, "cost": CostSummary(credits=2, inr=52.8, calls=1).model_dump()})
     async def fake(**kw):
         return R()
-    reg = {n: fake for n in TOOL_NAMES if n != "approve"}
+    reg = {n: fake for n in TOOL_NAMES}
     srv = build_server(reg)
     tools = asyncio.run(srv.list_tools())
     assert sorted(t.name for t in tools) == sorted(TOOL_NAMES)
@@ -221,3 +234,85 @@ def test_mcp_missing_pipeline_is_clear_error():
     srv = build_server({"resolve": bad})
     out = asyncio.run(srv.call_tool("resolve", {"domain": "x.com"}))
     assert "no pipeline" in json.dumps(out, default=lambda o: getattr(o, "text", str(o)))
+
+
+def test_execute_gated_without_approval(state):
+    n = []
+    assert actions.execute("g", "issue_case_file", "t", lambda: n.append(1)) is None
+    assert n == [] and not actions.effects_path().exists()
+
+
+def test_mcp_has_no_approve_tool():
+    from backend.platform.mcp_server import TOOL_NAMES
+    assert "approve" not in TOOL_NAMES and {"issue", "cost"} <= set(TOOL_NAMES)
+
+
+def test_non_https_webhook_falls_back(state, monkeypatch):
+    monkeypatch.setenv("SANDBOX_WEBHOOK_URL", "http://evil.example/x")
+    assert actions.sandbox_send({"a": 1}) == "outbox"
+
+
+def test_person_endpoints_disabled_no_network(tmp_path):
+    c = CrustClient("pp", mode="live", api_key="x", cache_dir=tmp_path / "c", ledger_dir=tmp_path / "l")
+    for f in (c.person_search, c.person_enrich):
+        r = asyncio.run(f({}))
+        assert not r.ok and r.kind == "endpoint_disabled" and "personal data" in r.reason
+    assert c.network_calls == 0
+
+
+def test_exceed_budget_approval_continues_once(state, tmp_path, monkeypatch):
+    cfg = tmp_path / "cfg.yaml"
+    base = yaml.safe_load((ROOT / "config.yaml").read_text())
+    base["limits"]["credit_cap_per_run"] = 5
+    cfg.write_text(yaml.safe_dump(base))
+    monkeypatch.setenv("ASOF_CONFIG", str(cfg))
+    calls = []
+    steps = [("a", lambda r: calls.append("a") or 1), ("b", lambda r: calls.append("b") or 2)]
+    r = runstate.run("eb", steps, cost_fn=lambda: 9.0)
+    assert r.status == "BUDGET_HELD"
+    key = [e for e in r.events if e.status == "held_for_approval"][0].data["approval_key"]
+    assert actions.get_record(key).action == "exceed_budget" and actions.get_record(key).status == "pending"
+    actions.approve(key)
+    r2 = runstate.run("eb", steps, cost_fn=lambda: 9.0)
+    assert r2.status == "done" and calls == ["a", "b"]
+
+
+def test_append_jsonl_heals_torn_tail(state):
+    from backend.platform.util import append_jsonl
+    p = state / "x.jsonl"
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text('{"key": "a"}\n{"key": "b"')  # torn tail, no newline
+    append_jsonl(p, {"key": "c"})
+    assert [e["key"] for e in read_jsonl(p)] == ["a", "c"]
+
+
+def test_ledger_skips_torn_lines(tmp_path):
+    led = Ledger("t", tmp_path)
+    led.add("/a", 1.0, False)
+    led.add("/a", 1.0, False)
+    p = tmp_path / "t.jsonl"
+    lines = p.read_text().splitlines()
+    p.write_text(lines[0] + "\n{torn garbage\n" + lines[1] + "\n{\"run_id\": \"t\", \"ts")
+    assert Ledger("t", tmp_path).total == 2.0
+    l2 = Ledger("t", tmp_path)
+    l2.add("/a", 1.0, False)  # heals tail, appends
+    assert Ledger("t", tmp_path).total == 3.0
+
+
+def test_identify_priced():
+    from backend.crust.ledger import PRICES
+    assert PRICES["/company/identify"] == 0.2
+
+
+def test_runstate_wrong_typed_fields_quarantined(state):
+    runstate.run("rw", _steps([]), cost_fn=lambda: 0)
+    p = state / "runs" / "rw.json"
+    p.write_text(json.dumps({"steps": {}, "elapsed": "garbage"}))
+    r = runstate.run("rw", _steps([]), cost_fn=lambda: 0)
+    assert r.recovered_torn and r.status == "done"
+
+
+def test_sandbox_send_dedupes_on_key(state):
+    actions.sandbox_send({"idempotency_key": "z", "n": 1})
+    actions.sandbox_send({"idempotency_key": "z", "n": 2})
+    assert len(read_jsonl(actions.outbox_path())) == 1

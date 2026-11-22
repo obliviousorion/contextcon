@@ -15,10 +15,9 @@ try:  # mcp 1.x
 except ImportError:  # mcp 2.x renamed FastMCP -> MCPServer
     from mcp.server.mcpserver import MCPServer as FastMCP
 
-from . import actions
 
 TOOL_NAMES = ["resolve", "attest", "clear_counterparty", "dispute_file", "observe",
-              "audit_claims", "request_evidence", "watch", "approve"]
+              "audit_claims", "request_evidence", "watch", "issue", "cost"]
 
 # Expected backend.pipeline.api signatures (each returns a pydantic model/dict; cost optional):
 #   resolve(name: str|None=None, domain: str|None=None) -> ResolveResult
@@ -29,6 +28,8 @@ TOOL_NAMES = ["resolve", "attest", "clear_counterparty", "dispute_file", "observ
 #   audit_claims(domain: str, claims: list[dict]) -> AuditReport
 #   request_evidence(target: str, items: list[str]) -> EvidenceRequest
 #   watch(domain: str) -> dict
+#   issue(id: str) -> dict          (sends only what a human approved, else held_for_approval)
+#   cost(run_id: str|None=None) -> CostSummary|dict   (optional)
 # Each may take an optional run_id kwarg; the server passes run_id=<tool>-<uuid> when accepted.
 
 
@@ -40,7 +41,7 @@ def _default_registry() -> dict[str, Callable]:
 
         def missing(**_kw):
             raise RuntimeError(err)
-        return {n: missing for n in TOOL_NAMES if n != "approve"}
+        return {n: missing for n in TOOL_NAMES}
     def lazy(n):
         def f(**kw):
             fn = getattr(api, n, None)
@@ -48,7 +49,7 @@ def _default_registry() -> dict[str, Callable]:
                 raise RuntimeError(f"backend.pipeline.api.{n} is missing")
             return fn(**kw)
         return f
-    return {n: lazy(n) for n in TOOL_NAMES if n != "approve"}
+    return {n: lazy(n) for n in TOOL_NAMES}
 
 
 def _plain(x: Any) -> Any:
@@ -126,11 +127,15 @@ def build_server(registry: dict[str, Callable] | None = None) -> FastMCP:
         return await call("watch", domain=domain)
 
     @mcp.tool()
-    def approve(key: str) -> dict:
-        """Approve a held action by idempotency key. A double approval is a no-op."""
-        first = actions.approve(key)
-        return {"result": {"key": key, "approved": True, "first_approval": first},
-                "cost": {"credits": 0.0, "inr": 0.0, "calls": 0, "cache_hits": 0}}
+    async def issue(id: str) -> dict:
+        """Send a case file / report / request ONLY if a human already approved it (via the CLI);
+        otherwise returns held_for_approval. There is no approve tool: approval is human-only."""
+        return await call("issue", id=id)
+
+    @mcp.tool()
+    async def cost(run_id: str | None = None) -> dict:
+        """Credits and INR spent so far (this run, or the named run)."""
+        return await call("cost", run_id=run_id)
 
     return mcp
 

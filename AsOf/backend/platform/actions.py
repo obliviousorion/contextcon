@@ -16,7 +16,11 @@ from typing import Any, Callable
 
 from backend.models import ActionRecord
 
-from .config import state_dir
+import logging
+
+from .config import load_config, state_dir
+
+log = logging.getLogger(__name__)
 from .util import append_jsonl, atomic_write_json, read_json, read_jsonl
 
 
@@ -79,9 +83,15 @@ def _extra(d: dict) -> dict:
     return {k: v for k, v in d.items() if k not in ("key", "action", "target", "status", "ts")}
 
 
-def execute(key: str, action: str, target: str, fn: Callable[[], Any]) -> ActionRecord:
+def needs_approval(action: str) -> bool:
+    return action in (load_config().get("approvals") or [])
+
+
+def execute(key: str, action: str, target: str, fn: Callable[[], Any]) -> ActionRecord | None:
     """Run fn exactly once for this key. Re-calls (or restarts) after success are no-ops.
-    Actions in config `approvals` should be gated by approve() at the caller."""
+    Actions listed in config `approvals` are HELD (returns None, no effect) until approve(key)."""
+    if needs_approval(action) and not is_approved(key):
+        return None
     reconcile(key)
     cur = get_record(key)
     if cur is not None and cur.status == "done":
@@ -125,8 +135,6 @@ def is_approved(key: str) -> bool:
 
 def execute_approved(key: str, action: str, target: str, fn: Callable[[], Any]) -> ActionRecord | None:
     """Gate: only runs once approve(key) has happened; otherwise returns None (held)."""
-    if not is_approved(key):
-        return None
     return execute(key, action, target, fn)
 
 
@@ -135,11 +143,17 @@ def sandbox_send(payload: dict) -> str:
     """POST to $SANDBOX_WEBHOOK_URL if set, else append to state/sandbox_outbox.jsonl.
     Never sends anywhere but our own sandbox channel. Returns 'webhook' or 'outbox'."""
     url = os.environ.get("SANDBOX_WEBHOOK_URL")
+    if url and not url.lower().startswith("https://"):
+        log.warning("SANDBOX_WEBHOOK_URL is not https; writing to sandbox_outbox.jsonl instead")
+        url = None
     if url:
         req = urllib.request.Request(url, data=json.dumps(payload, default=str).encode(),
                                      headers={"Content-Type": "application/json"}, method="POST")
         with urllib.request.urlopen(req, timeout=10) as r:  # noqa: S310 (sandbox URL from env)
             r.read()
         return "webhook"
+    ik = payload.get("idempotency_key") or payload.get("key")
+    if ik is not None and any((e.get("idempotency_key") or e.get("key")) == ik for e in read_jsonl(outbox_path())):
+        return "outbox"  # already sent: skip (closes the kill window)
     append_jsonl(outbox_path(), payload)
     return "outbox"
