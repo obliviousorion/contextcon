@@ -50,3 +50,23 @@ async def test_mcp_has_no_approve_tool(tmp_path):
             await s.initialize()
             names = {t.name for t in (await s.list_tools()).tools}
             assert "approve" not in names
+
+
+async def test_mcp_issue_and_cost_use_the_real_pipeline(tmp_path):
+    """Default registry, real protocol: issue on an unapproved case file is held; cost returns the ledger view."""
+    env = {**os.environ, "MODE": "replay", "ASOF_STATE_DIR": str(tmp_path)}
+    params = StdioServerParameters(command=sys.executable, args=["-m", "backend.platform.mcp_server"],
+                                   cwd=str(ROOT), env=env)
+    async with stdio_client(params) as (r, w):
+        async with ClientSession(r, w) as s:
+            await s.initialize()
+            cf = _payload(await s.call_tool("clear_counterparty", {"domain": "delhivery.com"}))
+            assert "error" not in cf, cf
+            cf_id = cf["result"]["id"]
+            held = _payload(await s.call_tool("issue", {"id": cf_id}))
+            assert "error" not in held, held
+            assert held["result"]["status"] == "held_for_approval"
+            assert not (tmp_path / "sandbox_outbox.jsonl").exists()
+            cost = _payload(await s.call_tool("cost", {}))
+            assert "error" not in cost, cost
+            assert "58.08" in json.dumps(cost)

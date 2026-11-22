@@ -28,8 +28,8 @@ TOOL_NAMES = ["resolve", "attest", "clear_counterparty", "dispute_file", "observ
 #   audit_claims(domain: str, claims: list[dict]) -> AuditReport
 #   request_evidence(target: str, items: list[str]) -> EvidenceRequest
 #   watch(domain: str) -> dict
-#   issue(id: str) -> dict          (sends only what a human approved, else held_for_approval)
-#   cost(run_id: str|None=None) -> CostSummary|dict   (optional)
+#   issue(artifact_id: str) -> dict          (sends only what a human approved, else held_for_approval)
+#   cost() -> dict   (cross-process ledger view)
 # Each may take an optional run_id kwarg; the server passes run_id=<tool>-<uuid> when accepted.
 
 
@@ -130,12 +130,12 @@ def build_server(registry: dict[str, Callable] | None = None) -> FastMCP:
     async def issue(id: str) -> dict:
         """Send a case file / report / request ONLY if a human already approved it (via the CLI);
         otherwise returns held_for_approval. There is no approve tool: approval is human-only."""
-        return await call("issue", id=id)
+        return await call("issue", artifact_id=id)
 
     @mcp.tool()
-    async def cost(run_id: str | None = None) -> dict:
-        """Credits and INR spent so far (this run, or the named run)."""
-        return await call("cost", run_id=run_id)
+    async def cost() -> dict:
+        """Ledger view: credits and INR spent, plus the recorded cost of each stored case file."""
+        return await call("cost")
 
     return mcp
 
