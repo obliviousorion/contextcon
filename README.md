@@ -32,8 +32,8 @@ Round 1 is five judges scoring 1–5 each, maximum 25. Round 2 is three judges, 
 | 13 | Account Watch | Customer churn and expansion watch | 11 | — | Dropped (surveillance) | [13-account-watch.md](ideas/13-account-watch.md) |
 | 14 | Notice-Period Alert | Flags when a named contact at a counterparty has left | 11 | — | Dropped (tracks individuals) | [14-notice-period-alert.md](ideas/14-notice-period-alert.md) |
 | 15 | Conflict-of-Interest Desk | Screens bidders' directors for conflicts | 11 | — | Dropped (personal data, namesakes) | [15-conflict-of-interest.md](ideas/15-conflict-of-interest.md) |
-| — | Sourced | Hiring desk with CV-claim verification | not scored | — | Superseded (hiring track) | [16-sourced.md](ideas/16-sourced.md) |
-| — | Raise | Fundraising agent for founders | not scored | — | Retired (doesn't serve the 3PL client) | [17-raise.md](ideas/17-raise.md) |
+| 16 | Sourced | Hiring desk with CV-claim verification | not scored — dropped on hard constraint (RULES §1: must be unique; hiring screeners are named as overdone) | — | **Dropped** | [16-sourced.md](ideas/16-sourced.md) |
+| 17 | Raise | Fundraising agent for founders | not scored — dropped on hard constraint (RULES §1: must serve the one 3PL client; Raise serves founders) | — | **Dropped** | [17-raise.md](ideas/17-raise.md) |
 
 The three Round 1 scores in Sentinel's row are Receivables Sentinel, Carrier Pulse and LaneWatch, the three ideas merged into it. All rupee fee figures are agent estimates unless marked as sourced.
 
