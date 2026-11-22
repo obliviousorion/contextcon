@@ -61,32 +61,57 @@ Modes: `--mode replay` (default, `config.yaml`), `record` (calls Crustdata, cach
 ## How it's built
 ```mermaid
 flowchart LR
-  subgraph UI["Guided UI (React)"]
-    LOGIN["Sign in: link + PIN + consent"] --> CONF["Confirm card"] --> QS["Two questions"] --> DASH["Bento dashboard<br/>graph · profile · trail · insurers · gaps · next step · diary · date slider"]
+  subgraph FRONT["Two front doors, one engine"]
+    FILEREQ["Headless requests<br/>requests/*.json: employee_review, job_change_check,<br/>peer_benchmark, employer_package"]
+    CONSOLE["Operator console @ /console<br/>run stream · ledger · kill & resume"]
+    LOGIN["Guided sign-in @ /<br/>link/name+company + PIN + consent"]
   end
-  LOGIN -->|"HTTP + HttpOnly cookie"| API["bd serve (stdlib HTTP)"]
-  API --> ALLOW{"on consenting_personas?"}
-  ALLOW -->|"no: no call"| NOPE["'only people who agreed'"]
-  ALLOW -->|"yes"| USERS[("users: PBKDF2 PIN hash · sessions · user_state")]
-  API --> RUN["Run (child process): fixed steps<br/>You → Employer → People like you → Insurers → Gaps<br/>steps keyed by hash(scope, step, inputs)"]
-  RUN <--> SS[("SQLite step store<br/>finished steps skipped on restart")]
-  RUN --> CL["Crustdata client<br/>cache · record/replay · cap + time limit · backoff with jitter"]
-  CL -->|"replay: 0 credits"| CA[("response cache + committed fixtures")]
-  CL -->|"/person/enrich · /company/search · /company/enrich · /job/search · /person/search"| CD[("Crustdata API")]
+  FILEREQ --> CLI["CLI: bd run / approve / act / watch-*"]
+  CONSOLE --> API["bd serve (stdlib HTTP)<br/>/api/run spawns `bd run` as its own process"]
+  LOGIN -->|"HTTP + HttpOnly cookie"| API
+  API --> ALLOW{"on config.yaml consenting_personas?"}
+  ALLOW -->|"no: no call made"| NOPE["'this demo only works for people who agreed'"]
+  ALLOW -->|"yes: PBKDF2 PIN check, 5 wrong = 10 min lock"| USERS[("users table: PIN hash · sessions · user_state")]
+  USERS --> GREQ["request type=guided_review, user_id=uid"]
+  CLI --> RUN["Run (pipeline.py) — one engine, every front door<br/>steps keyed by hash(run/scope, step, inputs)"]
+  API --> RUN
+  GREQ --> RUN
+  RUN <--> SS[("SQLite step store<br/>scope=mine (per user+day+answers): your own steps<br/>scope=shared (per day): insurers/peer posts reused across every user")]
+
+  RUN --> CL["Crustdata client (crust.py)<br/>mode: replay / record / live"]
+  CL -->|"cache or fixture hit: 0 credits"| CA[("disk cache + committed fixtures/crust/*.json")]
+  CL -->|"/person/enrich · /company/search · /company/enrich<br/>/job/search (count-only) · /person/search"| CD[("Crustdata API")]
+  CL -->|"429 / 5xx / timeout"| RETRY["backoff with full jitter, up to max_retries"]
+  CL -->|"would cross credit cap or time limit"| HELD["clean stop: held — settled facts kept, rest named as missing"]
   CL --> LED[("Cost ledger: one row per call, no personal data")]
-  PDF[("IRDAI Annual Report PDF<br/>Statement 10, page 374")] -->|"bd irdai-extract (pypdf)"| REG[("quoted rows + page + URL")]
-  REG --> INS["Insurers: company facts + quoted regulator rows<br/>never ranked"]
-  RUN --> INS
-  RUN --> TRAIL["Lookup trail<br/>searched · source · records · credits · status · live/replay"]
-  RULES[["rules.yaml<br/>gaps · insurer selection · group minimum · phrases"]] --> ENG["Rules engine (pure)"]
-  RUN --> ENG --> BEL[("persona_beliefs + group beliefs<br/>valid_from / valid_to")]
-  BEL --> DIARY["Diary + date slider<br/>no new calls"]
-  ENG --> INT["Intent log (idempotency key per account)"]
-  INT -->|"person approves"| SB[("Sandbox receiver<br/>records every delivery")]
-  LED -->|"cap or time reached"| HOLD["clean stop: settled vs missing"]
+
+  PDF[("IRDAI Annual Report PDF<br/>Statement 10, page 374")] -->|"bd irdai-extract (pypdf, offline, one-time)"| REGFIX[("fixtures/irdai/statement10_health_icr.json<br/>quoted row + page + URL, exact-name match only")]
+  REGFIX --> INS["Insurers: Crustdata company facts<br/>+ regulator figures — never ranked"]
+
+  RUN --> FACTS["Told / Checked / Guessed facts<br/>pointer = (record, field path); unresolved = CANNOT VERIFY"]
+  RULES[["rules.yaml<br/>gaps · job change · package · insurer selection ·<br/>peer phrases · group minimum"]] --> ENG["Rules engine (pure, no model)"]
+  FACTS --> ENG
+  ENG --> INS
+  ENG --> TRAIL["Lookup trail (guided dashboard)<br/>searched · source · records · credits · status · live/replay"]
+  ENG --> BEL[("persona_beliefs + group beliefs<br/>versioned valid_from / valid_to")]
+  BEL --> CASE["Case file / dashboard (report.py, guided.dashboard)<br/>diary + date slider read only this store, no new calls"]
+  ENG --> CASE
+  ENG --> INT["actions.py: intent log<br/>idempotency key = hash(action, persona/account id, payload)"]
+
+  WATCH["watch.py: bd watch-create / -register / -pull<br/>same job_change rule fn + same action key<br/>as the direct request — one alarm, one action"] --> ENG
+  CD -.->|"/watch/person/*/runs (polled; no public webhook URL yet, so create is refused)"| WATCH
+
+  INT -->|"person approves: CLI / dashboard button<br/>a second click is a no-op"| APP{"approved"}
+  APP -->|"execute(): status -> sending"| ASK{"restart found it still 'sending'?<br/>ask sandbox first: GET /inbox?key="}
+  ASK -->|"found: mark done, never resend"| SB[("sandbox.py: our own receiver<br/>records every delivery — never a real insurer")]
+  ASK -->|"not found / unreachable: hold, never send blind"| HELD
+  APP -->|"POST /inbox, idempotency-key header"| SB
 ```
+- **Two front doors, one engine.** The scripted headless requests (`requests/*.json`, used for the test-case table below), the operator console, and the guided dashboard all run through the same `Run` in `pipeline.py` — a `guided_review` request is just another request type next to `employee_review`/`job_change_check`/`peer_benchmark`/`employer_package`, sharing the same step store, Crustdata client, rules engine, intent log and sandbox.
+- **Per-user vs. shared steps.** Guided-flow steps are scoped `mine` (your own employer/profile lookups, keyed by user + day + confirmed answers) or `shared` (insurers and peer job-post counts, keyed only by day) — so every signed-in user that day reuses the same insurer and peer-benchmark lookups at zero extra cost, which is also the 100x-volume answer.
+- **Watch and direct request give one answer.** `bd watch-pull` reads finished Crustdata watch runs into the *same* `rules_engine.job_change` function and the *same* action idempotency key as a direct request, so whichever path fires first, the other is a no-op. `watch-create` is refused until `config.yaml watch.webhook_url` points at a public URL; the pull path needs no tunnel and is tested.
 - **No language model in the core.** It is rules and lookups and gives the same answer every time, which is what the restart test needs, and it removes the main way a wrong fact gets in.
-- **State:** `state/desk.sqlite` (steps, ledger, intents, personas, facts, beliefs, events, users, sessions, user_state, persona_beliefs, persona_snapshots) and `state/sandbox.sqlite`, both gitignored and never committed. Stdlib HTTP server; React + Vite + Tailwind UI in `web/`.
+- **State:** `state/desk.sqlite` (runs, steps, intents, personas, facts, beliefs, events, users, sessions, user_state, persona_beliefs, persona_snapshots, watches, watch_cursor, ledger) and `state/sandbox.sqlite`, both gitignored and never committed. Stdlib HTTP server; React + Vite + Tailwind UI in `web/`.
 - **Every rule** lives in [`rules.yaml`](rules.yaml); **every limit and output field** in [`config.yaml`](config.yaml).
 
 ## Sources and checks
