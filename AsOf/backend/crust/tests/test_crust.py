@@ -113,8 +113,8 @@ async def test_402_stops_no_retry(tmp_path):
 
 @respx.mock
 async def test_403_endpoint_disabled(tmp_path):
-    respx.post(f"{BASE}/web/fetch").mock(return_value=httpx.Response(403))
-    r = await mk(tmp_path).web_fetch({"url": "x"})
+    respx.post(f"{BASE}/web/enrich/live").mock(return_value=httpx.Response(403))
+    r = await mk(tmp_path).web_fetch({"urls": ["x"]})
     assert isinstance(r, EndpointDisabled) and not r.ok and r.status == 403
 
 

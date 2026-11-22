@@ -28,6 +28,7 @@ PRICES = {
     "/company/search": 0.03,  # per result
     "/person/search": 0.03,   # per result
     "/web/search/live": 1.0,  # per call
+    "/web/enrich/live": 1.0,  # per page (measured 2026-11-22: one url, balance -1.0)
 }
 
 

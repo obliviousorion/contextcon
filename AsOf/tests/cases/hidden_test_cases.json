@@ -35,6 +35,7 @@
     {"id": "C16", "request": {"tool": "audit_claims", "domain": "tciexpress.in", "claims": [{"id": "k1", "field": "headcount_growth", "text": "grew 4x since 2019"}]},
      "expected": {"verdict": "cannot_verify", "rule": "never derive a growth verdict from two lower-bound counts; show both dated values side by side"}},
     {"id": "C17", "request": {"tool": "resolve", "domain": "drl.aero"},
-     "expected": {"status": "resolved", "crustdata_company_id": 5798}, "UNVERIFIED": "identify was never called on drl.aero; inferred from all_domains. Run one record-mode identify (0.2 credits) before asserting."}
+     "expected": {"status": "cannot_resolve", "candidate_ids": [5798, 15944579], "missing_mentions": "exactly one company"},
+     "settled": "Record-mode company/identify on drl.aero, 2026-11-22 (0.2 credits): two confidence-1.0 matches, Delhivery (5798) and Delhivery Robotics (15944579, primary domain drl.aero). The earlier answer, inferred from Delhivery's all_domains, was wrong."}
   ]
 }

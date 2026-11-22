@@ -4,6 +4,8 @@ from types import SimpleNamespace
 
 import pytest
 
+from backend.crust.ledger import CREDIT_TO_INR
+
 from backend.cli import main
 from backend.crust.results import CrustResult
 from backend.models import ClaimInput
@@ -18,20 +20,23 @@ async def test_c08_name_with_25_candidates_cannot_resolve(session):
     assert "domain" in r.missing and r.entity is None
 
 
-async def test_c17_all_domains_map_to_one_id_without_identify(session):
-    # drl.aero is an alias of Delhivery: once delhivery.com resolves, the alias costs nothing
+async def test_c17_alias_is_not_proof_without_identify(session):
+    # delhivery.com's record lists drl.aero, but an alias is not proof: drl.aero gets its own identify
     a = await resolve(domain="delhivery.com")
-    n = len(session.client.ledger.entries)
+    assert a.entity.crustdata_company_id == 5798 and "drl.aero" in a.entity.domains
     b = await resolve(domain="drl.aero")
-    assert a.entity.crustdata_company_id == b.entity.crustdata_company_id == 5798
-    assert len(session.client.ledger.entries) == n  # no new call at all
+    assert b.status == "cannot_resolve" and b.entity is None
+    assert session.client.network_calls == 0  # replayed, never live
 
 
-@pytest.mark.xfail(reason="UNVERIFIED: identify was never called on drl.aero; needs one record-mode call", strict=False)
-async def test_c17_drl_aero_fresh_identify(session):
+async def test_c17_drl_aero_identify_matches_two_companies(session):
+    # live record-mode identify, 2026-11-22: drl.aero -> Delhivery (5798) AND Delhivery Robotics (15944579)
     r = await resolve(domain="drl.aero")
-    assert r.status == "resolved" and r.entity.crustdata_company_id == 5798
-    assert session.client.network_calls == 0 and session.index.company_for_domain("drl.aero") is None
+    assert r.status == "cannot_resolve" and r.entity is None
+    assert {c.crustdata_company_id for c in r.candidates} == {5798, 15944579}
+    assert "exactly one company" in r.missing
+    assert session.client.network_calls == 0
+    assert session.index.company_for_domain("drl.aero") is None  # no inference from all_domains
 
 
 class CountingClient:
@@ -61,8 +66,10 @@ async def test_two_domains_one_company_charged_once():
     set_session(Session(client=c))
     a = await resolve(domain="acme.com")
     b = await resolve(domain="https://www.ACME.io/about")
-    assert a.entity.crustdata_company_id == b.entity.crustdata_company_id == 7
-    assert c.identify_calls == 1
+    assert a.entity is b.entity and a.entity.crustdata_company_id == 7  # one record, two domains
+    assert c.identify_calls == 2  # each new domain is identified (0.2 credits), never assumed
+    again = await resolve(domain="acme.io")
+    assert again.entity is a.entity and c.identify_calls == 2  # an identified domain is cached
 
 
 async def test_unknown_domain_clean_cannot_resolve(session):
@@ -199,13 +206,15 @@ async def test_cost_block_replay_records_what_it_cost(session):
     assert (c.credits, c.inr, c.calls) == (0, 0, 0)          # nothing spent this run
     assert c.cache_hits == 2                                   # identify result + enrich record
     assert c.recorded_credits == pytest.approx(2.2)            # identify 0.2 + enrich 2
-    assert c.recorded_inr == pytest.approx(58.08)              # 2.2 x 26.4
+    assert c.recorded_inr == pytest.approx(round(2.2 * CREDIT_TO_INR, 2))  # 2.2 credits x config rate
 
 
-async def test_alias_not_charged_twice_in_recorded_cost(session):
+async def test_shared_alias_gets_evidence_request_not_a_guess(session):
     await clear_counterparty("delhivery.com")
-    cf = await clear_counterparty("drl.aero")  # same company, other alias
-    assert cf.cost.recorded_credits == pytest.approx(0.0)
+    cf = await clear_counterparty("drl.aero")  # listed on Delhivery's record, but shared with another company
+    assert cf.resolve.status == "cannot_resolve" and cf.attestation is None
+    assert cf.evidence_request and cf.evidence_request.note == "Not a negative finding."
+    assert cf.cost.credits == 0  # replay
 
 
 async def test_rerun_resumes_with_zero_client_calls(session, tmp_path, monkeypatch):
@@ -288,11 +297,11 @@ async def test_cost_view_label(session):
     from backend.pipeline import api
     await clear_counterparty("delhivery.com")
     f = (await api.cost())["case_files"][0]
-    assert f["label"] == "\u20b90.00 spent this run (replay); \u20b958.08 measured cost of the stored copies (2.2 credits)"
+    assert f["label"] == f"\u20b90.00 spent this run (replay); \u20b9{2.2 * CREDIT_TO_INR:.2f} measured cost of the stored copies (2.2 credits)"
 
 
 def test_cli_cost_note(capsys, monkeypatch):
-    label = "\u20b90.00 spent this run (replay); \u20b958.08 measured cost of the stored copies (2.2 credits)"
+    label = f"\u20b90.00 spent this run (replay); \u20b9{2.2 * CREDIT_TO_INR:.2f} measured cost of the stored copies (2.2 credits)"
     monkeypatch.setenv("MODE", "replay")
     set_session(None)
     assert main(["clear", "delhivery.com"]) == 0

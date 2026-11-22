@@ -110,6 +110,8 @@ class CrustClient:
             return 0.0
         if path == "/web/search/live":
             return price
+        if path == "/web/enrich/live":
+            return price * (len((body or {}).get("urls") or []) if isinstance(body, dict) else 1)
         if path == "/company/enrich":
             n = sum(len((i or {}).get("matches") or []) for i in first_list(data) if isinstance(i, dict))
             return price * (n or (len(first_list(data)) if first_list(data) else 0))
@@ -265,7 +267,8 @@ class CrustClient:
         return await self.request("POST", "/web/search/live", body, group="web", **kw)
 
     async def web_fetch(self, body, **kw):
-        return await self.request("POST", "/web/fetch", body, group="web", **kw)
+        # /web/fetch returns 404; the docs' page fetch is /web/enrich/live (measured 2026-11-22, 1 credit/page)
+        return await self.request("POST", "/web/enrich/live", body, group="web", **kw)
 
     async def autocomplete(self, body, kind: str = "company", **kw):
         # path UNVERIFIED; see NOTES.md

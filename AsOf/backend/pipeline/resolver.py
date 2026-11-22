@@ -42,17 +42,23 @@ def _cannot(missing: str, cands: list[Candidate] | None = None) -> ResolveResult
     return ResolveResult(status="cannot_resolve", candidates=cands or [], missing=missing)
 
 
-def _register(s: Session, c_data: dict, resolved_by: str, ev: dict) -> Entity:
+def _register(s: Session, c_data: dict, resolved_by: str, ev: dict, key: str | None = None) -> Entity:
+    """One Entity per crustdata_company_id. Only the domain identify was asked about (`key`) is cached:
+    an alias from all_domains is not proof the alias belongs to this company alone (live identify on
+    drl.aero matched Delhivery and Delhivery Robotics), so an alias costs one identify, never a guess."""
     bi = c_data.get("basic_info") or {}
     cid = int(c_data["crustdata_company_id"])
-    domains = [d.lower() for d in (bi.get("all_domains") or [])]
-    if bi.get("primary_domain") and bi["primary_domain"].lower() not in domains:
-        domains.append(bi["primary_domain"].lower())
-    ent = Entity(crustdata_company_id=cid, name=bi.get("name"), domains=domains, resolved_by=resolved_by,
-                 evidence_id="E1")
-    for d in domains:           # every alias maps to the one id: a second alias costs 0
-        s.entities[d] = ent
-    s.entity_evidence[cid] = ev
+    ent = s.entity_by_id.get(cid)
+    if ent is None:
+        domains = [d.lower() for d in (bi.get("all_domains") or [])]
+        if bi.get("primary_domain") and bi["primary_domain"].lower() not in domains:
+            domains.append(bi["primary_domain"].lower())
+        ent = Entity(crustdata_company_id=cid, name=bi.get("name"), domains=domains, resolved_by=resolved_by,
+                     evidence_id="E1")
+        s.entity_by_id[cid] = ent
+        s.entity_evidence[cid] = ev
+    if key:
+        s.entities[key] = ent
     return ent
 
 
@@ -88,7 +94,7 @@ async def _by_domain(s: Session, d: str) -> ResolveResult:
     ev = {"source_endpoint": "/company/identify", "field_path": "basic_info.all_domains",
           "excerpt": f"domains {sorted(owned - {''})} -> crustdata_company_id {cd['crustdata_company_id']}"[:400],
           "retrieved_at": res.retrieved_at, "cache_key": res.cache_key, "matched_on": d, "name": bi.get("name")}
-    return ResolveResult(status="resolved", entity=_register(s, cd, "domain", ev))
+    return ResolveResult(status="resolved", entity=_register(s, cd, "domain", ev, key=d))
 
 
 async def _by_name(s: Session, name: str) -> ResolveResult:

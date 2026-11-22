@@ -17,8 +17,8 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 def test_credit_to_inr_from_config():
-    assert config.credit_to_inr() == pytest.approx(26.4)
-    assert CREDIT_TO_INR == pytest.approx(26.4)
+    assert config.credit_to_inr() == pytest.approx(0.30 * 94.12)  # usd_per_credit x inr_per_usd
+    assert CREDIT_TO_INR == pytest.approx(config.credit_to_inr())
 
 
 def test_cost_summary(tmp_path):
@@ -27,7 +27,7 @@ def test_cost_summary(tmp_path):
     led.add("/company/enrich", 0.0, True)
     cs = cost_summary("r1", tmp_path)
     assert (cs.credits, cs.calls, cs.cache_hits) == (2.0, 1, 1)
-    assert cs.inr == pytest.approx(52.8)
+    assert cs.inr == pytest.approx(round(2.0 * CREDIT_TO_INR, 2))
 
 
 def test_replay_zero_network_calls(tmp_path):

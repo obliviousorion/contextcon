@@ -69,7 +69,7 @@ async def test_mcp_issue_and_cost_use_the_real_pipeline(tmp_path):
             assert not (tmp_path / "sandbox_outbox.jsonl").exists()
             cost = _payload(await s.call_tool("cost", {}))
             assert "error" not in cost, cost
-            assert "58.08" in json.dumps(cost)
+            assert f"{2.2 * 0.30 * 94.12:.2f}" in json.dumps(cost)  # 2.2 recorded credits at the config rate
 
 
 def test_every_mcp_tool_matches_pipeline_api_signature():

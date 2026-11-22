@@ -19,7 +19,7 @@ limits:
   time_limit_seconds: 300
 cost:
   usd_per_credit: 0.30
-  inr_per_usd: 88                 # set from a real rate before the demo
+  inr_per_usd: 94.12              # OFX USD/INR 94.1242, dated 2026-10-21 (latest dated rate found on 2026-11-22)
 watch:
   max_alerts_per_entity_per_month: 2
 approvals:                        # actions that wait for a person

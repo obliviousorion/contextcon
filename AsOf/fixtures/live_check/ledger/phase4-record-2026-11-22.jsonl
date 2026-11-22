@@ -1,0 +1,12 @@
+{"run_id": "phase4-record", "ts": "2026-11-22T11:12:34.550297+00:00", "endpoint": "/account/credits", "credits": 0.0, "cumulative": 0.0, "cache_hit": false}
+{"run_id": "phase4-record", "ts": "2026-11-22T11:12:35.720667+00:00", "endpoint": "/company/identify", "credits": 0.2, "cumulative": 0.2, "cache_hit": false}
+{"run_id": "phase4-record", "ts": "2026-11-22T11:13:41.644405+00:00", "endpoint": "/account/credits", "credits": 0.0, "cumulative": 0.2, "cache_hit": false}
+{"run_id": "phase4-record", "ts": "2026-11-22T11:13:44.332735+00:00", "endpoint": "/account/credits", "credits": 0.0, "cumulative": 0.2, "cache_hit": false}
+{"run_id": "phase4-record", "ts": "2026-11-22T11:13:49.619206+00:00", "endpoint": "/web/enrich/live", "credits": 1.0, "cumulative": 1.2, "cache_hit": false}
+{"run_id": "phase4-record", "ts": "2026-11-22T11:13:53.704417+00:00", "endpoint": "/account/credits", "credits": 0.0, "cumulative": 1.2, "cache_hit": false}
+{"run_id": "cf-2f2c5c469bc78905ca8e", "ts": "2026-11-22T11:13:06.938262+00:00", "endpoint": "/company/identify", "credits": 0.2, "cumulative": 0.2, "cache_hit": false}
+{"run_id": "cf-2f2c5c469bc78905ca8e", "ts": "2026-11-22T11:13:09.362649+00:00", "endpoint": "/company/enrich", "credits": 2.0, "cumulative": 2.2, "cache_hit": false}
+{"run_id": "cf-4f32e2d6dbce3e318b11", "ts": "2026-11-22T11:13:17.391065+00:00", "endpoint": "/company/identify", "credits": 0.2, "cumulative": 0.2, "cache_hit": false}
+{"run_id": "cf-4f32e2d6dbce3e318b11", "ts": "2026-11-22T11:13:21.709926+00:00", "endpoint": "/company/enrich", "credits": 2.0, "cumulative": 2.2, "cache_hit": false}
+{"run_id": "cf-aeac3d02c3efd05d9ca9", "ts": "2026-11-22T11:13:10.799814+00:00", "endpoint": "/company/identify", "credits": 0.2, "cumulative": 0.2, "cache_hit": false}
+{"run_id": "cf-aeac3d02c3efd05d9ca9", "ts": "2026-11-22T11:13:15.002062+00:00", "endpoint": "/company/enrich", "credits": 2.0, "cumulative": 2.2, "cache_hit": false}

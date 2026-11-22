@@ -75,11 +75,13 @@ class ReplayIndex:
                         if prev is None or ("headcount" in cd and "headcount" not in prev[0]):
                             self.by_id[cid] = (cd, e.get("retrieved_at"), f.stem)
                 for item in e["response"]:
-                    for m in item.get("matches") or []:
-                        cd = m["company_data"]
-                        for d in (cd.get("basic_info") or {}).get("all_domains") or []:
-                            if item.get("match_type") != "name":
-                                self.by_domain.setdefault(d.lower(), int(cd["crustdata_company_id"]))
+                    # index only the domain identify was actually asked about, and only when it matched
+                    # exactly one company: an all_domains alias is not proof (live drl.aero matched two)
+                    ms = item.get("matches") or []
+                    on = str(item.get("matched_on") or "").lower()
+                    ids = {int(m["company_data"]["crustdata_company_id"]) for m in ms}
+                    if item.get("match_type") == "domain" and on and len(ids) == 1:
+                        self.by_domain.setdefault(on, ids.pop())
             except Exception:
                 continue
 
@@ -100,7 +102,8 @@ class Session:
                                  credit_cap=float(limits.get("credit_cap_per_run", 40)),
                                  time_limit=float(limits.get("time_limit_seconds", 300)))
         self.client = client
-        self.entities: dict[str, Entity] = {}          # domain -> Entity (every alias)
+        self.entities: dict[str, Entity] = {}          # identified domain -> Entity (never a bare alias)
+        self.entity_by_id: dict[int, Entity] = {}      # one record per company, whatever domain found it
         self.entity_evidence: dict[int, dict] = {}     # id -> evidence fields for the identification
         self.records: dict[int, Record] = {}
         self.served = {"identify": 0, "enrich": 0}  # stored copies served (counted once per query)
