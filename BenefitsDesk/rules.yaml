@@ -92,31 +92,29 @@ package:                                  # employer view: what each staff group
     - {cover: group term life, rule_id: R-PKG-3, why: "income protection for dependants"}
 
 insurers:
-  # Ranked on regulator figures only. Commission plays no part. Weights sum to 1.
+  # Found from data (Crustdata company search), never typed in. These are SELECTION rules only.
+  # Company facts (founded, headcount, offices) are shown as company facts: they are NOT a measure of
+  # how well an insurer pays claims, and insurers are never ranked by them. Claim and complaint figures
+  # stay "cannot verify" until a regulator source can be quoted (see README).
+  search:
+    country: IND
+    name_phrases: ["Health Insurance Company Limited", "Health Insurance Limited", "Health Insurance Co. Ltd", "Health and Allied Insurance"]
+    limit: 30                             # 0.03 credits per result (no premium fields)
+  keep_company_types: ["Privately Held", "Public Company"]
+  require: [year_founded, primary_domain] # a legal entity with its own web domain
+  generic_domains: ["business.site", "in.net", "blogspot.com", "wixsite.com"]
+  exclude_name_words: ["TPA", "agency", "agent", "broker", "club", "services", "representer", "&", " - "]
+  one_record_per_domain: true             # one company under two names stays one record
+  enrich_max: 3                           # 2 credits each (headcount history + offices)
+  order: name                             # alphabetical: never by size
+  # kept for the ranking unit test; only used if verified regulator figures exist
   ranking:
     claim_settlement_ratio: {weight: 0.6, better: higher}
     complaints_per_10k_claims: {weight: 0.4, better: lower}
-  min_figures: 2                          # fewer verified figures -> not ranked (shown as cannot verify)
-  max_figure_age_days: 730
-  # The broker's panel. Each figure needs the regulator page (IRDAI annual report / insurer public
-  # disclosure) it is read from, and a regex with a named group `value`. Until a page is set and
-  # fetched, the figure is CANNOT VERIFY and the insurer is not ranked.
-  # Tried 22 Nov 2026: web search returned news pages and a redirect wrapper. IRDAI's company-wise figures are
-  # in the IRDAI Annual Report 2024-25 PDF (irdai.gov.in/document-detail?documentId=8375620), and
-  # /web/enrich/live returns "no enabled plugin supports this MIME type" for PDFs. Needs a PDF text source.
-  panel:
-    - name: Star Health and Allied Insurance
-      figures:
-        claim_settlement_ratio: {url: null, pattern: "Star Health[^0-9]{0,80}(?P<value>[0-9.]+)", period: "FY 2024-25"}
-        complaints_per_10k_claims: {url: null, pattern: "Star Health[^0-9]{0,80}(?P<value>[0-9.]+)", period: "FY 2024-25"}
-    - name: Niva Bupa Health Insurance
-      figures:
-        claim_settlement_ratio: {url: null, pattern: "Niva Bupa[^0-9]{0,80}(?P<value>[0-9.]+)", period: "FY 2024-25"}
-        complaints_per_10k_claims: {url: null, pattern: "Niva Bupa[^0-9]{0,80}(?P<value>[0-9.]+)", period: "FY 2024-25"}
-    - name: Care Health Insurance
-      figures:
-        claim_settlement_ratio: {url: null, pattern: "Care Health[^0-9]{0,80}(?P<value>[0-9.]+)", period: "FY 2024-25"}
-        complaints_per_10k_claims: {url: null, pattern: "Care Health[^0-9]{0,80}(?P<value>[0-9.]+)", period: "FY 2024-25"}
+  min_figures: 2
+
+diary:
+  headcount_points: 6                     # latest dated headcount points per group shown as diary entries
 
 actions:
   submit_application: {reversible: false, cost_note: "No charge from us; the premium is quoted by the insurer, not by this service."}

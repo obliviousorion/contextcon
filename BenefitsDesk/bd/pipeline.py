@@ -45,8 +45,9 @@ class Run:
     def crust(self, step: str) -> Crust:
         return Crust(self.store, self.run_id, step, mode=self.mode, started=self.t0)
 
-    def step(self, name: str, inputs: Any, fn: Callable[[], Any]) -> Any:
-        key = h(self.run_id, name, inputs)  # resume = same run; other runs reuse fetches via the response cache
+    def step(self, name: str, inputs: Any, fn: Callable[[], Any], scope: str | None = None) -> Any:
+        # resume = same run (default scope); a wider scope (e.g. one user per day) lets later runs reuse the step
+        key = h(scope or self.run_id, name, inputs)
         out = self.store.step_get(key)
         if out is not None:
             self.skipped.append(name)
@@ -76,6 +77,9 @@ class Run:
                                                    lambda: peers.benchmark(self.crust("peer_benchmark"), since, as_of))
             elif t == "employer_package":
                 self._employer(case, as_of, since)
+            elif t == "guided_review":
+                from .guided import run_guided
+                run_guided(self, case, as_of, since)
             else:
                 raise F.Refused("BAD_REQUEST", f"unknown request type {t!r}")
             if case["status"] != "refused":

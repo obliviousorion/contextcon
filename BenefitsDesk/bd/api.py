@@ -41,6 +41,42 @@ class H(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(b)
 
+    def _cookie(self) -> str | None:
+        for part in (self.headers.get("cookie") or "").split(";"):
+            k, _, v = part.strip().partition("=")
+            if k == "bd_session":
+                return v
+        return None
+
+    def _uid(self) -> str | None:
+        from . import users as U
+        return U.session_user(Store(), self._cookie())
+
+    def _json_cookie(self, obj, code: int, token: str | None):
+        b = json.dumps(obj, default=str).encode()
+        self.send_response(code)
+        self.send_header("content-type", "application/json")
+        self.send_header("content-length", str(len(b)))
+        if token is not None:
+            age = 0 if token == "" else 7 * 86400
+            self.send_header("set-cookie", f"bd_session={token}; HttpOnly; SameSite=Strict; Path=/; Max-Age={age}")
+        self.end_headers()
+        self.wfile.write(b)
+
+    def _start_guided(self, uid: str) -> str:
+        from . import users as U
+        cfg = load_config()["guided"]
+        req = {"id": "guided", "type": "guided_review", "user_id": uid, "as_of": cfg["as_of"], "since": cfg["since"]}
+        d = state_dir() / "requests"; d.mkdir(exist_ok=True)
+        rid = f"guided-{uid[:6]}-{h(req, time.time())[:6]}"
+        f = str(d / f"{rid}.json"); Path(f).write_text(json.dumps(req)); FILES[rid] = f
+        mode = "record" if U.mode_of(Store(), uid) == "live" else "replay"
+        s = Store()
+        U.save_state(s, uid, last_run_id=rid)
+        s.x("INSERT OR IGNORE INTO user_runs VALUES (?,?,?)", uid, rid, now())
+        PROCS[rid] = _spawn(["run", f, "--run-id", rid, "--mode", mode])
+        return rid
+
     def _body(self) -> dict:
         n = int(self.headers.get("content-length") or 0)
         return json.loads(self.rfile.read(n) or b"{}") if n else {}
@@ -51,6 +87,19 @@ class H(BaseHTTPRequestHandler):
         q = {k: v[0] for k, v in parse_qs(u.query).items()}
         p = u.path
         s = Store()
+        if p in ("/api/me", "/api/intake", "/api/dashboard"):
+            from . import users as U, guided as G
+            uid = self._uid()
+            if p == "/api/me":
+                if not uid:
+                    return self._json({"logged_in": False})
+                return self._json({"logged_in": True, "user_id": uid, "stage": U.state(s, uid).get("stage"), "mode": U.mode_of(s, uid)})
+            if not uid:
+                return self._json({"error": "Please sign in."}, 401)
+            if p == "/api/intake":
+                items = [i for i in U.state(s, uid).get("intake") or [] if not i.get("hidden")]
+                return self._json({"items": items})
+            return self._json(G.dashboard(s, uid, q.get("as_of")))
         if p == "/api/requests":
             out = []
             for f in sorted((ROOT / "requests").glob("*.json")):
@@ -141,6 +190,8 @@ class H(BaseHTTPRequestHandler):
     # ---- POST -------------------------------------------------------------
     def do_POST(self):
         p, b, s = urlparse(self.path).path, self._body(), Store()
+        if p in ("/api/login", "/api/logout", "/api/forget", "/api/intake", "/api/answers", "/api/check", "/api/mode", "/api/choose"):
+            return self._guided_post(p, b, s)
         if p == "/api/run":
             if b.get("file"):
                 f = b["file"]
@@ -184,6 +235,53 @@ class H(BaseHTTPRequestHandler):
                             "retrieved_at": now(), "record_date": now()}), now(), now())
             return self._json({"saved": True, "label": "told"})
         return self._json({"error": "not found"}, 404)
+
+
+def _guided_post(self, p: str, b: dict, s: Store):
+    from . import users as U, guided as G
+    from .crust import Crust
+    if p == "/api/login":
+        try:
+            entry = U.allowlisted(b.get("link"), b.get("name"), b.get("company"))
+            uid0 = h(U.normalize_url(entry["profile_url"])) if entry else None
+            mode = "record" if (uid0 and U.mode_of(s, uid0) == "live") else "replay"
+            res, token = U.login(s, b.get("link"), b.get("name"), b.get("company"), str(b.get("pin") or ""),
+                                 bool(b.get("consent")), Crust(s, f"login-{(uid0 or 'x')[:6]}", "intake", mode=mode))
+            return self._json_cookie(res, 200, token)
+        except U.LoginError as e:
+            return self._json({"error": e.msg}, e.code)
+    if p == "/api/logout":
+        U.logout(s, self._cookie())
+        return self._json_cookie({"ok": True}, 200, "")
+    uid = self._uid()
+    if not uid:
+        return self._json({"error": "Please sign in."}, 401)
+    try:
+        if p == "/api/forget":
+            return self._json_cookie(U.forget(s, uid), 200, "")
+        if p == "/api/intake":
+            return self._json(U.confirm(s, uid, b.get("items") or {}))
+        if p == "/api/answers":
+            if U.state(s, uid).get("stage") not in ("questions", "dashboard"):
+                return self._json({"error": "Please confirm your details first."}, 400)
+            U.save_state(s, uid, answers={"dependants": b.get("dependants") or [], "insurance_now": b.get("insurance_now") or []})
+            return self._json({"run_id": self._start_guided(uid)})
+        if p == "/api/check":
+            return self._json({"run_id": self._start_guided(uid)})
+        if p == "/api/mode":
+            m = b.get("mode")
+            if m not in ("live", "replay"):
+                return self._json({"error": "mode is live or replay"}, 400)
+            s.x("UPDATE users SET mode=? WHERE user_id=?", m, uid)
+            return self._json({"mode": m})
+        if p == "/api/choose":
+            return self._json({"action": G.choose(s, uid, int(b.get("company_id")))})
+    except U.LoginError as e:
+        return self._json({"error": e.msg}, e.code)
+    return self._json({"error": "not found"}, 404)
+
+
+H._guided_post = _guided_post
 
 
 def _port_free(port: int) -> bool:

@@ -12,7 +12,12 @@
     {
      "confidence_score": 1.0,
      "person_data": {
-      "crustdata_person_id": "<redacted>",
+      "crustdata_person_id": 84799338,
+      "basic_profile": {
+       "location": {
+        "city": "Noida"
+       }
+      },
       "experience": {
        "employment_details": {
         "current": [],
@@ -89,11 +94,14 @@
          }
         ]
        }
+      },
+      "education": {
+       "schools": []
       }
      }
     }
    ]
   }
  ],
- "redacted": "personal data removed: names, profile, URLs and ids; employment entries kept (consenting team members)"
+ "redacted": "consenting team members: names, profile, school names removed; job entries, city and education years kept"
 }
