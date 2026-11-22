@@ -77,6 +77,10 @@ class CostSummary(BaseModel):
     inr: float = 0.0
     calls: int = 0
     cache_hits: int = 0
+    # What the stored copies cost when they were recorded (from the recorded ledger). In replay mode
+    # credits/inr are 0 (nothing was spent this run); these show the measured cost of the same file live.
+    recorded_credits: float = 0.0
+    recorded_inr: float = 0.0
 
 
 class Attestation(BaseModel):
