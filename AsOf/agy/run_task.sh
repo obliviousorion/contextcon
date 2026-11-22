@@ -23,4 +23,6 @@ for f in $CHANGED; do f=${f#AsOf/}; ok=0; for a in "${ALLOWED[@]}"; do [[ "$f" =
 echo "agy exit=$RC log=$LOG"; echo "changed:"; echo "$CHANGED" | sed 's/^/  /'
 if [ -n "$OUTSIDE" ]; then echo "OUT-OF-SCOPE CHANGES (review and revert manually if wrong):$OUTSIDE" >&2; exit 3; fi
 [ $RC -eq 0 ] || exit 2
+INSIDE=0; for f in $CHANGED; do f=${f#AsOf/}; for a in "${ALLOWED[@]}"; do [[ "$f" == "$a"* ]] && INSIDE=1; done; done
+[ $INSIDE -eq 1 ] || { echo "agy produced no changes in the allowed paths (check the log, e.g. headless permission denials): fall back" >&2; exit 2; }
 exit 0
