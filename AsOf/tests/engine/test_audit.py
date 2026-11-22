@@ -76,3 +76,19 @@ def test_audit_malformed_record(cfg):
         assert audit_claim(rec, claim("headcount", 10, date(2024, 3, 1)), T, cfg).verdict == "cannot_verify"
         v = audit_claim(rec, claim("headcount_growth", "4x"), T, cfg)
         assert v.verdict == "cannot_verify" and v.line.refusal_code == "SOURCE_UNAVAILABLE"
+
+
+@pytest.mark.parametrize("field,is_ratio", [
+    ("headcount_growth", True), ("revenue_yoy", True), ("hiring_rate", True), ("headcount-pct", True),
+    ("exchange", False), ("stock_exchange", False), ("operating_rate_card", True), ("headcount", False),
+    ("strategy", False), ("growthy", False),
+])
+def test_ratio_tokens_whole_word(field, is_ratio):
+    from backend.engine import is_ratio_field
+    assert is_ratio_field(field) is is_ratio
+
+
+def test_exchange_field_not_treated_as_ratio(cfg):
+    v = audit_claim(base_record(), claim("exchange", "NSE", date(2024, 3, 1)), T, cfg)
+    assert v.verdict == "cannot_verify" and v.line.refusal_code == "NO_RECORD_TYPE"
+    assert "growth or ratio" not in v.reason.lower()

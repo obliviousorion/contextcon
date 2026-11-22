@@ -210,3 +210,23 @@ def test_observe_full_unique_evidence(cfg):
 def test_observe_refuses_independently(cfg):
     l1, l2 = observe(base_record(), "headcount", date(2023, 1, 1), date(2024, 3, 1), T, cfg)
     assert l1.refusal_code == "NOT_YET_RECORDED" and l2.status == "attested"
+
+
+# ---- council 1519: dated existence, exact template, whole-token ratio match
+def test_existence_dated_by_stored_copy(cfg, record_for, retrieved_at):
+    line, _, ev = attest(record_for("delhivery.com"), "existence", date(2024, 7, 15), retrieved_at, cfg)
+    td = retrieved_at.date()
+    assert line.value == 2011 and line.point_date == td and line.label == "as recorded"
+    assert ev[0].point_date == td and ev[0].field_path == "basic_info.year_founded"
+    assert line.statement == cfg["attest"]["statement_template"].format(
+        point_date=td.isoformat(), value="year_founded 2011", retrieved_at=retrieved_at.isoformat(timespec="seconds"))
+
+
+@pytest.mark.parametrize("field", ["headcount", "existence", "listing", "revenue_band", "domains"])
+def test_attested_statement_is_exact_template(cfg, field):
+    import re
+    line, _, _ = attest(base_record(), field, date(2024, 2, 1), T, cfg)
+    assert line.status == "attested"
+    pat = re.escape(cfg["attest"]["statement_template"]).replace(r"\{point_date\}", r"\d{4}-\d{2}-\d{2}") \
+        .replace(r"\{value\}", ".+").replace(r"\{retrieved_at\}", re.escape(T.isoformat(timespec="seconds")))
+    assert re.fullmatch(pat, line.statement), line.statement

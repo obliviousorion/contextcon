@@ -6,6 +6,7 @@ same output. Nothing here reads the current time; `retrieved_at` is always passe
 from __future__ import annotations
 
 import json
+import re
 from datetime import date, datetime
 from typing import Any, Callable
 
@@ -137,11 +138,11 @@ class _Ctx:
         return _guard(s + (" " + suffix if suffix else ""))
 
     def attested(self, value: Any, point_date: date | None, value_text: str, eids: list[str],
-                 label: str | None = None, stmt_date: date | str | None = None, suffix: str = "") -> AttestLine:
+                 label: str | None = None) -> AttestLine:
         return AttestLine(
             field=self.field, as_of=self.as_of, status="attested", value=value, point_date=point_date,
             label=label or _label(self.cfg, self.field),
-            statement=self.statement(stmt_date if stmt_date is not None else point_date, value_text, suffix),
+            statement=self.statement(point_date, value_text),  # exactly the config template
             evidence_ids=eids,
         )
 
@@ -150,7 +151,7 @@ class _Ctx:
             field=self.field, as_of=self.as_of, status="subsequent_event", value=value, point_date=point_date,
             label=_label(self.cfg, self.field),
             statement=self.statement(point_date, value_text,
-                                     f"Dated after {self.as_of.isoformat()}: reported as a subsequent event, not attested."),
+                                     f"Dated after {self.as_of.isoformat()}; not attested."),
             evidence_ids=[eid],
         )
 
@@ -311,15 +312,15 @@ def _rule_existence(ctx: _Ctx, record: dict, include_subsequent: bool = True) ->
         return ctx.refuse("CANNOT_ATTEST", "year_founded (basic_info.year_founded is null in the record)"), []
     if not (isinstance(yf, int) and not isinstance(yf, bool)):
         raise _Malformed(f"year_founded is not an integer: {yf!r}")
-    eid = ctx.ev("basic_info.year_founded", {"year_founded": yf}, None)
+    td = ctx.t.date()  # an undated record field is dated by the stored copy
+    eid = ctx.ev("basic_info.year_founded", {"year_founded": yf}, td)
     if ctx.as_of.year < yf:
         return ctx.refuse(
             "BEFORE_FOUNDING",
             f"any record of the company in {ctx.as_of.year}; the record's founding year is {yf}",
             [eid],
         ), []
-    return ctx.attested(yf, None, f"year_founded {yf}", [eid],
-                        stmt_date="n/a (undated record field basic_info.year_founded)"), []
+    return ctx.attested(yf, td, f"year_founded {yf}", [eid], label=DEFAULT_LABEL), []
 
 
 def _rule_listing(ctx: _Ctx, record: dict, include_subsequent: bool = True) -> Result:
@@ -362,9 +363,7 @@ def _rule_domains(ctx: _Ctx, record: dict, include_subsequent: bool = True) -> R
     td = ctx.t.date()
     eid = ctx.ev("basic_info.all_domains", doms, td)
     return ctx.attested(
-        list(doms), td, f"all_domains {', '.join(doms)}", [eid],
-        suffix="True at retrieval only; this is not a historical record of the domains.",
-    ), []
+        list(doms), td, f"all_domains {', '.join(doms)}", [eid]), []
 
 
 _RULES = {
@@ -434,8 +433,9 @@ def observe(record: dict | None, field: str, d1: date, d2: date, retrieved_at: d
 # --------------------------------------------------------------------------- public: audit
 
 def is_ratio_field(field: str) -> bool:
-    f = (field or "").lower()
-    return any(tok in f for tok in _RATIO_TOKENS)
+    """True when a whole underscore/hyphen/space-separated token of the field is a ratio token."""
+    toks = re.split(r"[_\-\s.]+", (field or "").lower())
+    return any(t in _RATIO_TOKENS for t in toks)
 
 
 def _base_field(field: str) -> str | None:
