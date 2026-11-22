@@ -1,6 +1,8 @@
 # ContextCon 05 — Ideas Leaderboard
 
 Team workspace for ContextCon 05 (BITS Pilani × Crustdata × YC, Sun 22 Nov 2026). **We are not building yet: this page is for discussion.**
+> **Adding or reviewing an idea? Give your agent [`ideas/RULES.md`](ideas/RULES.md) first.** New ideas start from [`ideas/_TEMPLATE.md`](ideas/_TEMPLATE.md), and reviews use [`ideas/_council/JUDGE_PROMPTS.md`](ideas/_council/JUDGE_PROMPTS.md).
+
 Every idea has its own document in [`ideas/`](ideas/) with all the spec, data and council feedback gathered so far. How the ranking was produced is in [ideas/_council/PROCESS.md](ideas/_council/PROCESS.md). The old prep notes that used to be this README are now in [docs/PREP-NOTES.md](docs/PREP-NOTES.md).
 
 **Why we re-ideated:** the event judges told us the standard track examples (hiring screeners, vendor checks, investor scouts, invoice matchers, ...) are what most teams build. We need a unique, out-of-the-box use of Crustdata's APIs, watchers and MCP. We also want to cover as much of Crustdata's API as is genuinely useful.
