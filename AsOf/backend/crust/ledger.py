@@ -7,7 +7,16 @@ from pathlib import Path
 
 from .cache import DEFAULT_LEDGER_DIR, now_iso
 
-CREDIT_TO_INR = 8.0  # placeholder; confirm with plan pricing
+
+def _credit_to_inr() -> float:
+    try:
+        from backend.platform.config import credit_to_inr
+        return credit_to_inr()
+    except Exception:
+        return 0.30 * 88  # config.yaml unreadable: same defaults as the shipped config
+
+
+CREDIT_TO_INR = _credit_to_inr()  # usd_per_credit x inr_per_usd from config.yaml
 DEFAULT_CREDIT_CAP = 400.0
 
 # credits per unit; unit counted from response (or request) by Client._units
@@ -58,3 +67,12 @@ class Ledger:
 
 def get_run_cost(run_id: str, directory: Path | str | None = None) -> float:
     return Ledger(run_id, directory).total
+
+
+def cost_summary(run_id: str, directory: Path | str | None = None):
+    """CostSummary (credits, INR, calls, cache hits) for a run, INR from current config."""
+    from backend.models import CostSummary
+    led = Ledger(run_id, directory)
+    calls = sum(1 for e in led.entries if not e.cache_hit)
+    hits = sum(1 for e in led.entries if e.cache_hit)
+    return CostSummary(credits=led.total, inr=round(led.total * _credit_to_inr(), 2), calls=calls, cache_hits=hits)
