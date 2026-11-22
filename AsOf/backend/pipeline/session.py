@@ -40,8 +40,40 @@ def parse_ts(s: str | None) -> datetime | None:
         return None
 
 
-# credits per unit proven by the recorded ledger fixtures/live_check/ledger/datacheck-asof.jsonl
-RECORDED_UNIT_CREDITS = {"identify": 0.2, "enrich": 2.0}
+FIXTURE_LEDGER = ROOT / "fixtures" / "live_check" / "ledger"
+_UNIT_ENDPOINTS = {"identify": "/company/identify", "enrich": "/company/enrich"}
+
+
+def cfg_get(cfg: dict, *path: str):
+    """Index a config key; a missing key fails naming the dotted path (no silent defaults)."""
+    cur: Any = cfg
+    for i, k in enumerate(path):
+        if not isinstance(cur, dict) or k not in cur:
+            raise KeyError(f"config.yaml is missing required key '{'.'.join(path[:i + 1])}'")
+        cur = cur[k]
+    return cur
+
+
+def recorded_unit_credits(ledger_dir: Path | None = None) -> dict[str, float]:
+    """Credits per unit (identify per match, enrich per record) from the recorded ledgers: the smallest
+    charged call per endpoint is one unit. Fails loudly if a needed endpoint has no recorded price."""
+    import json
+    d = ledger_dir or FIXTURE_LEDGER
+    seen: dict[str, float] = {}
+    for f in sorted(d.glob("*.jsonl")):
+        for line in f.read_text().splitlines():
+            if not line.strip():
+                continue
+            e = json.loads(line)
+            c = float(e.get("credits") or 0)
+            if c > 0 and not e.get("cache_hit"):
+                seen[e["endpoint"]] = min(c, seen.get(e["endpoint"], c))
+    out = {}
+    for k, ep in _UNIT_ENDPOINTS.items():
+        if ep not in seen:
+            raise RuntimeError(f"no recorded price for {ep} in {d}/*.jsonl; cannot derive recorded unit credits")
+        out[k] = seen[ep]
+    return out
 
 
 @dataclass
@@ -55,13 +87,12 @@ class Session:
     def __init__(self, client: CrustClient | None = None, run_id: str | None = None):
         self.cfg = load_yaml()
         if client is None:
-            limits = self.cfg.get("limits", {})
             cache_dir = os.environ.get("CRUST_CACHE_DIR") or FIXTURE_CACHE
             client = CrustClient(run_id=run_id or f"run-{uuid.uuid4().hex[:8]}",
                                  mode=os.environ.get("MODE") or "replay",
                                  cache_dir=cache_dir, ledger_dir=state_dir() / "ledger",
-                                 credit_cap=float(limits.get("credit_cap_per_run", 40)),
-                                 time_limit=float(limits.get("time_limit_seconds", 300)))
+                                 credit_cap=float(cfg_get(self.cfg, "limits", "credit_cap_per_run")),
+                                 time_limit=float(cfg_get(self.cfg, "limits", "time_limit_seconds")))
         self.client = client
         self.entities: dict[str, Entity] = {}          # identified domain -> Entity (never a bare alias)
         self.entity_by_id: dict[int, Entity] = {}      # one record per company, whatever domain found it
@@ -94,7 +125,8 @@ class Session:
         es = self.client.ledger.entries[mark:]
         credits = round(sum(e.credits for e in es if not e.cache_hit), 6)
         sv = {k: self.served[k] - (served0 or {}).get(k, 0) + (extra_served or {}).get(k, 0) for k in self.served}
-        rec = round(sum(sv[k] * RECORDED_UNIT_CREDITS[k] for k in sv), 6)
+        unit = recorded_unit_credits()
+        rec = round(sum(sv[k] * unit[k] for k in sv), 6)
         return CostSummary(credits=credits, inr=round(credits * CREDIT_TO_INR, 2),
                            calls=sum(1 for e in es if not e.cache_hit), cache_hits=sum(sv.values()),
                            recorded_credits=rec, recorded_inr=round(rec * CREDIT_TO_INR, 2))

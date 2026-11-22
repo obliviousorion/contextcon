@@ -7,7 +7,7 @@ from typing import Any
 from backend.models import Candidate, Entity, ResolveResult
 
 from .errors import RequestError
-from .session import Session
+from .session import Session, cfg_get
 
 _DOMAIN = re.compile(r"^(?=.{4,253}$)([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,24}$")
 
@@ -108,7 +108,7 @@ async def _by_name(s: Session, name: str) -> ResolveResult:
     cands = _candidates(items)
     if not cands:
         return _cannot("a domain (no company matched that name)")
-    if len(cands) > int(s.cfg.get("resolve", {}).get("require_domain_when_candidates_gt", 1)):
+    if len(cands) > int(cfg_get(s.cfg, "resolve", "require_domain_when_candidates_gt")):
         return _cannot("a domain", cands)
     cd = next(m["company_data"] for it in items for m in it.get("matches") or [])
     ev = {"source_endpoint": "/company/identify", "field_path": "basic_info.name",

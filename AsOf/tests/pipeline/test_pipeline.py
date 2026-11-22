@@ -338,3 +338,12 @@ async def test_ledger_run_id_stable_across_restart(tmp_path):
     c3 = fresh()
     await attest("delhivery.com", "headcount", "2024-07-15")
     assert c3.run_id.startswith("rq-")
+
+
+def test_recorded_unit_credits_from_ledgers(tmp_path):
+    from backend.pipeline.session import cfg_get, recorded_unit_credits
+    assert recorded_unit_credits() == {"identify": 0.2, "enrich": 2.0}
+    with pytest.raises(RuntimeError, match="no recorded price"):
+        recorded_unit_credits(tmp_path)
+    with pytest.raises(KeyError, match="limits.nope"):
+        cfg_get({"limits": {}}, "limits", "nope")
