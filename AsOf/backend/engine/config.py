@@ -20,3 +20,21 @@ def load_config(path: str | Path = "config.yaml") -> dict[str, Any]:
     if not isinstance(cfg, dict):
         raise ValueError(f"config at {p} is not a mapping")
     return cfg
+
+
+class ConfigKeyError(KeyError):
+    """A required config key is missing; the message names the dotted key."""
+
+    def __str__(self) -> str:  # KeyError would repr() the message; keep it readable
+        return str(self.args[0]) if self.args else "missing config key"
+
+
+def require(config: Any, dotted: str) -> Any:
+    """Index config by a dotted key (e.g. 'attest.max_staleness_days') with no fallback.
+    Raises ConfigKeyError naming the full key when any part is missing."""
+    node = config
+    for part in dotted.split("."):
+        if not isinstance(node, dict) or part not in node or node[part] is None:
+            raise ConfigKeyError(f"missing required config key '{dotted}' (check config.yaml)")
+        node = node[part]
+    return node

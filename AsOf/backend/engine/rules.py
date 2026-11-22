@@ -10,6 +10,7 @@ import re
 from datetime import date, datetime
 from typing import Any, Callable
 
+from backend.engine.config import ConfigKeyError, require
 from backend.models import AttestLine, ClaimInput, ClaimVerdict, Evidence
 
 SOURCE_ENDPOINT = "/company/enrich"
@@ -89,19 +90,19 @@ def _attest_cfg(config: dict) -> dict:
 
 
 def _label(config: dict, field: str) -> str:
-    labels = _attest_cfg(config).get("labels") or {}
-    return labels.get(field, DEFAULT_LABEL) if isinstance(labels, dict) else DEFAULT_LABEL
+    labels = require(config, "attest.labels")
+    if not isinstance(labels, dict):
+        raise ConfigKeyError("config key 'attest.labels' must be a mapping of field -> label")
+    # fields with no label in config (existence, listing) are labelled as recorded
+    return labels.get(field, DEFAULT_LABEL)
 
 
 def _template(config: dict) -> str:
-    return _attest_cfg(config).get(
-        "statement_template",
-        "Data point dated {point_date} states {value}; stored copy retrieved {retrieved_at}.",
-    )
+    return str(require(config, "attest.statement_template"))
 
 
 def _max_stale(config: dict) -> int:
-    return int(_attest_cfg(config).get("max_staleness_days", 14))
+    return int(require(config, "attest.max_staleness_days"))
 
 
 def _record_types(config: dict) -> list[str]:
@@ -398,6 +399,8 @@ def _attest_ctx(record: Any, field: str, as_of: Any, retrieved_at: Any, config: 
     try:
         rec = _validate_record(record)
         line, subs = _RULES[fld](ctx, rec, include_subsequent)
+    except ConfigKeyError:
+        raise  # a broken config is our fault, never a source refusal
     except (_Malformed, TypeError, ValueError, KeyError, AttributeError) as exc:
         ctx.evidence.clear()
         ctx.n = start - 1
@@ -447,11 +450,6 @@ def _base_field(field: str) -> str | None:
     return None
 
 
-def _audit_cfg(config: dict) -> dict:
-    a = (config or {}).get("audit") or {}
-    return a if isinstance(a, dict) else {}
-
-
 def _cite(ids: list[str]) -> str:
     return "[" + ", ".join(ids) + "]" if ids else "[no evidence]"
 
@@ -491,6 +489,8 @@ def _ratio_audit(record: Any, claim: ClaimInput, retrieved_at: datetime, config:
         if pts is not None:
             valued = [(d, p, vf(p)) for d, p in _parse_series(pts, path) if d <= end]
             valued = [x for x in valued if x[2] is not None]
+    except ConfigKeyError:
+        raise  # a broken config is our fault, never a source refusal
     except (_Malformed, TypeError, ValueError, KeyError, AttributeError) as exc:
         ctx.evidence.clear()
         line = ctx.refuse("SOURCE_UNAVAILABLE", f"a well-formed company record from {SOURCE_ENDPOINT} ({exc})")
@@ -529,9 +529,8 @@ _NOT_LISTED = {"not listed", "unlisted", "false", "no", "private"}
 
 
 def _compare(claim: ClaimInput, line: AttestLine, config: dict) -> tuple[str, str]:
-    acfg = _audit_cfg(config)
-    window = int(acfg.get("contradict_date_window_days", 14))
-    tol = float(acfg.get("contradict_tolerance_pct", 25))
+    window = int(require(config, "audit.contradict_date_window_days"))
+    tol = float(require(config, "audit.contradict_tolerance_pct"))
     f = claim.field
     cv = claim.value
 
