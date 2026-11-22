@@ -75,10 +75,11 @@ An idea that fails any of these is marked **Dropped** with the reason.
    - State in the commit message which reviews justify the change.
 
 ## 6. Git workflow
-- Work on a branch named `idea/<slug>` or `review/<slug>` and open a pull request to `main`; don't push straight to `main`.
-- One idea or one review round per pull request. The description lists the files changed and the credits spent, if any.
+- Pushing straight to `main` or opening a pull request are both fine. Use whichever is easier.
+- `git pull` before you start and again before you push, so you don't overwrite someone else's leaderboard update.
+- Keep one idea or one review round per commit where you can. The commit message says what changed and how many credits were spent, if any.
 - Never commit `.env`, keys, or the local build repo (`sourced*/` is gitignored).
-- If you're an AI agent, end your commits with your own co-author line, and **don't merge your own pull request**.
+- If you're an AI agent, end your commits with your own co-author line.
 
 ## 7. What a good report back looks like (for agents)
 1. Which sections of these rules you followed.
