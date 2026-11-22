@@ -69,6 +69,7 @@ class Crust:
         self.cache_dir = state_dir() / "cache"
         self.cache_dir.mkdir(parents=True, exist_ok=True)
         self.transport, self.sleep = transport, sleep
+        self.use_cache = True  # the live smoke test turns this off
         self.prices = cfg["cost"]["prices"]
         self.inr = float(cfg["cost"]["inr_per_credit"])
 
@@ -133,7 +134,7 @@ class Crust:
              cacheable: bool = True) -> Result:
         body = body or {}
         key = h(method, path, body)
-        cached = self._cache_get(key) if cacheable else None
+        cached = self._cache_get(key) if cacheable and self.use_cache else None
         if cached is not None:
             self.store.ledger_add(self.run_id, self.step, path, 0.0, 0.0, True, "cache", key)
             return self._wrap(path, key, cached["status"], cached["data"], 0.0, True, cached.get("retrieved_at"))

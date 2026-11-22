@@ -15,4 +15,6 @@ state file was reset at 16:35, so this table is the record for them. Later runs 
 | 16:45 | E1 first run: 22 calls (role counts free, person-search counts) | 1.04 | leavers filter rejected (HTTP 400, free) |
 | 16:47 | probe: past.end_date filter (400, free), 1 row with job history | 0.23 | found that past.end_date is not filterable |
 | 16:49 | E1 rerun: person-search counts + 2 x 10 leaver rows with job history | 5.64 | leavers confirmed row by row |
-| | **Total** | **≈ 12.03 (≈ Rs 318)** | per-call rows for everything after 16:35 are in `state/desk.sqlite` (`bd ledger`) |
+| 16:44 | live smoke test (2 count-only queries, cache bypassed) | 0.00 | 3,434 / 114 reproduced |
+| 16:46 | web fetch IRDAI document page + 2 PDF links | 3.00 | page fetched; PDFs not readable by web fetch |
+| | **Total** | **≈ 15.03 (≈ Rs 397)** | per-call rows for everything after 16:35 are in `state/desk.sqlite` (`bd ledger`) |

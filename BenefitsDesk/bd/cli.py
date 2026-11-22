@@ -111,6 +111,7 @@ def main(argv: list[str] | None = None) -> int:
         from .config import load_rules
         rules = load_rules()
         c = Crust(store, "smoke", "smoke", mode=args.mode, credit_cap=2)
+        c.use_cache = False  # really ask Crustdata
         tot, e1, ts = count(c, base_filter("2026-09-01", rules))
         hi, e2, _ = count(c, base_filter("2026-09-01", rules, phrase_cond("health insurance")))
         print(json.dumps({"logistics_posts_india_since_2026_09_01": tot, "with_health_insurance": hi,

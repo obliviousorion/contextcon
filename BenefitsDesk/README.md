@@ -119,7 +119,7 @@ Same-company role change (compares `crustdata_company_id`, not `recently_changed
 
 ## Not done (cut for time), and why not now
 - **Live watch creation.** Crustdata needs a public notification URL and ours is local. `bd watch-create` refuses until `config.yaml watch.webhook_url` is set. The **pull path is built and tested**: `bd watch-pull <id>` reads finished runs after the last one processed, runs the same rule, prepares the same action key, and saves the run id. Direct and watch paths give the same alarm and one action (`tests/test_watch.py`).
-- Insurer figures need IRDAI's own table URL per figure (`rules.yaml insurers.panel`).
+- Insurer figures. IRDAI publishes company-wise claims figures only in its Annual Report 2024-25 PDF, and Crustdata's web fetch does not read PDFs ("no enabled plugin supports this MIME type", 22 Nov 2026). Next step: a PDF-to-text step, then a URL and pattern per figure in `rules.yaml insurers.panel`.
 - Monthly leavers on the timeline.
 - Sourced broker commission for the price.
 

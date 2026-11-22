@@ -101,7 +101,9 @@ insurers:
   # The broker's panel. Each figure needs the regulator page (IRDAI annual report / insurer public
   # disclosure) it is read from, and a regex with a named group `value`. Until a page is set and
   # fetched, the figure is CANNOT VERIFY and the insurer is not ranked.
-  # Tried 22 Nov 2026: web search returned only news pages and a redirect wrapper, not IRDAI's table.
+  # Tried 22 Nov 2026: web search returned news pages and a redirect wrapper. IRDAI's company-wise figures are
+  # in the IRDAI Annual Report 2024-25 PDF (irdai.gov.in/document-detail?documentId=8375620), and
+  # /web/enrich/live returns "no enabled plugin supports this MIME type" for PDFs. Needs a PDF text source.
   panel:
     - name: Star Health and Allied Insurance
       figures:
