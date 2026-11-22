@@ -6,8 +6,8 @@ Back to the [leaderboard](../README.md). Follows [RULES.md](RULES.md).
 - **Created:** 2026-11-22 15:35
 - **Status:** Proposed
 - **Parents (if a merge):** none
-- **Round 1 score:** not scored yet (RULES §5.1 review pending)
-- **Round 2:** not played
+- **Round 1 score:** 10/25 — CS 1 · Novelty 3 · Ethics 2 · Builder 2 · Finance 2 ([CS](_council/reviews/18-cs-20261122-1541.md) · [Novelty](_council/reviews/18-novelty-20261122-1541.md) · [Ethics](_council/reviews/18-ethics-20261122-1541.md) · [Builder](_council/reviews/18-builder-20261122-1541.md) · [Finance](_council/reviews/18-finance-20261122-1541.md))
+- **Round 2:** not played: 10/25 is below the ≥ 19 bar and does not beat the lowest current finalist (RULES §5.2)
 
 ## 1. One-line pitch
 An insurance desk for the client's workforce: employer side designs the cover; employee side tells each person what they have, what's missing, what to do.
