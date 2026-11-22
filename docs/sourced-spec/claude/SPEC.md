@@ -126,6 +126,7 @@ TraceEvent; final step="complete" data=Run) · `GET /api/runs/{id}` ·
    `CompanySnapshot` (headcount/funding at the claimed date) via `company/enrich` and
    flag implausible claims (e.g. "led 50 people" at a company with 10 employees that
    year) as `contradicted` with the snapshot as evidence.
+   See career-physics-addendum.md for extra checks, finer verdicts and data trap rules for steps 7 and 8.
 9. Market calibration: `job/search` for comparable live postings → attach
    `MarketComparable`s to the `JobSpec` for the recruiter-facing comp/demand context,
    and as a sanity check that the brief's title maps to a real market term.
