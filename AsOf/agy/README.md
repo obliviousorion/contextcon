@@ -27,4 +27,4 @@ agy/run_task.sh agy/tasks/docs.md README.md docs/
 
 **First-time setup:** run `agy` once interactively to sign in. Check with `agy --version`.
 
-**Permissions:** headless agy can't prompt, so any unapproved tool is auto-denied (and agy still exits 0). The runner passes a per-session `--settings` that grants `write_file` on the allowed paths only, plus the command prefixes in `AGY_ALLOW_CMDS`. Never use `--dangerously-skip-permissions`.
+**Permissions:** headless agy can't prompt, so any unapproved tool is auto-denied (and agy still exits 0). The runner passes a per-session `--settings` that grants `write_file` on the allowed paths only, plus the command prefixes in `AGY_ALLOW_CMDS`. `AGY_SKIP_PERMISSIONS=1` switches to `--dangerously-skip-permissions`; use it only with the user's explicit OK, since agy can then run any command.

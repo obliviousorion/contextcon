@@ -18,7 +18,10 @@ $(cat "$TASK")"
 # Per-session permissions (never saved): write only under the allowed paths, plus commands named in AGY_ALLOW_CMDS (comma-separated prefixes, e.g. "npm,npx").
 SETTINGS=$(ROOT="$ROOT" AGY_ALLOW_CMDS="${AGY_ALLOW_CMDS:-}" python3 -c 'import json,os,sys; r=os.environ["ROOT"]; allow=[f"write_file({r}/{a.rstrip("/")})" for a in sys.argv[1:]]+[f"command({c.strip()})" for c in os.environ["AGY_ALLOW_CMDS"].split(",") if c.strip()]; print(json.dumps({"permissions":{"allow":allow}}))' "${ALLOWED[@]}")
 echo "agy settings: $SETTINGS"
-"$AGY" --mode accept-edits --print-timeout 1500s --settings="$SETTINGS" --print="$PROMPT" > "$LOG" 2>&1; RC=$?
+PERMS=(--settings="$SETTINGS")
+# AGY_SKIP_PERMISSIONS=1 only with the user's explicit OK for this run: auto-approves every tool. The scope check below still runs.
+[ "${AGY_SKIP_PERMISSIONS:-0}" = "1" ] && { PERMS=(--dangerously-skip-permissions); echo "agy: ALL PERMISSIONS (user-approved)"; }
+"$AGY" --mode accept-edits --print-timeout 1500s "${PERMS[@]}" --print="$PROMPT" > "$LOG" 2>&1; RC=$?
 AFTER=$(git status --porcelain --untracked-files=all . | sort)
 CHANGED=$(comm -13 <(echo "$BEFORE") <(echo "$AFTER") | awk '{print $NF}')
 OUTSIDE=""
