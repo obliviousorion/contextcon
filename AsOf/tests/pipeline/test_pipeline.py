@@ -188,3 +188,68 @@ async def test_issue_held_then_approved_sends_once(session, tmp_path, monkeypatc
     assert a["status"] == b["status"] == "done"
     sent = (plat.outbox_path().read_text().splitlines())
     assert len(sent) == 1
+
+
+async def test_cost_block_replay_records_what_it_cost(session):
+    cf = await clear_counterparty("delhivery.com")
+    c = cf.cost
+    assert (c.credits, c.inr, c.calls) == (0, 0, 0)          # nothing spent this run
+    assert c.cache_hits == 2                                   # identify result + enrich record
+    assert c.recorded_credits == pytest.approx(2.2)            # identify 0.2 + enrich 2
+    assert c.recorded_inr == pytest.approx(58.08)              # 2.2 x 26.4
+
+
+async def test_alias_not_charged_twice_in_recorded_cost(session):
+    await clear_counterparty("delhivery.com")
+    cf = await clear_counterparty("drl.aero")  # same company, other alias
+    assert cf.cost.recorded_credits == pytest.approx(0.0)
+
+
+async def test_rerun_resumes_with_zero_client_calls(session, tmp_path, monkeypatch):
+    first = await clear_counterparty("delhivery.com")
+    # fresh session, same state dir: runstate has every step, so no client call may happen
+    fresh = Session(client=session.client)
+    set_session(fresh)
+    calls = []
+    for n in ("company_identify", "company_enrich", "autocomplete"):
+        monkeypatch.setattr(session.client, n, lambda *a, _n=n, **k: calls.append(_n))
+    again = await clear_counterparty("delhivery.com")
+    assert calls == [] and again.idempotency_key == first.idempotency_key
+    assert [l.model_dump() for l in again.attestation.lines] == [l.model_dump() for l in first.attestation.lines]
+    assert again.cost.recorded_credits == pytest.approx(2.2)
+
+
+async def test_cap_hit_returns_budget_held_case_file(session, monkeypatch):
+    from backend.platform import runstate
+    monkeypatch.setattr(runstate, "limits", lambda cfg=None: (0.0, 300.0))  # cap already reached
+    cf = await clear_counterparty("delhivery.com")
+    assert cf.status == "draft" and cf.resolve.status == "cannot_resolve"
+    assert "limit" in cf.resolve.missing
+    monkeypatch.setattr(runstate, "limits", lambda cfg=None: (40.0, 300.0))
+    ok = await clear_counterparty("delhivery.com")  # resumable
+    assert ok.attestation is not None
+
+
+async def test_cap_hit_midway_marks_lines_budget_held(session, monkeypatch):
+    from backend.platform import runstate
+    seen = {"n": 0}
+    real = runstate.limits
+
+    def limits(cfg=None):
+        seen["n"] += 1
+        return (0.0, 300.0) if seen["n"] > 3 else real()
+    monkeypatch.setattr(runstate, "limits", limits)
+    cf = await clear_counterparty("delhivery.com")
+    codes = [l.refusal_code for l in cf.attestation.lines]
+    assert "BUDGET_HELD" in codes and cf.attestation.lines[0].status == "attested"
+
+
+async def test_sandbox_payload_carries_idempotency_key(session, monkeypatch):
+    from backend.platform import actions
+    sent = []
+    monkeypatch.setattr(actions, "sandbox_send", lambda p: sent.append(p) or "outbox")
+    cf = await clear_counterparty("delhivery.com")
+    from backend.pipeline import api
+    await api.approve(cf.id)
+    await api.issue(cf.id)
+    assert sent and sent[0]["idempotency_key"] == cf.idempotency_key

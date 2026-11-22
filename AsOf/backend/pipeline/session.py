@@ -27,12 +27,8 @@ def today() -> date:
 
 
 def load_yaml() -> dict:
-    try:
-        import yaml  # guarded: defaults below match config.yaml if pyyaml is not installed yet
-        return yaml.safe_load((ROOT / "config.yaml").read_text()) or {}
-    except Exception:
-        return {"limits": {"credit_cap_per_run": 40, "time_limit_seconds": 300},
-                "resolve": {"require_domain_when_candidates_gt": 1}}
+    from backend.platform.config import load_config  # config.yaml is the only source of thresholds
+    return load_config()
 
 
 def parse_ts(s: str | None) -> datetime | None:
@@ -42,6 +38,10 @@ def parse_ts(s: str | None) -> datetime | None:
         return datetime.fromisoformat(s)
     except ValueError:
         return None
+
+
+# credits per unit proven by the recorded ledger fixtures/live_check/ledger/datacheck-asof.jsonl
+RECORDED_UNIT_CREDITS = {"identify": 0.2, "enrich": 2.0}
 
 
 @dataclass
@@ -103,31 +103,40 @@ class Session:
         self.entities: dict[str, Entity] = {}          # domain -> Entity (every alias)
         self.entity_evidence: dict[int, dict] = {}     # id -> evidence fields for the identification
         self.records: dict[int, Record] = {}
+        self.served = {"identify": 0, "enrich": 0}  # stored copies served (counted once per query)
         self.index = ReplayIndex(Path(client.cache.dir)) if client.mode == "replay" else None
 
     # --- ledger -------------------------------------------------------------
     def ledger_mark(self) -> int:
         return len(self.client.ledger.entries)
 
-    def cost_since(self, mark: int) -> CostSummary:
-        try:
-            from backend.crust.ledger import _credit_to_inr
-            rate = _credit_to_inr()
-        except Exception:
-            rate = 0.30 * 88
+    def served_mark(self) -> dict:
+        return dict(self.served)
+
+    def cost_since(self, mark: int, served0: dict | None = None, extra_served: dict | None = None) -> CostSummary:
+        """credits/inr/calls: what THIS run spent (ledger). recorded_*: what the stored copies served cost
+        when recorded (units proven by fixtures/live_check/ledger: identify 0.2, enrich 2.0, autocomplete 0)."""
+        from backend.crust.ledger import CREDIT_TO_INR
         es = self.client.ledger.entries[mark:]
         credits = round(sum(e.credits for e in es if not e.cache_hit), 6)
-        return CostSummary(credits=credits, inr=round(credits * rate, 2),
-                           calls=sum(1 for e in es if not e.cache_hit), cache_hits=sum(1 for e in es if e.cache_hit))
+        sv = {k: self.served[k] - (served0 or {}).get(k, 0) + (extra_served or {}).get(k, 0) for k in self.served}
+        rec = round(sum(sv[k] * RECORDED_UNIT_CREDITS[k] for k in sv), 6)
+        return CostSummary(credits=credits, inr=round(credits * CREDIT_TO_INR, 2),
+                           calls=sum(1 for e in es if not e.cache_hit), cache_hits=sum(sv.values()),
+                           recorded_credits=rec, recorded_inr=round(rec * CREDIT_TO_INR, 2))
 
     # --- crust with replay fallback ------------------------------------------
     async def identify_domain(self, domain: str) -> CrustResult:
         res = await self.client.company_identify({"domains": [domain]})
+        if res.ok and res.cache_hit:
+            self.served["identify"] += 1
         if res.ok or self.index is None or res.kind != "replay_miss":
             return res
         hit = self.index.company_for_domain(domain)
         data = [] if hit is None else [{"matched_on": domain, "match_type": "domain", "matches": [
             {"confidence_score": 1.0, "company_data": hit[1][0]}]}]
+        if hit is not None:
+            self.served["identify"] += 1
         key = None if hit is None else hit[1][2]
         ts = None if hit is None else hit[1][1]
         return CrustResult(ok=True, data=data, retrieved_at=ts, cache_hit=True, cache_key=key,
@@ -141,10 +150,13 @@ class Session:
                                                 "fields": ["basic_info", "headcount", "revenue"]})
         cd = _first_company(res.data) if res.ok else None
         key, ts = res.cache_key, res.retrieved_at
+        if cd is not None and res.cache_hit:
+            self.served["enrich"] += 1
         if not res.ok and self.index is not None and res.kind == "replay_miss":
             hit = self.index.by_id.get(company_id)
             if hit is not None and "headcount" in hit[0]:
                 cd, ts, key = hit[0], hit[1], hit[2]
+                self.served["enrich"] += 1
         if cd is None:
             return None, res
         when = parse_ts(ts)

@@ -94,6 +94,8 @@ async def _by_domain(s: Session, d: str) -> ResolveResult:
 async def _by_name(s: Session, name: str) -> ResolveResult:
     await s.client.autocomplete({"field": "basic_info.name", "query": name, "limit": 5})  # free; failure is fine
     res = await s.client.company_identify({"names": [name]})
+    if res.ok and res.cache_hit:
+        s.served["identify"] += 1
     if not res.ok:
         return _cannot(f"a reachable source ({res.kind}: {res.reason}); or a domain")
     items = res.data if isinstance(res.data, list) else []
