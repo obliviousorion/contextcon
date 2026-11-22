@@ -155,17 +155,22 @@ Tier A must ship by 17:30; Tier B only if A is green; Tier C is cut unless there
 
 ## 8. RULES / Handbook checklist (ticked as each is proven)
 
-- [ ] Whole job: request in, case file + approval request out
-- [ ] Live data drives at least one decision (job-change alarm, peer counts)
-- [ ] Every fact: link to record + field/passage + record date; no model facts
-- [ ] Cannot verify names what is missing
-- [ ] Irreversible actions wait for a person; payments in test mode; sends go to sandbox only
-- [ ] Time and cost limit per run; ledger row per call (model calls too, if any)
-- [ ] Kill/restart: each action exactly once (20-run chaos test)
-- [ ] Output fields and limits are config; rules in one file
-- [ ] Three test cases + duplicate + lookalike + cannot verify, dated after 1 Sep 2026
-- [ ] One record per person/company under two names (exact-id merge only)
-- [ ] Only the personal data the job needs; consent; deletion on withdrawal
-- [ ] Never contacts real outside people
-- [ ] README (job, who pays, input, result, pass mark, data sources, broker-tool licence note), diagram, cost per job
-- [ ] Runs headless (CLI); frontend optional
+- [x] Whole job: request in, case file + approval request out
+- [x] Live data drives at least one decision (job-change alarm, peer counts)
+- [x] Every fact: link to record + field/passage + record date; no model facts
+- [x] Cannot verify names what is missing
+- [x] Irreversible actions wait for a person; payments in test mode; sends go to sandbox only
+- [x] Time and cost limit per run; ledger row per call (model calls too, if any)
+- [x] Kill/restart: each action exactly once (20-run chaos test)
+- [x] Output fields and limits are config; rules in one file
+- [x] Three test cases + duplicate + lookalike + cannot verify, dated after 1 Sep 2026
+- [x] One record per person/company under two names (exact-id merge only)
+- [x] Only the personal data the job needs; consent; deletion on withdrawal
+- [x] Never contacts real outside people
+- [x] README (job, who pays, input, result, pass mark, data sources, broker-tool licence note), diagram, cost per job
+- [x] Runs headless (CLI); frontend optional
+
+### Status at build end (22 Nov 2026)
+All items above are met and tested, with two exceptions, both stated in the README:
+- Insurer regulator figures are CANNOT VERIFY: no IRDAI table URL was found.
+- The watch path for the alarm is not built: the direct request is the path.

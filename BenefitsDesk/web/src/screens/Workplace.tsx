@@ -32,7 +32,7 @@ export function WorkplaceScreen({ c }: { c: CaseFile }) {
 
   return (
     <>
-      <Card title={<span>{w.group.employer} · {w.group.function} · {w.group.city}</span>} icon={<Users className="h-5 w-5 text-indigo-600 dark:text-indigo-400" aria-hidden />} subtitle={<>Group-level beliefs, never about one person. Group key <span className="font-mono">{w.group.key}</span></>}>
+      <Card title={<span>{[w.group.employer, w.group.function || "all functions", w.group.city].filter(Boolean).join(" · ")}</span>} icon={<Users className="h-5 w-5 text-indigo-600 dark:text-indigo-400" aria-hidden />} subtitle={<>Group-level beliefs, never about one person. Group key <span className="font-mono">{w.group.key}</span></>}>
         <h3 className="mb-2 font-semibold">Joiners and leavers over time</h3>
         {w.timeline.length === 0 ? <Empty title="No timeline points" /> : <JoinLeaveChart data={w.timeline} />}
       </Card>

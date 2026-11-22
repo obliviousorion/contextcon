@@ -46,7 +46,7 @@ class Run:
         return Crust(self.store, self.run_id, step, mode=self.mode, started=self.t0)
 
     def step(self, name: str, inputs: Any, fn: Callable[[], Any]) -> Any:
-        key = h(name, inputs)
+        key = h(self.run_id, name, inputs)  # resume = same run; other runs reuse fetches via the response cache
         out = self.store.step_get(key)
         if out is not None:
             self.skipped.append(name)
@@ -184,6 +184,9 @@ class Run:
         if g:
             case["workplace"] = self.step("workplace", [g, load_rules()["beliefs"]],
                                           lambda: beliefs_for(self.store, self.crust("workplace"), g))
+            self.cannot.append({"statement": "Leavers per month on the timeline",
+                                "missing": "person search cannot filter on the end date of a past job; leavers are only "
+                                           "confirmed row by row for each belief window (see the leavers belief)"})
 
     def _save_facts(self, pid: str, flist: list[dict]) -> None:
         for f in flist:
