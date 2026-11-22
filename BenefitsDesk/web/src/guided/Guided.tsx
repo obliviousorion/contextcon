@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import ForceGraph3D from "3d-force-graph";
+import SpriteText from "three-spritetext";
 import type { CaseFile, Fact, Source } from "../types";
 
 // The consenting demo persona (requests/L1_persona_a_review.json). Never the under-18 refusal case.
@@ -47,6 +48,18 @@ export default function Guided() {
   const [err, setErr] = useState<string | null>(null);
   const [shown, setShown] = useState(0);
   const [open, setOpen] = useState<{ title: string; body: React.ReactNode } | null>(null);
+  const [live, setLive] = useState<string[]>([]);
+  useEffect(() => {
+    if (!runId) return;
+    const es = new EventSource(`/api/stream?run_id=${runId}`);
+    const words: Record<string, string> = { sign_up: "Consent and sign-up recorded", person_record: "Public work record read", alarm: "Job-change rule checked",
+      peer_benchmark: "Similar employers' job posts counted", gaps: "Rules file applied", shortlist: "Insurer figures checked", prepare_application: "Application pre-filled (not sent)" };
+    es.onmessage = (m) => { const e = JSON.parse(m.data); if (e.status === "done" && words[e.step]) setLive((x) => (x.includes(words[e.step]) ? x : [...x, words[e.step]])); if (e.status === "finished") es.close(); };
+    return () => es.close();
+  }, [runId]);
+  // bring each new step into view
+  const stage = !runId ? 1 : !cf ? 2 : shown < factsOf(cf).length ? 2 : 3;
+  useEffect(() => { if (stage > 1) document.getElementById(`s${stage}`)?.scrollIntoView({ behavior: "smooth", block: "start" }); }, [stage]);
   const [dark, setDark] = useState(() => window.matchMedia?.("(prefers-color-scheme: dark)").matches);
 
   useEffect(() => { document.documentElement.classList.toggle("dark", !!dark); }, [dark]);
@@ -104,12 +117,13 @@ export default function Guided() {
   const q = QUESTIONS[qi];
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
-      <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/90 backdrop-blur dark:border-slate-800 dark:bg-slate-900/90">
+      <header className="sticky top-0 z-20 scroll-mt-0 border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
         <div className="mx-auto flex max-w-5xl flex-wrap items-center gap-4 px-4 py-3">
           <div className="mr-auto">
             <div className="text-lg font-bold">Benefits Desk</div>
             <div className="text-xs text-slate-500 dark:text-slate-400">A tool for a licensed broker. Nothing is bought or sent without your approval.</div>
           </div>
+          {qi > 0 && <button className="rounded-md border px-3 py-1.5 text-sm dark:border-slate-700" onClick={() => window.location.reload()}>Start over</button>}
           <button className="rounded-md border px-3 py-1.5 text-sm dark:border-slate-700" onClick={() => setDark(!dark)}>{dark ? "Light" : "Dark"} theme</button>
           <a className="rounded-md border border-indigo-300 px-3 py-1.5 text-sm text-indigo-700 dark:border-indigo-700 dark:text-indigo-300"
              href={`/console${runId ? `#/console/${runId}` : ""}`}>Behind the scenes ↗</a>
@@ -164,7 +178,10 @@ export default function Guided() {
 
         {runId && (
           <Section n={2} title="Your profile builds">
-            {!cf ? <Spinner text="Gathering facts: your answers, then your public work record…" /> : (
+            {!cf ? (
+              <div className="space-y-2"><Spinner text="Working on it. Each line below is a real step finishing on the server." />
+                <ul className="ml-1 space-y-1 text-sm">{live.map((w) => <li key={w} className="animate-[fadein_.3s_ease-out]">✓ {w}</li>)}</ul></div>
+            ) : (
               <>
                 <p className="mb-3 text-sm text-slate-500 dark:text-slate-400">Each chip says how we know it. Click one to see the exact source field and its date.</p>
                 <div className="flex flex-wrap gap-2">
@@ -172,7 +189,7 @@ export default function Guided() {
                     <button key={f.fact_id} onClick={() => setOpen({ title: f.statement, body: <SourceBox f={f} /> })}
                       className={`animate-[fadein_.3s_ease-out] rounded-lg border px-3 py-2 text-left text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 ${f.label === "told" ? "border-sky-300 bg-sky-50 dark:border-sky-800 dark:bg-sky-950" : "border-emerald-300 bg-emerald-50 dark:border-emerald-800 dark:bg-emerald-950"}`}>
                       <span className="mr-2 text-[10px] font-bold uppercase tracking-wide">{f.label === "told" ? "Told" : "Checked"}</span>
-                      {f.statement}{(f as Fact & { cannot_verify?: boolean }).cannot_verify && <span className="ml-2 rounded bg-amber-200 px-1 text-[10px] font-bold text-amber-900">CANNOT VERIFY</span>}
+                      {nice(f.statement)}{(f as Fact & { cannot_verify?: boolean }).cannot_verify && <span className="ml-2 rounded bg-amber-200 px-1 text-[10px] font-bold text-amber-900">CANNOT VERIFY</span>}
                     </button>
                   ))}
                 </div>
@@ -231,13 +248,15 @@ export default function Guided() {
   );
 }
 
+const nice = (t: string) => t.replace(/(\d{4}-\d{2}-\d{2})T00:00:00\+00:00/g, "$1");
+
 function factsOf(cf: CaseFile): Fact[] {
   return (cf.facts || []).filter((f) => f.label === "told" || f.label === "checked");
 }
 
 function Section({ n, title, children }: { n: number; title: string; children: React.ReactNode }) {
   return (
-    <section aria-labelledby={`s${n}`} className="rounded-2xl border border-slate-200 bg-white/60 p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900/60">
+    <section aria-labelledby={`s${n}`} className="scroll-mt-32 rounded-2xl border border-slate-200 bg-white/60 p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900/60">
       <h2 id={`s${n}`} className="mb-4 flex items-center gap-3 text-lg font-semibold">
         <span className="flex h-7 w-7 items-center justify-center rounded-full bg-indigo-600 text-sm text-white">{n}</span>{title}
       </h2>
@@ -275,81 +294,116 @@ function SourceBox({ f }: { f: Fact }) {
   );
 }
 
-type GNode = { id: string; label: string; kind: "you" | "employer" | "role" | "city" | "peers" | "rival"; title: string; body: React.ReactNode; val?: number };
+type GNode = { id: string; label: string; kind: "you" | "employer" | "role" | "city" | "peers" | "phrase" | "rival"; title: string; body: React.ReactNode; val?: number; fx?: number; fy?: number; fz?: number };
 type GLink = { source: string; target: string; illustrative?: boolean };
+const COLORS: Record<string, string> = { you: "#6366f1", employer: "#10b981", role: "#0ea5e9", city: "#f59e0b", peers: "#ec4899", phrase: "#f472b6", rival: "#f43f5e" };
 
 function Graph({ cf, onPick, dark }: { cf: CaseFile; onPick: (t: string, b: React.ReactNode) => void; dark: boolean }) {
   const el = useRef<HTMLDivElement>(null);
   const data = useMemo(() => buildGraph(cf), [cf]);
+  const pick = useRef(onPick); pick.current = onPick;
   useEffect(() => {
-    if (!el.current) return;
+    const box = el.current;
+    if (!box) return;
     const FG: any = ForceGraph3D;
     let g: any;
-    try { g = new FG(el.current); } catch { g = FG()(el.current); }
-    const color: Record<string, string> = { you: "#6366f1", employer: "#10b981", role: "#0ea5e9", city: "#f59e0b", peers: "#ec4899", rival: "#f43f5e" };
-    g.width(el.current.clientWidth).height(420).backgroundColor(dark ? "#020617" : "#f8fafc")
+    try { g = new FG(box, { controlType: "orbit" }); } catch { g = FG({ controlType: "orbit" })(box); }
+    const ink = dark ? "#e2e8f0" : "#0f172a";
+    g.width(box.clientWidth).height(480).backgroundColor(dark ? "#0b1120" : "#f8fafc").showNavInfo(false)
       .graphData({ nodes: data.nodes.map((n) => ({ ...n })), links: data.links.map((l) => ({ ...l })) })
-      .nodeLabel((n: GNode) => `${n.label}`).nodeColor((n: GNode) => color[n.kind]).nodeVal((n: GNode) => n.val || 4).nodeOpacity(0.95)
-      .linkColor((l: GLink) => (l.illustrative ? "#94a3b8" : "#6366f1")).linkWidth((l: GLink) => (l.illustrative ? 0.3 : 1.5))
-      .linkLabel((l: GLink) => (l.illustrative ? "illustrative link: not from data" : "from data"))
-      .onNodeClick((n: GNode) => onPick(n.title, n.body))
-      .cooldownTicks(120).onEngineStop(() => g.zoomToFit(600, 60));
-    const onResize = () => el.current && g.width(el.current.clientWidth);
+      .cooldownTicks(0).warmupTicks(0)                       // fixed layout: no simulation, no lag
+      .nodeColor((n: GNode) => COLORS[n.kind]).nodeVal((n: GNode) => n.val || 4).nodeResolution(16).nodeOpacity(1)
+      .nodeLabel((n: GNode) => n.title)
+      .nodeThreeObjectExtend(true)
+      .nodeThreeObject((n: GNode) => {
+        const t = new (SpriteText as any)(n.label);
+        t.color = ink; t.textHeight = n.kind === "you" ? 7 : 4.2; t.fontWeight = n.kind === "you" ? "700" : "500";
+        t.backgroundColor = dark ? "rgba(11,17,32,0.75)" : "rgba(248,250,252,0.8)"; t.padding = 1.5; t.borderRadius = 3;
+        t.position.y = -(Math.cbrt(n.val || 4) * 4 + 6);
+        return t;
+      })
+      .linkColor((l: GLink) => (l.illustrative ? "#94a3b8" : COLORS.you)).linkOpacity(0.6)
+      .linkWidth((l: GLink) => (l.illustrative ? 0 : 1.2))
+      .linkDirectionalParticles((l: GLink) => (l.illustrative ? 0 : 2)).linkDirectionalParticleWidth(1.6).linkDirectionalParticleSpeed(0.006)
+      .linkLabel((l: GLink) => (l.illustrative ? "illustrative link: not from data" : "from a record"))
+      .onNodeClick((n: any) => {
+        pick.current(n.title, n.body);
+        const d = 90, r = 1 + d / Math.hypot(n.x || 1, n.y || 1, n.z || 1);
+        g.cameraPosition({ x: (n.x || 0) * r, y: (n.y || 0) * r, z: (n.z || 0) * r + 40 }, n, 900);
+      })
+      .cameraPosition({ x: 0, y: 30, z: 300 });
+    const ctl = g.controls(); if (ctl) { ctl.autoRotate = true; ctl.autoRotateSpeed = 0.35; ctl.enableDamping = true; }
+    // render only while visible
+    const io = new IntersectionObserver(([e]) => (e.isIntersecting ? g.resumeAnimation() : g.pauseAnimation()));
+    io.observe(box);
+    const onResize = () => g.width(box.clientWidth);
     window.addEventListener("resize", onResize);
-    return () => { window.removeEventListener("resize", onResize); g._destructor?.(); el.current && (el.current.innerHTML = ""); };
+    return () => { io.disconnect(); window.removeEventListener("resize", onResize); g.pauseAnimation(); g._destructor?.(); box.innerHTML = ""; };
   }, [data, dark]);
   return (
-    <div>
-      <p className="mb-2 text-sm text-slate-500 dark:text-slate-400">Drag to rotate, scroll to zoom, click a node to open its card. Solid lines come from records; faint lines are illustrative.</p>
-      <div ref={el} className="overflow-hidden rounded-xl border dark:border-slate-800" aria-label="3D graph of the groups around you" />
-      <div className="mt-2 flex flex-wrap gap-2" aria-label="Graph nodes (keyboard access)">
-        {data.nodes.map((n) => <button key={n.id} onClick={() => onPick(n.title, n.body)} className="rounded border px-2 py-1 text-xs dark:border-slate-700">{n.label}</button>)}
+    <div className="grid gap-4 lg:grid-cols-[1fr_220px]">
+      <div>
+        <div ref={el} className="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800" aria-label="3D map of the groups around you" />
+        <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">Drag to rotate · scroll to zoom · click a node to open its card. Moving dots run along links that come from records; the faint link is illustrative.</p>
       </div>
+      <ul className="space-y-1.5 text-sm" aria-label="Nodes (keyboard access)">
+        {data.nodes.map((n) => (
+          <li key={n.id}><button onClick={() => onPick(n.title, n.body)} className="flex w-full items-center gap-2 rounded-md border border-slate-200 px-2 py-1.5 text-left hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:border-slate-700 dark:hover:bg-slate-800">
+            <span className="h-3 w-3 shrink-0 rounded-full" style={{ background: COLORS[n.kind] }} /><span className="truncate">{n.label}</span></button></li>
+        ))}
+      </ul>
     </div>
   );
+}
+
+function ring(nodes: GNode[], radius: number, cx: number, phase = 0) {
+  nodes.forEach((n, i) => { const t = phase + (2 * Math.PI * i) / Math.max(nodes.length, 1); n.fx = cx + radius * Math.cos(t); n.fy = radius * Math.sin(t); n.fz = 15 * Math.sin(2 * t); });
 }
 
 function buildGraph(cf: CaseFile): { nodes: GNode[]; links: GLink[] } {
   const by = Object.fromEntries((cf.facts || []).map((f) => [f.fact_id, f]));
   const nodes: GNode[] = [], links: GLink[] = [];
-  nodes.push({ id: "you", label: "You", kind: "you", val: 10, title: "You", body: <p className="text-sm">The person at the centre. Only facts you told us or a record states are used.</p> });
+  const cv = (t: string) => <div className="rounded bg-amber-100 p-2 text-amber-900">Cannot verify: {t}</div>;
+  nodes.push({ id: "you", label: "You", kind: "you", val: 14, fx: -85, fy: 0, fz: 0, title: "You",
+    body: <p className="text-sm">The person at the centre. Only facts you told us, or a record states, are used. Nobody else is shown by name.</p> });
+  const mine: GNode[] = [];
   const emp = by.current_employer?.value ? by.current_employer : by.last_past_employer;
-  if (emp?.value) {
-    nodes.push({ id: "employer", label: `Employer group: ${emp.value}`, kind: "employer", val: 7, title: `${emp.value} (employer group)`,
-      body: <div className="space-y-3 text-sm"><p>{emp.statement}</p><SourceRows s={emp.source} />
-        <div className="rounded bg-amber-100 p-2 text-amber-900">Cannot verify: workplace beliefs (joiners, leavers, group size) have not been computed for this group. Run the employer view for it to get sourced numbers.</div></div> });
-    links.push({ source: "you", target: "employer" });
-  }
+  if (emp?.value) mine.push({ id: "employer", label: `Employer · ${emp.value}`, kind: "employer", val: 8, title: `${emp.value} (employer group)`,
+    body: <div className="space-y-3 text-sm"><p>{nice(emp.statement)}</p><SourceRows s={emp.source} />{cv("workplace numbers (joiners, leavers, group size) were not computed for this group.")}</div> });
   const title = by.current_title?.value ? by.current_title : by.last_past_title;
-  if (title?.value) {
-    nodes.push({ id: "role", label: `Role group: ${title.value}`, kind: "role", val: 5, title: `${title.value} (role group)`,
-      body: <div className="space-y-3 text-sm"><p>{title.statement}</p><SourceRows s={title.source} /><div className="rounded bg-amber-100 p-2 text-amber-900">Cannot verify: no group size for this role group.</div></div> });
-    links.push({ source: "you", target: "role" });
-    if (emp?.value) links.push({ source: "role", target: "employer" });
-  }
-  if (by.city?.value) {
-    nodes.push({ id: "city", label: `City: ${by.city.value}`, kind: "city", val: 5, title: `${by.city.value} (city group)`,
-      body: <div className="space-y-3 text-sm"><p>You told us you live here.</p><SourceRows s={by.city.source} /><div className="rounded bg-amber-100 p-2 text-amber-900">Cannot verify: no group data for this city.</div></div> });
-    links.push({ source: "you", target: "city" });
-  }
+  if (title?.value) mine.push({ id: "role", label: `Role · ${title.value}`, kind: "role", val: 6, title: `${title.value} (role group)`,
+    body: <div className="space-y-3 text-sm"><p>{nice(title.statement)}</p><SourceRows s={title.source} />{cv("no group size for this role group.")}</div> });
+  if (by.city?.value) mine.push({ id: "city", label: `City · ${by.city.value}`, kind: "city", val: 6, title: `${by.city.value} (city group)`,
+    body: <div className="space-y-3 text-sm"><p>You told us you live here.</p><SourceRows s={by.city.source} />{cv("no group data for this city.")}</div> });
+  ring(mine, 55, -85, Math.PI / 2);
+  mine.forEach((n) => { nodes.push(n); links.push({ source: "you", target: n.id }); });
+  if (mine.some((n) => n.id === "role") && mine.some((n) => n.id === "employer")) links.push({ source: "role", target: "employer" });
+
   const pb = cf.peer_benchmark;
   if (pb && pb.total != null) {
-    nodes.push({ id: "peers", label: `Logistics employers in India: ${pb.total.toLocaleString("en-IN")} posts`, kind: "peers", val: 8,
+    const src = pb.source;
+    nodes.push({ id: "peers", label: `Logistics employers · ${pb.total.toLocaleString("en-IN")} posts`, kind: "peers", val: 10, fx: 85, fy: 0, fz: 0,
       title: "Peer group: logistics employers in India",
       body: <div className="space-y-3 text-sm">
         <div className="text-3xl font-bold">{pb.any_cover.count ?? "—"} <span className="text-base font-normal">of {pb.total.toLocaleString("en-IN")} job posts</span></div>
         <p>mention any cover phrase ({pb.any_cover.share != null ? (pb.any_cover.share * 100).toFixed(1) + "%" : "cannot verify"}) since {(pb as any).since}. Group size: {pb.total.toLocaleString("en-IN")} posts.</p>
-        <p className="text-slate-500">{pb.note}</p><SourceRows s={pb.source} />
+        <p className="text-slate-500">{pb.note}</p><SourceRows s={src} />
         <details><summary className="cursor-pointer">Filter used</summary><pre className="overflow-auto text-xs">{JSON.stringify(pb.filter, null, 1)}</pre></details></div> });
     links.push({ source: "you", target: "peers", illustrative: true });
-    for (const s of pb.samples || []) {
-      const id = `rival-${s.job_id}`;
-      nodes.push({ id, label: `Rival employer: ${s.company}`, kind: "rival", val: 3, title: `${s.company} (employer in the peer group)`,
-        body: <div className="space-y-3 text-sm"><p>One job post from this employer mentions “{s.phrase}”.</p><blockquote className="border-l-4 pl-3 italic">…{s.passage}…</blockquote>
-          <SourceRows s={{ record: "crustdata /job/search", field_path: "content.description", url: s.url, record_date: s.date_added, retrieved_at: (s as any).retrieved_at || pb.source.retrieved_at }} />
-          <p className="text-slate-500">One post is not the employer's whole benefits policy.</p></div> });
-      links.push({ source: "peers", target: id });
+    const kids: GNode[] = [];
+    for (const ph of pb.phrases.filter((x) => x.count)) {
+      kids.push({ id: `ph-${ph.phrase}`, label: `"${ph.phrase}" · ${ph.count}`, kind: "phrase", val: 2 + Math.log2(1 + (ph.count || 0)), title: `Posts mentioning "${ph.phrase}"`,
+        body: <div className="space-y-3 text-sm"><div className="text-3xl font-bold">{ph.count} <span className="text-base font-normal">of {pb.total.toLocaleString("en-IN")} posts</span></div>
+          <p>({ph.share != null ? (ph.share * 100).toFixed(1) + "%" : "—"}) contain the exact phrase “{ph.phrase}”.</p><SourceRows s={src} /></div> });
     }
+    for (const sm of pb.samples || []) {
+      kids.push({ id: `rival-${sm.job_id}`, label: `Rival · ${sm.company}`, kind: "rival", val: 4, title: `${sm.company} (employer in the peer group)`,
+        body: <div className="space-y-3 text-sm"><p>One job post from this employer mentions “{sm.phrase}”.</p><blockquote className="border-l-4 pl-3 italic">…{sm.passage}…</blockquote>
+          <SourceRows s={{ record: "crustdata /job/search", field_path: "content.description", url: sm.url, record_date: sm.date_added, retrieved_at: (sm as any).retrieved_at || src.retrieved_at }} />
+          <p className="text-slate-500">One post is not the employer's whole benefits policy.</p></div> });
+    }
+    ring(kids, 62, 85, 0.3);
+    kids.forEach((k) => { nodes.push(k); links.push({ source: "peers", target: k.id }); });
   }
   return { nodes, links };
 }
