@@ -40,7 +40,7 @@ class CrustClient:
         self.mode = (mode or os.environ.get("MODE") or "live").lower()
         if self.mode not in ("live", "record", "replay"):
             raise ValueError(f"bad MODE {self.mode!r}")
-        self.api_key = api_key or os.environ.get("CRUST_KEY")
+        self.api_key = api_key or os.environ.get("CRUST_KEY") or os.environ.get("CRUSTDATA_API_KEY")
         self.cache = DiskCache(cache_dir)
         self.ledger = Ledger(run_id, ledger_dir)
         self.credit_cap, self.time_limit = credit_cap, time_limit
@@ -160,7 +160,7 @@ class CrustClient:
             blocked.cache_key = key
             return blocked
         if not self.api_key:
-            return unavailable(path, "CRUST_KEY not set", key=key)
+            return unavailable(path, "Crustdata API key not set (CRUST_KEY or CRUSTDATA_API_KEY)", key=key)
         iid = self.ledger.intent(path, self._estimate(path, body))  # durable before the call
         try:
             res = await self._network(method, path, body, key, group)

@@ -96,7 +96,7 @@ def test_audit_growth_claim_cannot_verify(client):
 def test_file_detail_and_watch_flow_marks_stale(client):
     cf_id = client.get("/api/casefile", params={"tool": "clear", "domain": "delhivery.com"}).json()["caseFile"]["id"]
     assert client.get(f"/api/files/{cf_id}").json()["artifact"]["id"] == cf_id
-    assert client.get("/api/files/CF-nope").status_code == 400
+    assert client.get("/api/files/CF-nope").status_code == 404
     w = client.post("/api/watch", json={"domain": "delhivery.com"}).json()
     key = w.get("watch_id_handle") or w["key"]
     assert w["status"] == "held_for_approval"
@@ -112,3 +112,17 @@ def test_file_detail_and_watch_flow_marks_stale(client):
 def test_evidence_request_is_not_a_negative_finding(client):
     r = client.post("/api/evidence_request", json={"target": "shreebalajigrp.com", "items": ["GSTIN"]}).json()
     assert r["request"]["note"] == "Not a negative finding." and r["request"]["status"] == "draft"
+
+
+def test_ui_contract_fixes(client):
+    r = client.get("/api/casefile", params={"tool": "clear", "domain": "delhivery.com"}).json()
+    assert "62.12" in r["cost_note"]
+    cf_id = r["caseFile"]["id"]
+    assert "62.12" in client.get(f"/api/files/{cf_id}").json()["cost_note"]
+    er = client.post("/api/evidence_request", json={"target": "shreebalajigrp.com", "items": ["GSTIN"]}).json()
+    assert er["id"].startswith("ER-") and client.get(f"/api/files/{er['id']}").status_code == 200
+    assert client.get("/api/files/CF-doesnotexist").status_code == 404
+    ok = client.post("/api/approve", json={"id": cf_id, "by": "Asha"}, headers={"x-asof-approval-token": TOKEN}).json()
+    assert ok["approved_by"] == "Asha (ui)"
+    h = client.get("/api/health").json()
+    assert h["inr_per_credit"] == 28.236 and h["watch_alert_credits"] == 5.0

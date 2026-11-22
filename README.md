@@ -71,19 +71,37 @@ Needs Python 3.12 and [uv](https://docs.astral.sh/uv/). Replay never touches the
 ```bash
 cd contextcon
 uv sync
-uv run pytest -q                      # 195 passed
+uv run pytest -q                      # 212 passed
 export MODE=replay ASOF_TODAY=2026-11-22 ASOF_STATE_DIR="$(mktemp -d)"
 uv run python -m backend.cli clear delhivery.com
 ```
 Full 2-minute script: `docs/demo.md`. Design: `docs/architecture.md`.
 
-Use it from Claude Code as an MCP server (stdio). Run this from the `AsOf` directory:
+Use it from Claude Code as an MCP server (stdio). Run this from the repo root:
 ```bash
 claude mcp add asof -e MODE=replay -e ASOF_TODAY=2026-11-22 -- uv run --directory "$PWD" python -m backend.platform.mcp_server
 ```
 (The `claude mcp add` line was not run in this write-up; the server itself is tested over stdio in `tests/e2e/test_mcp_stdio.py`.) For the demo contrast, add Crustdata's own MCP: `claude mcp add --transport http crustdata https://install.crustdata.com/mcp`.
 
-Never use `MODE=record` or `MODE=live` without the owner's approval: they spend credits.
+### Web UI (two terminals)
+```bash
+uv run python -m backend.http_api                 # API on 127.0.0.1:8787; prints this session's approval token
+cd frontend && npm install && npm run dev         # UI on http://127.0.0.1:5173 (proxies /api)
+```
+Routes: `/` search, `/resolve?q=`, `/clear/:domain`, `/dispute/:domain?as_of=`, `/files`, `/audit`, `/watch`, `/ledger`.
+Approving needs the token the API printed: a person's act, so nothing that only calls the API can approve.
+
+### Live lookups (spend credits only after you confirm)
+```bash
+uv run python -m backend.http_api --live --cap 10
+```
+Every request is answered from stored copies first, for free. A company that is not stored returns
+`needs_confirmation` with an estimate from the recorded unit prices (2.2 credits, about ₹62, for a new company);
+nothing is spent until you press "Spend and fetch". The response is cached in `state/live-cache`, so the same
+company is never paid for twice, and the session cap stops spending past `--cap`. Watchers stay replay-only
+(the live watcher request body is not verified against the Crustdata docs).
+
+Never use `MODE=record` or `MODE=live` on the CLI without the owner's approval: they spend credits.
 
 ## Approaches weighed
 19 ideas were listed and the top ones scored by a council (see `docs/idea.md`). AsOf scored 88/100 on the Handbook rubric and won 8 of 9 head-to-head matchups. It is a merge:
