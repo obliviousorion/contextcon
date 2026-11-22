@@ -18,7 +18,7 @@ from backend.models import ActionRecord
 
 import logging
 
-from .config import load_config, state_dir
+from .config import load_config, require, state_dir
 
 log = logging.getLogger(__name__)
 from .util import append_jsonl, atomic_write_json, read_json, read_jsonl
@@ -84,7 +84,7 @@ def _extra(d: dict) -> dict:
 
 
 def needs_approval(action: str) -> bool:
-    return action in (load_config().get("approvals") or [])
+    return action in require(load_config(), "approvals")
 
 
 def execute(key: str, action: str, target: str, fn: Callable[[], Any]) -> ActionRecord | None:
@@ -143,9 +143,17 @@ def sandbox_send(payload: dict) -> str:
     """POST to $SANDBOX_WEBHOOK_URL if set, else append to state/sandbox_outbox.jsonl.
     Never sends anywhere but our own sandbox channel. Returns 'webhook' or 'outbox'."""
     url = os.environ.get("SANDBOX_WEBHOOK_URL")
-    if url and not url.lower().startswith("https://"):
-        log.warning("SANDBOX_WEBHOOK_URL is not https; writing to sandbox_outbox.jsonl instead")
-        url = None
+    if url:
+        from urllib.parse import urlparse
+        u = urlparse(url)
+        allowed = [str(h).lower() for h in (require(load_config(), "sandbox", "allowed_hosts") or [])]
+        if u.scheme.lower() != "https":
+            log.warning("SANDBOX_WEBHOOK_URL is not https; writing to sandbox_outbox.jsonl instead")
+            url = None
+        elif (u.hostname or "").lower() not in allowed:
+            log.warning("webhook host %r not in sandbox.allowed_hosts; writing to sandbox_outbox.jsonl instead",
+                        u.hostname)
+            url = None
     if url:
         req = urllib.request.Request(url, data=json.dumps(payload, default=str).encode(),
                                      headers={"Content-Type": "application/json"}, method="POST")

@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 import os
+import uuid
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
@@ -38,6 +39,7 @@ class LedgerEntry:
     credits: float
     cumulative: float
     cache_hit: bool
+    intent_id: str = ""
 
 
 class Ledger:
@@ -45,6 +47,7 @@ class Ledger:
         self.run_id = run_id
         self.path = Path(directory or DEFAULT_LEDGER_DIR) / f"{run_id}.jsonl"
         self.entries: list[LedgerEntry] = []
+        self._pending: dict[str, float] = {}
         try:
             lines = self.path.read_text().splitlines()
         except OSError:
@@ -53,20 +56,27 @@ class Ledger:
             if not line.strip():
                 continue
             try:
-                self.entries.append(LedgerEntry(**json.loads(line)))
-            except (ValueError, TypeError):
+                d = json.loads(line)
+                if "intent" in d:  # written (fsync) before a network call
+                    self._pending[d["id"]] = float(d["intent"])
+                elif "released" in d:
+                    self._pending.pop(d["released"], None)
+                else:
+                    e = LedgerEntry(**d)
+                    self.entries.append(e)
+                    self._pending.pop(e.intent_id, None)
+            except (ValueError, TypeError, KeyError, AttributeError):
                 continue  # torn/garbage line: skip it, keep the true total from the rest
 
     @property
     def total(self) -> float:
-        return self.entries[-1].cumulative if self.entries else 0.0
+        """Confirmed credits plus the estimate of any call whose intent has no matching done line
+        (a kill mid-call or a torn done line): the cap can overcount, never undercount."""
+        return (self.entries[-1].cumulative if self.entries else 0.0) + sum(self._pending.values())
 
-    def add(self, endpoint: str, credits: float, cache_hit: bool) -> LedgerEntry:
-        credits = 0.0 if cache_hit else float(credits)
-        e = LedgerEntry(self.run_id, now_iso(), endpoint, credits, round(self.total + credits, 6), cache_hit)
-        self.entries.append(e)
+    def _append(self, rec: dict) -> None:
         self.path.parent.mkdir(parents=True, exist_ok=True)
-        line = json.dumps(asdict(e)) + "\n"
+        line = json.dumps(rec) + "\n"
         fd = os.open(self.path, os.O_RDWR | os.O_APPEND | os.O_CREAT, 0o644)
         try:
             size = os.fstat(fd).st_size
@@ -76,6 +86,24 @@ class Ledger:
             os.fsync(fd)
         finally:
             os.close(fd)
+
+    def intent(self, endpoint: str, est: float) -> str:
+        iid = uuid.uuid4().hex[:12]
+        self._pending[iid] = float(est)
+        self._append({"intent": float(est), "id": iid, "endpoint": endpoint, "ts": now_iso()})
+        return iid
+
+    def release(self, intent_id: str) -> None:
+        if self._pending.pop(intent_id, None) is not None:
+            self._append({"released": intent_id})
+
+    def add(self, endpoint: str, credits: float, cache_hit: bool, intent_id: str = "") -> LedgerEntry:
+        credits = 0.0 if cache_hit else float(credits)
+        base = self.entries[-1].cumulative if self.entries else 0.0
+        e = LedgerEntry(self.run_id, now_iso(), endpoint, credits, round(base + credits, 6), cache_hit, intent_id)
+        self.entries.append(e)
+        self._pending.pop(intent_id, None)
+        self._append(asdict(e))
         return e
 
 

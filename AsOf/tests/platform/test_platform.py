@@ -316,3 +316,54 @@ def test_sandbox_send_dedupes_on_key(state):
     actions.sandbox_send({"idempotency_key": "z", "n": 1})
     actions.sandbox_send({"idempotency_key": "z", "n": 2})
     assert len(read_jsonl(actions.outbox_path())) == 1
+
+
+def test_webhook_allow_list_empty_means_outbox(tmp_path, monkeypatch):
+    from backend.platform import actions
+    monkeypatch.setenv("ASOF_STATE_DIR", str(tmp_path))
+    monkeypatch.setenv("SANDBOX_WEBHOOK_URL", "https://hooks.example.com/x")
+    posted = []
+    monkeypatch.setattr(actions.urllib.request, "urlopen", lambda *a, **k: posted.append(a) or (_ for _ in ()).throw(AssertionError("network")))
+    monkeypatch.setattr(actions, "load_config", lambda: {"sandbox": {"allowed_hosts": []}})
+    assert actions.sandbox_send({"key": "k1"}) == "outbox" and not posted
+    monkeypatch.setattr(actions, "load_config", lambda: {"sandbox": {"allowed_hosts": ["other.example.com"]}})
+    assert actions.sandbox_send({"key": "k2"}) == "outbox" and not posted
+
+
+def test_webhook_allowed_host_posts(tmp_path, monkeypatch):
+    from backend.platform import actions
+    monkeypatch.setenv("ASOF_STATE_DIR", str(tmp_path))
+    monkeypatch.setenv("SANDBOX_WEBHOOK_URL", "https://hooks.example.com/x")
+    monkeypatch.setattr(actions, "load_config", lambda: {"sandbox": {"allowed_hosts": ["hooks.example.com"]}})
+    calls = []
+
+    class R:
+        def __enter__(self): return self
+        def __exit__(self, *a): return False
+        def read(self): return b""
+    monkeypatch.setattr(actions.urllib.request, "urlopen", lambda *a, **k: calls.append(a) or R())
+    assert actions.sandbox_send({"key": "k"}) == "webhook" and len(calls) == 1
+
+
+def test_torn_ledger_tail_never_undercounts(tmp_path):
+    led = Ledger("tt", tmp_path)
+    led.add("/a", 1.0, False)
+    iid = led.intent("/company/enrich", 2.0)
+    p = tmp_path / "tt.jsonl"
+    # kill during the done write: torn final line, intent unresolved
+    with p.open("a") as f:
+        f.write('{"run_id": "tt", "ts": "x", "endpoint": "/company/enr')
+    assert Ledger("tt", tmp_path).total == 3.0  # 1 confirmed + 2 reserved
+    l2 = Ledger("tt", tmp_path)
+    l2.add("/b", 2.0, False, iid)  # a resolved intent is not double counted
+    assert Ledger("tt", tmp_path).total == 3.0
+    iid2 = l2.intent("/x", 1.0)
+    l2.release(iid2)
+    assert Ledger("tt", tmp_path).total == 3.0
+
+
+def test_missing_config_key_fails_loudly():
+    import pytest
+    from backend.platform.config import limits
+    with pytest.raises(KeyError, match="limits.credit_cap_per_run"):
+        limits({"limits": {}})

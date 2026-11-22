@@ -10,7 +10,7 @@ from typing import Any
 from backend.models import WatchSnapshot
 
 from . import actions
-from .config import load_config, state_dir
+from .config import load_config, require, state_dir
 from .util import append_jsonl, atomic_write_json, read_json, read_jsonl
 
 
@@ -118,7 +118,7 @@ def on_alert(watch_id: str, company_id: int, field: str, signal_date: date, snap
     for e in seen:
         if e.get("dedupe_key") == dk:
             return WatchSnapshot(**e), False
-    cap = load_config().get("watch", {}).get("max_alerts_per_entity_per_month", 2)
+    cap = require(load_config(), "watch", "max_alerts_per_entity_per_month")
     month = str(signal_date)[:7]
     n = sum(1 for e in seen if e["crustdata_company_id"] == company_id and str(e["signal_date"])[:7] == month)
     if n >= cap:

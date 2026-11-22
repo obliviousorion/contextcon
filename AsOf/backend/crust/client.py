@@ -86,9 +86,7 @@ class CrustClient:
         if path == "/company/enrich":
             n = sum(len(b.get(k) or []) for k in ("crustdata_company_ids", "domains", "names")) or 1
             return 2.0 * n
-        if path == "/person/enrich":
-            return 1.0 * (len(b.get("professional_network_profile_urls") or []) or 1)
-        if path in ("/company/search", "/person/search"):
+        if path == "/company/search":
             return 0.03 * int(b.get("limit") or 1)
         if path == "/web/enrich/live":
             return PRICES[path] * (len(b.get("urls") or []) or 1)
@@ -120,8 +118,6 @@ class CrustClient:
         if path == "/company/identify":
             n = sum(len((i or {}).get("matches") or []) for i in first_list(data) if isinstance(i, dict))
             return price * n
-        if path == "/person/enrich":
-            return price * len(first_list(data))
         return price * len(first_list(data))
 
     # ---- core ---------------------------------------------------------------
@@ -165,11 +161,17 @@ class CrustClient:
             return blocked
         if not self.api_key:
             return unavailable(path, "CRUST_KEY not set", key=key)
-        res = await self._network(method, path, body, key, group)
+        iid = self.ledger.intent(path, self._estimate(path, body))  # durable before the call
+        try:
+            res = await self._network(method, path, body, key, group)
+        except BaseException:
+            raise  # intent stays pending: a possibly-billed call is never forgotten
         if res.ok:
-            self.ledger.add(path, res.credits, False)  # ledger first: never undercount
+            self.ledger.add(path, res.credits, False, iid)  # ledger first: never undercount
             if cacheable:
                 self.cache.put(key, {"method": method, "path": path, "body": body}, res.data, res.status or 200)
+        else:
+            self.ledger.release(iid)
         return res
 
     def _headers(self) -> dict:

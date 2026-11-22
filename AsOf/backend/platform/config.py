@@ -19,14 +19,24 @@ def load_config() -> dict[str, Any]:
         return yaml.safe_load(f) or {}
 
 
+def require(cfg: dict, *keys: str) -> Any:
+    """Index nested config keys; a missing key raises KeyError naming the dotted path."""
+    cur: Any = cfg
+    for i, k in enumerate(keys):
+        if not isinstance(cur, dict) or k not in cur:
+            raise KeyError(f"config.yaml is missing required key: {'.'.join(keys[:i + 1])}")
+        cur = cur[k]
+    return cur
+
+
 def credit_to_inr(cfg: dict | None = None) -> float:
-    c = (cfg or load_config()).get("cost", {})
-    return float(c["usd_per_credit"]) * float(c["inr_per_usd"])
+    cfg = cfg or load_config()
+    return float(require(cfg, "cost", "usd_per_credit")) * float(require(cfg, "cost", "inr_per_usd"))
 
 
 def limits(cfg: dict | None = None) -> tuple[float, float]:
-    l = (cfg or load_config()).get("limits", {})
-    return float(l.get("credit_cap_per_run", 40)), float(l.get("time_limit_seconds", 300))
+    cfg = cfg or load_config()
+    return float(require(cfg, "limits", "credit_cap_per_run")), float(require(cfg, "limits", "time_limit_seconds"))
 
 
 def state_dir() -> Path:
