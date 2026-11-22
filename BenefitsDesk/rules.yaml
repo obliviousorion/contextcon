@@ -38,6 +38,7 @@ beliefs:
   windows_days: 90
   versions_at: ["2026-10-01", "2026-11-22"]
   timeline_months: 6
+  leaver_rows_checked: 10                 # rows fetched per window to confirm leavers (~0.23 credits each)
 
 gaps:
   # when: every condition must hold. Facts: age_band, dependants, city, cover_held (list), monthly_budget_inr,

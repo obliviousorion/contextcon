@@ -98,6 +98,12 @@ export default function App() {
 
   const caseQ = useAsync(() => api.caseFile(caseRun!), [caseRun], { enabled: !!caseRun });
 
+  // when the backend comes back, refresh what is on screen
+  useEffect(() => {
+    if (!down && caseRun && caseQ.error) caseQ.reload();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [down]);
+
   const openCase = (id: string, t: Tab) => {
     setCaseRun(id);
     setTab(t);
@@ -186,14 +192,18 @@ export default function App() {
             </div>
           </header>
 
-          <main id="main" className="space-y-6 px-6 py-6">
-            {down && <BackendDown />}
+          <main id="main" className="px-6 py-6">
             <h2 className="sr-only">{current.label}</h2>
+            {down && (
+              <div className="mb-6">
+                <BackendDown />
+              </div>
+            )}
             <div hidden={tab !== "console"}>
               <RunConsole runs={runs.data} onOpenCase={openCase} onRunsChanged={() => runs.reload(true)} />
             </div>
             {current.caseView && (
-              <CaseScreen tab={tab} caseRun={caseRun} q={caseQ} onGoConsole={() => setTab("console")} hasRuns={(runs.data?.length ?? 0) > 0} runsLoading={runs.loading} />
+              <CaseScreen down={down} tab={tab} caseRun={caseRun} q={caseQ} onGoConsole={() => setTab("console")} hasRuns={(runs.data?.length ?? 0) > 0} runsLoading={runs.loading} />
             )}
           </main>
         </div>
@@ -203,6 +213,7 @@ export default function App() {
 }
 
 function CaseScreen({
+  down,
   tab,
   caseRun,
   q,
@@ -210,6 +221,7 @@ function CaseScreen({
   hasRuns,
   runsLoading,
 }: {
+  down: boolean;
   tab: Tab;
   caseRun: string | null;
   q: { data: CaseFile | { status: "running" } | undefined; error: unknown; loading: boolean; reload: (quiet?: boolean) => void };
@@ -222,6 +234,7 @@ function CaseScreen({
     return <ApprovalsScreen caseFile={isCaseFile(q.data) ? q.data : null} runId={caseRun} />;
   }
   if (!caseRun) {
+    if (down) return null;
     if (runsLoading) return <Loading />;
     return (
       <Empty title={hasRuns ? "Choose a case file" : "No finished runs yet"}>
@@ -235,6 +248,7 @@ function CaseScreen({
     );
   }
   if (q.loading && !q.data) return <Loading label="Loading case file…" />;
+  if (q.error && down) return null;
   if (q.error) return <ErrorState error={q.error} onRetry={() => q.reload()} />;
   if (!q.data) return null;
   if (!isCaseFile(q.data)) {

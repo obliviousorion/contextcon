@@ -79,7 +79,7 @@ function JoinLeaveChart({ data }: { data: Timeline }) {
         {ticks.map((t) => (
           <g key={t}>
             <line x1={pad.l} x2={W - pad.r} y1={y(t)} y2={y(t)} className="stroke-slate-200 dark:stroke-slate-800" />
-            <text x={pad.l - 8} y={y(t)} textAnchor="end" dominantBaseline="middle" className="fill-slate-500 text-[12px] dark:fill-slate-400">
+            <text x={pad.l - 8} y={y(t)} textAnchor="end" dominantBaseline="middle" className="fill-slate-500 text-[13px] dark:fill-slate-400">
               {t}
             </text>
           </g>
@@ -108,7 +108,7 @@ function JoinLeaveChart({ data }: { data: Timeline }) {
                 style={{ transformBox: "fill-box", transformOrigin: "bottom", animationDelay: `${i * 45 + 20}ms` }}
               />
               {i % labelEvery === 0 && (
-                <text x={cx0} y={H - pad.b + 18} textAnchor="middle" className="fill-slate-600 text-[12px] dark:fill-slate-400">
+                <text x={cx0} y={H - pad.b + 18} textAnchor="middle" className="fill-slate-600 text-[13px] dark:fill-slate-400">
                   {shortDate(d.date)}
                 </text>
               )}

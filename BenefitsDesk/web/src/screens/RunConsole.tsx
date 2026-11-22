@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { CheckCircle2, CircleDot, FileText, Hand, OctagonX, Play, Recycle, RotateCcw, ShieldCheck, Skull, XCircle, Flag, Activity } from "lucide-react";
-import { api } from "../api";
+import { api, BackendDownError, onBackendStatus } from "../api";
 import { useAsync, useInterval } from "../hooks";
 import type { EventStatus, Ledger, RunEvent, RunSummary, SandboxReceipt } from "../types";
 import { fmtNum, fmtTime, humanize } from "../format";
@@ -30,6 +30,14 @@ function phaseFromRunStatus(s: string): Phase {
 
 export function RunConsole({ runs, onOpenCase, onRunsChanged }: { runs: RunSummary[] | undefined; onOpenCase: (runId: string, tab: Tab) => void; onRunsChanged: () => void }) {
   const reqs = useAsync(() => api.requests(), []);
+  useEffect(
+    () =>
+      onBackendStatus((isDown) => {
+        if (!isDown) reqs.reload(true);
+      }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
   const [file, setFile] = useState<string | null>(null);
   const [runId, setRunId] = useState<string | null>(null);
   const [phase, setPhase] = useState<Phase>("idle");
@@ -181,14 +189,15 @@ export function RunConsole({ runs, onOpenCase, onRunsChanged }: { runs: RunSumma
   }, [events]);
 
   const running = phase === "running" || phase === "starting";
-  const canResume = !!runId && (phase === "killed" || phase === "failed");
+  const canResume = !!runId && !running;
+  const canKill = !!runId && (running || phase === "idle");
 
   return (
     <div className="space-y-6">
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_22rem]">
         <Card title="1 · Pick a prepared request" subtitle="Each one is a file in requests/ on the server.">
           {reqs.loading && <Loading />}
-          {!!reqs.error && <ErrorState error={reqs.error} onRetry={() => reqs.reload()} />}
+          {!!reqs.error && !reqs.data && (reqs.error instanceof BackendDownError ? <Empty title="Waiting for the backend">Prepared requests load once the service is running.</Empty> : <ErrorState error={reqs.error} onRetry={() => reqs.reload()} />)}
           {reqs.data && reqs.data.length === 0 && <Empty title="No prepared requests">Add a request file under requests/ on the server.</Empty>}
           {reqs.data && reqs.data.length > 0 && (
             <fieldset>
@@ -242,7 +251,7 @@ export function RunConsole({ runs, onOpenCase, onRunsChanged }: { runs: RunSumma
             <Button variant="primary" className="w-full py-3 text-lg" onClick={start} disabled={!file || running}>
               <Play className="h-5 w-5" aria-hidden /> Run
             </Button>
-            <Button variant="danger" className="w-full py-4 text-lg shadow-lg shadow-red-600/20" onClick={kill} disabled={!runId || !running} aria-describedby="kill-hint">
+            <Button variant="danger" className="w-full py-4 text-lg shadow-lg shadow-red-600/20" onClick={kill} disabled={!canKill} aria-describedby="kill-hint">
               <OctagonX className="h-6 w-6" aria-hidden /> Kill process
             </Button>
             <p id="kill-hint" className="text-sm text-slate-600 dark:text-slate-400">
@@ -420,7 +429,7 @@ function EventRow({ ev }: { ev: RunEvent }) {
         <span className="mt-0.5">{meta.icon}</span>
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="font-mono text-slate-600 line-through decoration-slate-400/60 dark:text-slate-400">{ev.step}</span>
+            <span className="font-mono text-slate-600 dark:text-slate-400">{ev.step}</span>
             <span className="rounded bg-slate-200 px-1.5 py-0.5 text-xs font-bold uppercase tracking-wide text-slate-700 dark:bg-slate-700 dark:text-slate-200">Skipped · reused from step store</span>
           </div>
           {ev.msg && <p className="text-sm text-slate-500 dark:text-slate-400">{ev.msg}</p>}

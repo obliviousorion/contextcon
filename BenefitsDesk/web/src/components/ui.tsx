@@ -44,7 +44,7 @@ export function Button({ children, variant = "secondary", className, ...props }:
   const v: Record<string, string> = {
     primary: "bg-indigo-600 text-white hover:bg-indigo-700 disabled:bg-indigo-300 dark:disabled:bg-indigo-900 dark:disabled:text-indigo-400",
     secondary: "bg-white text-slate-900 ring-1 ring-inset ring-slate-300 hover:bg-slate-50 disabled:text-slate-400 dark:bg-slate-800 dark:text-slate-100 dark:ring-slate-600 dark:hover:bg-slate-700 dark:disabled:text-slate-500",
-    danger: "bg-red-600 text-white hover:bg-red-700 disabled:bg-red-300 dark:disabled:bg-red-950 dark:disabled:text-red-400",
+    danger: "bg-red-600 text-white hover:bg-red-700 disabled:bg-red-300 disabled:shadow-none dark:disabled:bg-red-950/60 dark:disabled:text-red-300/70",
     ghost: "text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800",
   };
   return (
@@ -239,7 +239,7 @@ export function SourceDetail({ source, index }: { source: Source; index?: number
 export function SourceButton({ source, sources, title, children, className }: { source?: Source | null; sources?: Source[]; title: string; children?: ReactNode; className?: string }) {
   const { open } = useDrawer();
   return (
-    <button type="button" onClick={() => open({ title, source, sources })} className={cx("inline-flex items-center gap-1 text-sm font-medium text-indigo-700 underline decoration-dotted underline-offset-4 hover:text-indigo-900 dark:text-indigo-300 dark:hover:text-indigo-100", className)}>
+    <button type="button" onClick={() => open({ title, source, sources })} className={cx("inline-flex shrink-0 items-center gap-1 whitespace-nowrap text-sm font-medium text-indigo-700 underline decoration-dotted underline-offset-4 hover:text-indigo-900 dark:text-indigo-300 dark:hover:text-indigo-100", className)}>
       <FileSearch className="h-4 w-4" aria-hidden />
       {children ?? "Source"}
     </button>

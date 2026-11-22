@@ -47,10 +47,14 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     }
     throw new Error(`Unexpected response from ${path}`);
   }
+  if (data === undefined && (res.status >= 500 || res.status === 404)) {
+    setDown(true);
+    throw new BackendDownError();
+  }
   setDown(false);
   if (!res.ok) {
-    const msg = (data && typeof data === "object" && "error" in data && String((data as { error: unknown }).error)) || `${res.status} ${res.statusText}`;
-    throw new Error(msg);
+    const errField = data && typeof data === "object" && "error" in data ? (data as { error: unknown }).error : undefined;
+    throw new Error(errField ? String(errField) : `${res.status} ${res.statusText}`);
   }
   return data as T;
 }

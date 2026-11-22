@@ -114,3 +114,23 @@ def test_live_fix_rule_change_in_yaml_only(tmp_path, monkeypatch):
     p = tmp_path / "rules.yaml"; p.write_text(yaml.safe_dump(rules))
     monkeypatch.setenv("BD_RULES", str(p))
     assert [g["rule_id"] for g in R.gaps(facts, None)] == ["R-GAP-6"]
+
+
+def test_small_group_belief_is_suppressed(state, monkeypatch):
+    from bd import beliefs as B
+    monkeypatch.setattr(B, "measure", lambda c, g, end, days: {"staff_now": 3, "joiners": 2, "contract_joiners": 0,
+                                                                "leavers": 1, "leavers_checked": 1, "leaver_candidates": 1})
+    monkeypatch.setattr(B, "_timeline", lambda c, g, r: [])
+    out = B.beliefs_for(Store(), None, {"company_id": 1, "city": "X"})
+    assert out["beliefs"] and all(b["suppressed"] and b["value"] is None and "too small" in b["reason"] for b in out["beliefs"])
+
+
+def test_new_evidence_closes_old_belief_version(state):
+    from bd import beliefs as B
+    s = Store()
+    B._version(s, "g", "joiners", "J", 20, 100, "2026-10-01", [], False)
+    B._version(s, "g", "joiners", "J", 9, 100, "2026-11-22", [], False)
+    B._version(s, "g", "joiners", "J", 9, 100, "2026-11-22", [], False)  # restart: idempotent
+    rows = [dict(r) for r in s.q("SELECT version, value, valid_from, valid_to FROM beliefs ORDER BY version")]
+    assert rows == [{"version": 1, "value": 20, "valid_from": "2026-10-01", "valid_to": "2026-11-22"},
+                    {"version": 2, "value": 9, "valid_from": "2026-11-22", "valid_to": None}]

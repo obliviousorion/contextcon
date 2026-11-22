@@ -1,5 +1,5 @@
 import { AlarmClock, AlertTriangle, ArrowRight, Award, CalendarClock, Receipt } from "lucide-react";
-import type { CaseFile, Fact, Figure, Gap } from "../types";
+import type { Action, CaseFile, Fact, Figure, Gap } from "../types";
 import { fmtDate, humanize } from "../format";
 import { Badge, Card, Empty, LabelIcon, LABEL_META, SourceButton, cx, useDrawer, LabelTag } from "../components/ui";
 
@@ -15,7 +15,7 @@ export function GapsScreen({ c }: { c: CaseFile }) {
   const shortlist = [...(c.shortlist ?? [])].sort((a, b) => (a.rank ?? 1e9) - (b.rank ?? 1e9));
   return (
     <>
-      {c.alarm && <AlarmCard alarm={c.alarm} />}
+      {c.alarm && <AlarmCard alarm={c.alarm} conversion={(c.actions ?? []).find((a) => a.action === "conversion_request")} />}
 
       <Card title="Cover gaps" icon={<Receipt className="h-5 w-5 text-indigo-600 dark:text-indigo-400" aria-hidden />} subtitle="Each line is one rule from the rules file, checked against the fact file.">
         {gaps.length === 0 ? (
@@ -68,7 +68,7 @@ export function GapsScreen({ c }: { c: CaseFile }) {
         {shortlist.length === 0 ? (
           <Empty title="No shortlist in this case file" />
         ) : (
-          <div className="grid gap-4 lg:grid-cols-2">
+          <div className="grid gap-4 2xl:grid-cols-2">
             {shortlist.map((ins) => (
               <article key={ins.insurer} className="flex flex-col rounded-xl border border-slate-200 p-4 dark:border-slate-700">
                 <div className="flex items-center justify-between gap-2">
@@ -99,16 +99,19 @@ export function GapsScreen({ c }: { c: CaseFile }) {
 function FigureRow({ f, insurer }: { f: Figure; insurer: string }) {
   if (f.cannot_verify) {
     return (
-      <li className="hatch rounded-lg border border-amber-500 px-3 py-2">
+      <li className="flex overflow-hidden rounded-lg border-2 border-dashed border-amber-500 bg-amber-50 dark:bg-amber-950/50">
+        <span className="hatch w-3 shrink-0" aria-hidden />
+        <div className="px-3 py-2">
         <p className="text-sm font-medium text-slate-700 dark:text-slate-300">{f.metric}</p>
         <p className="flex items-center gap-1.5 font-semibold text-amber-900 dark:text-amber-200">
-          <AlertTriangle className="h-4 w-4" aria-hidden /> Cannot verify — missing: {f.missing ?? "source not given"}
+          <AlertTriangle className="h-4 w-4 shrink-0" aria-hidden /> Cannot verify — missing: {f.missing ?? "source not given"}
         </p>
+        </div>
       </li>
     );
   }
   return (
-    <li className="flex items-center justify-between gap-3 rounded-lg bg-slate-50 px-3 py-2 dark:bg-slate-800/60">
+    <li className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 rounded-lg bg-slate-50 px-3 py-2 dark:bg-slate-800/60">
       <div className="min-w-0">
         <p className="text-sm text-slate-600 dark:text-slate-400">
           {f.metric}
@@ -152,7 +155,7 @@ function FactRef({ id, fact }: { id: string; fact?: Fact }) {
   );
 }
 
-function AlarmCard({ alarm }: { alarm: NonNullable<CaseFile["alarm"]> }) {
+function AlarmCard({ alarm, conversion }: { alarm: NonNullable<CaseFile["alarm"]>; conversion?: Action }) {
   const isChange = alarm.status === "job_change";
   return (
     <section
@@ -200,7 +203,11 @@ function AlarmCard({ alarm }: { alarm: NonNullable<CaseFile["alarm"]> }) {
       <p className="mt-3 text-slate-800 dark:text-slate-200">{alarm.explanation}</p>
       <div className="mt-2 flex flex-wrap items-center gap-3">
         {alarm.sources.length > 0 && <SourceButton sources={alarm.sources} title="Cover-gap alarm">{alarm.sources.length} source{alarm.sources.length > 1 ? "s" : ""}</SourceButton>}
-        {isChange && <span className="text-sm text-slate-600 dark:text-slate-400">A conversion request has been prepared. It waits on the Approvals screen.</span>}
+        {conversion && (
+          <span className="text-sm text-slate-700 dark:text-slate-300">
+            Conversion request prepared · status <Badge tone="amber">{humanize(conversion.status)}</Badge> · see Approvals
+          </span>
+        )}
       </div>
     </section>
   );

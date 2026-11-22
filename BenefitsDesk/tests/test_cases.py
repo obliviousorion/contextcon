@@ -96,3 +96,14 @@ def test_budget_cap_holds_before_a_paid_call(state, monkeypatch):
     r = c.person_enrich("https://x.test/in/uncached")
     assert r.kind == "held" and "credit cap" in r.reason
     assert st.q("SELECT status FROM ledger WHERE run_id='cap-test'")[0]["status"] == "held"
+
+
+def test_E1_employer_view_replay(state):
+    c = run("E1_employer_package")
+    assert c["status"] == "finished" and [p["role"] for p in c["package"]] == ["drivers", "warehouse staff", "office staff"]
+    roles = {r["role"]: r for r in c["peer_benchmark"]["by_role"]}
+    assert roles["drivers"]["total"] == 16 and roles["warehouse staff"]["with_cover"] == 5
+    b = {(x["belief_key"], x["version"]): x for x in c["workplace"]["beliefs"]}
+    assert b[("joiners", 1)]["value"] == 20 and b[("joiners", 1)]["valid_to"] == "2026-11-22"
+    assert b[("joiners", 2)]["value"] == 9 and b[("joiners", 2)]["valid_to"] is None
+    assert "checked 10 of" in b[("leavers", 1)]["statement"]

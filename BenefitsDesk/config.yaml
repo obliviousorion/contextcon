@@ -27,6 +27,8 @@ sandbox:
   url: http://127.0.0.1:8765     # our own receiver (bd sandbox). Never a real insurer or person.
 output:
   # Which sections a case file carries, in order. Add or remove names here only.
-  fields: [request, persona, facts, workplace, peer_benchmark, gaps, shortlist, alarm, actions, questions, cannot_verify, cost]
+  fields: [request, persona, facts, workplace, peer_benchmark, package, gaps, shortlist, alarm, actions, questions, cannot_verify, cost]
 chaos:
   kill_probability: 0.25     # chance of os._exit at each step boundary under --chaos
+ui:
+  step_delay_seconds: 1.2    # pacing for runs started from the UI only, so a judge can press Kill mid-run

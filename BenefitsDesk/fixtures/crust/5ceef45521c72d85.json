@@ -1,0 +1,23 @@
+{
+ "endpoint": "/person/search",
+ "status": 200,
+ "retrieved_at": "2026-11-22T11:01:17+00:00",
+ "credits": 0.13,
+ "data": {
+  "profiles": [
+   {
+    "experience": {
+     "employment_details": {
+      "past": [],
+      "current": []
+     }
+    }
+   }
+  ],
+  "next_cursor": "H4sIAAAAAAAA_xTJzQrCMAwA4FcpOe-wpE2z7FVERvrHDmJx6w4ivrt4_j7wuurx3nY7d1gdFDL2XJp4kpZrkhYCmrcFJRoThaI6J61zLMSz4aIowlFT9SG3pDA5OPsxYHU3JqYQI94nB6MPe2y5X88_4fL9BQAA__91R7TmeQAAAA==",
+  "total_count": 18,
+  "total_count_relation": null,
+  "remarks": []
+ },
+ "redacted": "people who did not opt in: only company ids, dates, seniority and current employer name kept; no person ids, names or locations"
+}

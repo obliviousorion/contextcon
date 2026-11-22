@@ -53,6 +53,8 @@ class Run:
             self.store.event(self.run_id, name, "skipped", "reused from step store")
             return out
         self.store.event(self.run_id, name, "start")
+        if os.environ.get("BD_STEP_DELAY"):  # UI pacing only (config ui.step_delay_seconds), so a kill can land
+            time.sleep(float(os.environ["BD_STEP_DELAY"]))
         self.chaos(f"before:{name}")
         out = fn()
         self.store.step_put(key, self.run_id, name, out)

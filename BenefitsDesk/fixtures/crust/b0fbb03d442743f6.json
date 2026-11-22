@@ -1,0 +1,572 @@
+{
+ "endpoint": "/person/search",
+ "status": 200,
+ "retrieved_at": "2026-11-22T11:04:56+00:00",
+ "credits": 2.3,
+ "data": {
+  "profiles": [
+   {
+    "experience": {
+     "employment_details": {
+      "past": [
+       {
+        "crustdata_company_id": 5798,
+        "start_date": "2026-07-01T00:00:00",
+        "end_date": "2026-09-01T00:00:00",
+        "seniority_level": "Vice President"
+       },
+       {
+        "crustdata_company_id": 1033822,
+        "start_date": "2025-12-01T00:00:00",
+        "end_date": "2026-06-01T00:00:00",
+        "seniority_level": "Entry Level"
+       },
+       {
+        "crustdata_company_id": 622937,
+        "start_date": "2016-01-01T00:00:00",
+        "end_date": "2025-12-01T00:00:00",
+        "seniority_level": "CXO"
+       },
+       {
+        "crustdata_company_id": 5892,
+        "start_date": "2014-12-01T00:00:00",
+        "end_date": "2015-08-01T00:00:00",
+        "seniority_level": "Entry Level"
+       },
+       {
+        "crustdata_company_id": 14548,
+        "start_date": "2013-06-01T00:00:00",
+        "end_date": "2014-12-01T00:00:00",
+        "seniority_level": "Entry Level"
+       }
+      ],
+      "current": [
+       {
+        "name": "Aionos",
+        "is_default": true
+       }
+      ]
+     }
+    }
+   },
+   {
+    "experience": {
+     "employment_details": {
+      "past": [
+       {
+        "crustdata_company_id": 10338376,
+        "start_date": "2025-08-01T00:00:00",
+        "end_date": "2026-09-01T00:00:00",
+        "seniority_level": "CXO"
+       },
+       {
+        "crustdata_company_id": 5798,
+        "start_date": "2025-01-01T00:00:00",
+        "end_date": "2025-08-01T00:00:00",
+        "seniority_level": "Vice President"
+       },
+       {
+        "crustdata_company_id": 6472,
+        "start_date": "2022-03-01T00:00:00",
+        "end_date": "2024-12-01T00:00:00",
+        "seniority_level": "Vice President"
+       },
+       {
+        "crustdata_company_id": 0,
+        "start_date": "2020-06-01T00:00:00",
+        "end_date": "2022-03-01T00:00:00",
+        "seniority_level": "Director"
+       },
+       {
+        "crustdata_company_id": 6841,
+        "start_date": "2019-07-01T00:00:00",
+        "end_date": "2020-06-01T00:00:00",
+        "seniority_level": "Vice President"
+       },
+       {
+        "crustdata_company_id": 5724,
+        "start_date": "2018-09-01T00:00:00",
+        "end_date": "2019-07-01T00:00:00",
+        "seniority_level": "Vice President"
+       },
+       {
+        "crustdata_company_id": 5798,
+        "start_date": "2014-02-01T00:00:00",
+        "end_date": "2018-08-01T00:00:00",
+        "seniority_level": "Vice President"
+       },
+       {
+        "crustdata_company_id": 1088621,
+        "start_date": "2013-03-01T00:00:00",
+        "end_date": "2014-02-01T00:00:00",
+        "seniority_level": "Director"
+       },
+       {
+        "crustdata_company_id": 1088621,
+        "start_date": "2011-02-01T00:00:00",
+        "end_date": "2013-03-01T00:00:00",
+        "seniority_level": "Director"
+       },
+       {
+        "crustdata_company_id": 1088621,
+        "start_date": "2009-05-01T00:00:00",
+        "end_date": "2011-02-01T00:00:00",
+        "seniority_level": "Director"
+       },
+       {
+        "crustdata_company_id": 1088621,
+        "start_date": "2007-04-01T00:00:00",
+        "end_date": "2009-05-01T00:00:00",
+        "seniority_level": "Director"
+       },
+       {
+        "crustdata_company_id": 1088621,
+        "start_date": "2005-01-01T00:00:00",
+        "end_date": "2007-04-01T00:00:00",
+        "seniority_level": "Entry Level Manager"
+       },
+       {
+        "crustdata_company_id": 0,
+        "start_date": "2002-06-01T00:00:00",
+        "end_date": "2004-04-01T00:00:00",
+        "seniority_level": "Owner / Partner"
+       },
+       {
+        "crustdata_company_id": 1088621,
+        "start_date": "2001-03-01T00:00:00",
+        "end_date": "2002-06-01T00:00:00",
+        "seniority_level": "Entry Level"
+       }
+      ],
+      "current": []
+     }
+    }
+   },
+   {
+    "experience": {
+     "employment_details": {
+      "past": [
+       {
+        "crustdata_company_id": 5798,
+        "start_date": "2024-11-01T00:00:00",
+        "end_date": "2026-08-01T00:00:00",
+        "seniority_level": "Senior"
+       },
+       {
+        "crustdata_company_id": 4926893,
+        "start_date": "2024-01-01T00:00:00",
+        "end_date": "2024-11-01T00:00:00",
+        "seniority_level": "Entry Level"
+       },
+       {
+        "crustdata_company_id": 1033677,
+        "start_date": "2022-04-01T00:00:00",
+        "end_date": "2024-01-01T00:00:00",
+        "seniority_level": "Senior"
+       },
+       {
+        "crustdata_company_id": 680980,
+        "start_date": "2020-12-01T00:00:00",
+        "end_date": "2022-04-01T00:00:00",
+        "seniority_level": "Entry Level"
+       }
+      ],
+      "current": [
+       {
+        "name": "Codebix",
+        "is_default": true
+       },
+       {
+        "name": "Visionaries",
+        "is_default": false
+       }
+      ]
+     }
+    }
+   },
+   {
+    "experience": {
+     "employment_details": {
+      "past": [
+       {
+        "crustdata_company_id": 5725,
+        "start_date": "2024-10-01T00:00:00",
+        "end_date": "2026-08-01T00:00:00",
+        "seniority_level": "Entry Level Manager"
+       },
+       {
+        "crustdata_company_id": 2037562,
+        "start_date": "2023-12-01T00:00:00",
+        "end_date": "2024-07-01T00:00:00",
+        "seniority_level": "Director"
+       },
+       {
+        "crustdata_company_id": 7196,
+        "start_date": "2023-07-01T00:00:00",
+        "end_date": "2023-12-01T00:00:00",
+        "seniority_level": "Entry Level Manager"
+       },
+       {
+        "crustdata_company_id": 5798,
+        "start_date": "2022-02-01T00:00:00",
+        "end_date": "2023-07-01T00:00:00",
+        "seniority_level": "Entry Level Manager"
+       },
+       {
+        "crustdata_company_id": 5738,
+        "start_date": "2020-10-01T00:00:00",
+        "end_date": "2021-12-01T00:00:00",
+        "seniority_level": "Entry Level Manager"
+       },
+       {
+        "crustdata_company_id": 5738,
+        "start_date": "2019-12-01T00:00:00",
+        "end_date": "2020-09-01T00:00:00",
+        "seniority_level": "Senior"
+       },
+       {
+        "crustdata_company_id": 0,
+        "start_date": "2018-12-01T00:00:00",
+        "end_date": "2019-11-01T00:00:00",
+        "seniority_level": "Entry Level"
+       },
+       {
+        "crustdata_company_id": 0,
+        "start_date": "2018-06-01T00:00:00",
+        "end_date": "2018-12-01T00:00:00",
+        "seniority_level": "Entry Level Manager"
+       },
+       {
+        "crustdata_company_id": 0,
+        "start_date": "2017-09-01T00:00:00",
+        "end_date": "2018-05-01T00:00:00",
+        "seniority_level": "Entry Level"
+       },
+       {
+        "crustdata_company_id": 1286780,
+        "start_date": "2017-02-01T00:00:00",
+        "end_date": "2017-07-01T00:00:00",
+        "seniority_level": "In Training"
+       }
+      ],
+      "current": []
+     }
+    }
+   },
+   {
+    "experience": {
+     "employment_details": {
+      "past": [
+       {
+        "crustdata_company_id": 1953730,
+        "start_date": "2026-07-01T00:00:00",
+        "end_date": "2026-09-01T00:00:00",
+        "seniority_level": "Senior"
+       },
+       {
+        "crustdata_company_id": 1089935,
+        "start_date": "2025-08-01T00:00:00",
+        "end_date": "2026-06-01T00:00:00",
+        "seniority_level": "Entry Level"
+       },
+       {
+        "crustdata_company_id": 6194,
+        "start_date": "2024-09-01T00:00:00",
+        "end_date": "2025-06-01T00:00:00",
+        "seniority_level": "Entry Level"
+       },
+       {
+        "crustdata_company_id": 6194,
+        "start_date": "2024-06-01T00:00:00",
+        "end_date": "2025-06-01T00:00:00",
+        "seniority_level": "Entry Level"
+       },
+       {
+        "crustdata_company_id": 6194,
+        "start_date": "2024-06-01T00:00:00",
+        "end_date": "2024-09-01T00:00:00",
+        "seniority_level": "In Training"
+       },
+       {
+        "crustdata_company_id": 6054098,
+        "start_date": "2022-02-01T00:00:00",
+        "end_date": "2024-04-01T00:00:00",
+        "seniority_level": "Entry Level Manager"
+       },
+       {
+        "crustdata_company_id": 5798,
+        "start_date": "2018-09-01T00:00:00",
+        "end_date": "2021-01-01T00:00:00",
+        "seniority_level": "Entry Level"
+       },
+       {
+        "crustdata_company_id": 623182,
+        "start_date": "2017-11-01T00:00:00",
+        "end_date": "2018-08-01T00:00:00",
+        "seniority_level": "In Training"
+       },
+       {
+        "crustdata_company_id": 6036985,
+        "start_date": "2016-03-01T00:00:00",
+        "end_date": "2017-02-01T00:00:00",
+        "seniority_level": "Entry Level"
+       }
+      ],
+      "current": [
+       {
+        "name": "Revivo",
+        "is_default": true
+       }
+      ]
+     }
+    }
+   },
+   {
+    "experience": {
+     "employment_details": {
+      "past": [
+       {
+        "crustdata_company_id": 623026,
+        "start_date": "2025-03-01T00:00:00",
+        "end_date": "2026-08-01T00:00:00",
+        "seniority_level": "Entry Level Manager"
+       },
+       {
+        "crustdata_company_id": 1377500,
+        "start_date": "2024-02-01T00:00:00",
+        "end_date": "2025-02-01T00:00:00",
+        "seniority_level": "Experienced Manager"
+       },
+       {
+        "crustdata_company_id": 1377500,
+        "start_date": "2022-12-01T00:00:00",
+        "end_date": "2024-02-01T00:00:00",
+        "seniority_level": "Entry Level Manager"
+       },
+       {
+        "crustdata_company_id": 5798,
+        "start_date": "2021-11-01T00:00:00",
+        "end_date": "2022-12-01T00:00:00",
+        "seniority_level": "Entry Level Manager"
+       },
+       {
+        "crustdata_company_id": 12571,
+        "start_date": "2021-05-01T00:00:00",
+        "end_date": "2021-11-01T00:00:00",
+        "seniority_level": "Entry Level"
+       },
+       {
+        "crustdata_company_id": 5993,
+        "start_date": "2020-04-01T00:00:00",
+        "end_date": "2020-06-01T00:00:00",
+        "seniority_level": "Experienced Manager"
+       },
+       {
+        "crustdata_company_id": 680980,
+        "start_date": "2017-07-01T00:00:00",
+        "end_date": "2019-05-01T00:00:00",
+        "seniority_level": "Entry Level"
+       }
+      ],
+      "current": []
+     }
+    }
+   },
+   {
+    "experience": {
+     "employment_details": {
+      "past": [
+       {
+        "crustdata_company_id": 5307389,
+        "start_date": "2025-08-01T00:00:00",
+        "end_date": "2026-08-01T00:00:00",
+        "seniority_level": "Entry Level Manager"
+       },
+       {
+        "crustdata_company_id": 6034577,
+        "start_date": "2023-12-01T00:00:00",
+        "end_date": "2025-08-01T00:00:00",
+        "seniority_level": "Entry Level"
+       },
+       {
+        "crustdata_company_id": 6034577,
+        "start_date": "2021-07-01T00:00:00",
+        "end_date": "2023-12-01T00:00:00",
+        "seniority_level": "Entry Level Manager"
+       },
+       {
+        "crustdata_company_id": 5798,
+        "start_date": "2018-10-01T00:00:00",
+        "end_date": "2020-05-01T00:00:00",
+        "seniority_level": "Senior"
+       },
+       {
+        "crustdata_company_id": 3883373,
+        "start_date": "2016-04-01T00:00:00",
+        "end_date": "2018-10-01T00:00:00",
+        "seniority_level": "Senior"
+       },
+       {
+        "crustdata_company_id": 3883373,
+        "start_date": "2015-02-01T00:00:00",
+        "end_date": "2016-04-01T00:00:00",
+        "seniority_level": "Entry Level"
+       },
+       {
+        "crustdata_company_id": 0,
+        "start_date": "2012-05-01T00:00:00",
+        "end_date": "2013-07-01T00:00:00",
+        "seniority_level": "Entry Level"
+       },
+       {
+        "crustdata_company_id": 0,
+        "start_date": "2012-05-01T00:00:00",
+        "end_date": "2013-07-01T00:00:00",
+        "seniority_level": "Entry Level"
+       },
+       {
+        "crustdata_company_id": 0,
+        "start_date": "2009-12-01T00:00:00",
+        "end_date": "2011-04-01T00:00:00",
+        "seniority_level": "Entry Level"
+       },
+       {
+        "crustdata_company_id": 6369793,
+        "start_date": "2008-12-01T00:00:00",
+        "end_date": "2009-09-01T00:00:00",
+        "seniority_level": "Entry Level"
+       }
+      ],
+      "current": [
+       {
+        "name": "Gateway Distriparks Limited",
+        "is_default": true
+       }
+      ]
+     }
+    }
+   },
+   {
+    "experience": {
+     "employment_details": {
+      "past": [
+       {
+        "crustdata_company_id": 5798,
+        "start_date": "2026-03-01T00:00:00",
+        "end_date": "2026-08-01T00:00:00",
+        "seniority_level": "Entry Level Manager"
+       },
+       {
+        "crustdata_company_id": 6034577,
+        "start_date": "2025-02-01T00:00:00",
+        "end_date": "2026-02-01T00:00:00",
+        "seniority_level": "Entry Level"
+       },
+       {
+        "crustdata_company_id": 6034577,
+        "start_date": "2023-10-01T00:00:00",
+        "end_date": "2025-02-01T00:00:00",
+        "seniority_level": "Entry Level"
+       }
+      ],
+      "current": [
+       {
+        "name": "Zepto",
+        "is_default": true
+       }
+      ]
+     }
+    }
+   },
+   {
+    "experience": {
+     "employment_details": {
+      "past": [
+       {
+        "crustdata_company_id": 891315,
+        "start_date": "2021-05-01T00:00:00",
+        "end_date": "2026-09-01T00:00:00",
+        "seniority_level": "Entry Level"
+       },
+       {
+        "crustdata_company_id": 5798,
+        "start_date": "2020-08-01T00:00:00",
+        "end_date": "2020-10-01T00:00:00",
+        "seniority_level": "Owner / Partner"
+       },
+       {
+        "crustdata_company_id": 5068495,
+        "start_date": "2018-05-01T00:00:00",
+        "end_date": "2019-02-01T00:00:00",
+        "seniority_level": "In Training"
+       }
+      ],
+      "current": []
+     }
+    }
+   },
+   {
+    "experience": {
+     "employment_details": {
+      "past": [
+       {
+        "crustdata_company_id": 5798,
+        "start_date": "2025-07-01T00:00:00",
+        "end_date": "2026-09-01T00:00:00",
+        "seniority_level": "Experienced Manager"
+       },
+       {
+        "crustdata_company_id": 6162764,
+        "start_date": "2023-06-01T00:00:00",
+        "end_date": "2025-02-01T00:00:00",
+        "seniority_level": "Director"
+       },
+       {
+        "crustdata_company_id": 6162764,
+        "start_date": "2022-11-01T00:00:00",
+        "end_date": "2023-06-01T00:00:00",
+        "seniority_level": "Entry Level Manager"
+       },
+       {
+        "crustdata_company_id": 5746,
+        "start_date": "2022-03-01T00:00:00",
+        "end_date": "2022-11-01T00:00:00",
+        "seniority_level": "Experienced Manager"
+       },
+       {
+        "crustdata_company_id": 6036750,
+        "start_date": "2021-02-01T00:00:00",
+        "end_date": "2022-03-01T00:00:00",
+        "seniority_level": "Entry Level Manager"
+       },
+       {
+        "crustdata_company_id": 6036750,
+        "start_date": "2020-08-01T00:00:00",
+        "end_date": "2021-01-01T00:00:00",
+        "seniority_level": "Senior"
+       },
+       {
+        "crustdata_company_id": 6036750,
+        "start_date": "2019-03-01T00:00:00",
+        "end_date": "2020-08-01T00:00:00",
+        "seniority_level": "Entry Level"
+       },
+       {
+        "crustdata_company_id": 0,
+        "start_date": "2014-03-01T00:00:00",
+        "end_date": "2017-09-01T00:00:00",
+        "seniority_level": "CXO"
+       }
+      ],
+      "current": []
+     }
+    }
+   }
+  ],
+  "next_cursor": "H4sIAAAAAAAA_xTJzQrCMAwA4FcpOe-Q9G_NXkVkpF3CDmJx6w4ivrt4_j7wuvR4r7ucOywO2JSN2XBuQUWMJEjz2AphrFSDVKFtbirZcopVo6VKnpA9Ro6bwuTg7MeAxd04ZC6p3CcHow95rK1fz78Qhu8vAAD__07AS7Z5AAAA",
+  "total_count": 103,
+  "total_count_relation": null,
+  "remarks": []
+ },
+ "redacted": "people who did not opt in: only company ids, dates, seniority and current employer name kept; no person ids, names or locations"
+}

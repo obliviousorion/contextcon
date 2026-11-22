@@ -1,0 +1,18 @@
+{
+ "endpoint": "/job/search",
+ "status": 200,
+ "retrieved_at": "2026-11-22T11:00:11+00:00",
+ "credits": 0.0,
+ "data": {
+  "job_listings": [],
+  "next_cursor": null,
+  "total_count": 29,
+  "aggregations": [
+   {
+    "type": "count",
+    "field": null,
+    "value": 29
+   }
+  ]
+ }
+}

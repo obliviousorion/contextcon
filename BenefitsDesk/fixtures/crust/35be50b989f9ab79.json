@@ -1,0 +1,14 @@
+{
+ "endpoint": "/person/search",
+ "status": 200,
+ "retrieved_at": "2026-11-22T11:00:20+00:00",
+ "credits": 0.0,
+ "data": {
+  "profiles": [],
+  "next_cursor": null,
+  "total_count": 0,
+  "total_count_relation": null,
+  "remarks": []
+ },
+ "redacted": "people who did not opt in: only company ids, dates, seniority and current employer name kept; no person ids, names or locations"
+}
